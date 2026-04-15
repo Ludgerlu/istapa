@@ -213,10 +213,9 @@
 
 <main>
     @yield('content')
-</main>
 
-<!-- ==================== Footer Start Here ==================== -->
-<footer class="footer bg-main-25 position-relative z-1">
+    <!-- ==================== Footer Start Here ==================== -->
+<footer class="footer bg-main-25 position-relative z-1 container">
     <img src="{{ asset('assets/images/shapes/shape2.png') }}" alt="" class="shape five animation-scalation">
     <img src="{{ asset('assets/images/shapes/shape6.png') }}" alt="" class="shape one animation-scalation">
     
@@ -343,10 +342,13 @@
     </div>
 </footer>
 <!-- ==================== Footer End Here ==================== -->
+</main>
+
+
 
 <!-- Scripts -->
-<script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
 <script src="{{ asset('assets/js/boostrap.bundle.min.js') }}"></script>
+<script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script> 
 <script src="{{ asset('assets/js/select2.min.js') }}"></script>
 <script src="{{ asset('assets/js/phosphor-icon.js') }}"></script>
 <script src="{{ asset('assets/js/slick.min.js') }}"></script>
