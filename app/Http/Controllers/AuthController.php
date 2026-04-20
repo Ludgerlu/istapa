@@ -6,6 +6,7 @@ use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use App\Models\User;
 use Validator;
 
 class AuthController extends Controller
@@ -18,27 +19,27 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'login' => 'required|string',
+            'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
 
         // Find user by email or username
-        $user = User::where('user_email', $request->login)
-                    ->orWhere('user_login', $request->login)
+        $user = User::where('email', $request->email)
+                    ->orWhere('login', $request->email)
                     ->first();
 
-        if ($user && Hash::check($request->password, $user->user_pass)) {
+        if ($user && Hash::check($request->password, $user->password)) {
             Auth::login($user, $request->remember);
             
             // Log the login
             $this->logLogin($user);
             
             // Redirect based on role
-            if ($user->isAdmin()) {
+            if ($user->type === 'admin') {
                 return redirect()->route('admin.dashboard');
-            } elseif ($user->isTeacher()) {
+            } elseif ($user->type === 'teacher') {
                 return redirect()->route('teacher.dashboard');
-            } elseif ($user->isStudent()) {
+            } elseif ($user->type === 'student') {
                 return redirect()->route('student.dashboard');
             }
             
@@ -62,7 +63,7 @@ class AuthController extends Controller
     protected function logLogin($user)
     {
         \App\Models\UserLog::create([
-            'user_login' => $user->user_login,
+            'user_login' => $user->login,
             'role' => $user->getRole(),
             'ip_address' => request()->ip(),
             'created_at' => now(),

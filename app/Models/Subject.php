@@ -10,11 +10,11 @@ class Subject extends Model
     use HasFactory;
 
     protected $table = 'subject';
-    protected $primaryKey = 'subid';
+    protected $primaryKey = 'id';
     public $timestamps = false;
 
     protected $fillable = [
-        'sub_name',
+        'name',
         'teacher_id',
         'class_id',
         'author_name',

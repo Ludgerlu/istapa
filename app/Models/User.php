@@ -11,23 +11,23 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $table = 'users';
-    protected $primaryKey = 'ID';
+    protected $primaryKey = 'id';
     public $timestamps = false;
 
     protected $fillable = [
-        'user_login',
-        'user_pass',
-        'user_nicename',
-        'user_email',
-        'user_url',
-        'user_registered',
-        'user_activation_key',
-        'user_status',
+        'login',
+        'password',
+        'nicename',
+        'email',
+        'type',
+        'registered',
+        'activation_key',
+        'status',
         'display_name'
     ];
 
     protected $hidden = [
-        'user_pass',
+        'password',
         'user_activation_key',
     ];
 
@@ -39,7 +39,7 @@ class User extends Authenticatable
     // Get auth password
     public function getAuthPassword()
     {
-        return $this->user_pass;
+        return $this->password;
     }
 
     // Get email for authentication
@@ -51,12 +51,12 @@ class User extends Authenticatable
     // Get username for authentication
     public function getAuthIdentifierName()
     {
-        return 'user_login';
+        return 'login';
     }
 
     public function getAuthIdentifier()
     {
-        return $this->user_login;
+        return $this->login;
     }
 
     // Relationships

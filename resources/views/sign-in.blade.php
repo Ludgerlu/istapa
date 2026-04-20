@@ -52,7 +52,7 @@
                         <p class="text-neutral-500">Connectez-vous à votre compte pour accéder à votre espace personnel</p>
                     </div>
                     
-                    <form action="#" method="POST" id="signinForm">
+                    <form action="{{ route('login') }}" method="POST" id="signinForm">
                         @csrf
                         <div class="mb-24">
                             <label for="email" class="fw-medium text-lg text-neutral-500 mb-16">Adresse Email</label>
@@ -160,11 +160,11 @@
     });
 
     // Handle sign in form submission
-    document.getElementById('signinForm')?.addEventListener('submit', function(e) {
-        e.preventDefault();
-        alert('Connexion réussie ! Redirection vers votre tableau de bord...');
-        // window.location.href = "#";
-    });
+    // document.getElementById('signinForm')?.addEventListener('submit', function(e) {
+    //     e.preventDefault();
+    //     alert('Connexion réussie ! Redirection vers votre tableau de bord...');
+    //     // window.location.href = "#";
+    // });
 
     // Handle forgot password
     document.getElementById('forgotPassword')?.addEventListener('click', function() {
