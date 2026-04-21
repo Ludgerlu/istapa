@@ -22,12 +22,14 @@ class Subject extends Model
         'syllabus',
         'created_by',
         'section_id',
-        'subject_code'
+        'subject_code',
     ];
 
-    public function class()
+    // ─── Relationships ──────────────────────────────────────────────────────────
+
+    public function schoolClass()
     {
-        return $this->belongsTo(ClassModel::class, 'class_id', 'class_id');
+        return $this->belongsTo(SchoolClass::class, 'class_id', 'class_id');
     }
 
     public function section()
@@ -37,11 +39,28 @@ class Subject extends Model
 
     public function teacher()
     {
-        return $this->belongsTo(User::class, 'teacher_id', 'ID');
+        // teacher_id now refers to users.id (not wp_users.ID)
+        return $this->belongsTo(User::class, 'teacher_id', 'id');
     }
 
     public function marks()
     {
-        return $this->hasMany(Mark::class, 'subject_id', 'subid');
+        // subject FK in marks table is subject_id referencing subject.id
+        return $this->hasMany(Mark::class, 'subject_id', 'id');
+    }
+
+    public function homeworks()
+    {
+        return $this->hasMany(Homework::class, 'subject_id', 'id');
+    }
+
+    public function timetables()
+    {
+        return $this->hasMany(TimeTable::class, 'subject_id', 'id');
+    }
+
+    public function teachers()
+    {
+        return $this->belongsToMany(User::class, 'teacher_subject', 'subject_id', 'teacher_id', 'id', 'id');
     }
 }

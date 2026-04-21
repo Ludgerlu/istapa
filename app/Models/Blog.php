@@ -14,25 +14,55 @@ class Blog extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'post_author',
+        'author_id ',
         'post_date',
         'post_content',
-        'post_title',
+        'title',
         'post_excerpt',
-        'post_status',
+        'status',
         'comment_status',
         'post_name',
         'post_modified',
-        'post_type'
+        'post_type',
+        'cover_image',
+        'views',
+        'created_at',
+        'updated_at'
     ];
 
-    public function author()
-    {
-        return $this->belongsTo(User::class, 'post_author', 'ID');
-    }
-
+    // ─── Relationships ──────────────────────────────────────────────────────────
+    
     public function comments()
     {
         return $this->hasMany(Comment::class, 'comment_post_ID', 'ID');
+    }
+ 
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'author_id', 'id');
+    }
+ 
+    // ─── Scopes ─────────────────────────────────────────────────────────────────
+ 
+    public function scopePublished($query)
+    {
+        return $query->where('status', 'published')->latest();
+    }
+ 
+    public function scopeDraft($query)
+    {
+        return $query->where('status', 'draft')->latest();
+    }
+ 
+    // ─── Helpers ────────────────────────────────────────────────────────────────
+ 
+    public function getExcerptOrTrimmedAttribute(): string
+    {
+        return $this->excerpt ?: str($this->content)->stripTags()->limit(160);
+    }
+ 
+    public function isPublished(): bool
+    {
+        return $this->status === 'published';
     }
 }

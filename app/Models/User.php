@@ -19,11 +19,11 @@ class User extends Authenticatable
         'password',
         'nicename',
         'email',
-        'type',
+        'type',           // 'admin' | 'teacher' | 'student'
         'registered',
-        'activation_key',
-        'status',
-        'display_name'
+        'user_activation_key',
+        'user_status',
+        'display_name',
     ];
 
     protected $hidden = [
@@ -32,23 +32,22 @@ class User extends Authenticatable
     ];
 
     protected $casts = [
-        'user_registered' => 'datetime',
+        'registered'  => 'datetime',
         'user_status' => 'integer',
     ];
 
-    // Get auth password
+    // ─── Auth ──────────────────────────────────────────────────────────────────
+
     public function getAuthPassword()
     {
         return $this->password;
     }
 
-    // Get email for authentication
     public function getEmailForPasswordReset()
     {
-        return $this->user_email;
+        return $this->email;
     }
 
-    // Get username for authentication
     public function getAuthIdentifierName()
     {
         return 'login';
@@ -59,97 +58,174 @@ class User extends Authenticatable
         return $this->login;
     }
 
-    // Relationships
+    // ─── Relationships ──────────────────────────────────────────────────────────
+
     public function userMeta()
     {
-        return $this->hasMany(UserMeta::class, 'user_id', 'ID');
+        return $this->hasMany(UserMeta::class, 'user_id', 'id');
     }
 
-    public function getMeta($key)
-    {
-        $meta = $this->userMeta()->where('meta_key', $key)->first();
-        return $meta ? $meta->meta_value : null;
-    }
+    // ─── Meta helpers ───────────────────────────────────────────────────────────
 
-    public function setMeta($key, $value)
+    public function getMeta(string $key): ?string
     {
-        $meta = $this->userMeta()->where('meta_key', $key)->first();
-        if ($meta) {
-            $meta->meta_value = $value;
-            $meta->save();
-        } else {
-            $this->userMeta()->create([
-                'meta_key' => $key,
-                'meta_value' => $value
-            ]);
+        // Use eager-loaded collection when available to avoid N+1
+        if ($this->relationLoaded('userMeta')) {
+            return $this->userMeta->where('meta_key', $key)->value('meta_value');
         }
+
+        return $this->userMeta()->where('meta_key', $key)->value('meta_value');
     }
 
-    // Role checks
-    public function isAdmin()
+    public function setMeta(string $key, string $value): void
     {
-        $capabilities = $this->getMeta('wp_capabilities');
-        if ($capabilities) {
-            $caps = unserialize($capabilities);
-            return isset($caps['administrator']);
-        }
-        return false;
+        $this->userMeta()->updateOrCreate(
+            ['meta_key' => $key],
+            ['meta_value' => $value]
+        );
     }
 
-    public function isTeacher()
+    // ─── Role helpers (now uses the `type` column directly) ────────────────────
+
+    public function isAdmin(): bool
     {
-        $capabilities = $this->getMeta('wp_capabilities');
-        if ($capabilities) {
-            $caps = unserialize($capabilities);
-            return isset($caps['teacher']);
-        }
-        return false;
+        return $this->type === 'admin';
     }
 
-    public function isStudent()
+    public function isTeacher(): bool
     {
-        $capabilities = $this->getMeta('wp_capabilities');
-        if ($capabilities) {
-            $caps = unserialize($capabilities);
-            return isset($caps['student']);
-        }
-        return false;
+        return $this->type === 'teacher';
     }
 
-    public function getRole()
+    public function isStudent(): bool
     {
-        if ($this->isAdmin()) return 'admin';
-        if ($this->isTeacher()) return 'teacher';
-        if ($this->isStudent()) return 'student';
-        return 'subscriber';
+        return $this->type === 'student';
     }
 
-    // Student specific
-    public function studentClass()
+    public function getRole(): string
+    {
+        return in_array($this->type, ['admin', 'teacher', 'student'])
+            ? $this->type
+            : 'subscriber';
+    }
+
+    // ─── Accessors (common profile fields stored in usermeta) ──────────────────
+
+    public function getFirstNameAttribute(): ?string
+    {
+        return $this->getMeta('first_name');
+    }
+
+    public function getLastNameAttribute(): ?string
+    {
+        return $this->getMeta('last_name');
+    }
+
+    public function getFullNameAttribute(): string
+    {
+        return trim($this->first_name . ' ' . $this->last_name) ?: $this->display_name;
+    }
+
+    public function getPhoneAttribute(): ?string
+    {
+        return $this->getMeta('mobile_number');
+    }
+
+    public function getAddressAttribute(): ?string
+    {
+        return $this->getMeta('address');
+    }
+
+    public function getGenderAttribute(): ?string
+    {
+        return $this->getMeta('gender');
+    }
+
+    public function getBirthDateAttribute(): ?string
+    {
+        return $this->getMeta('birth_date');
+    }
+
+    public function getProfilePhotoAttribute(): ?string
+    {
+        return $this->getMeta('profile_image');
+    }
+
+    // ─── Student-specific relationships ────────────────────────────────────────
+
+    public function studentClass(): ?object
     {
         $classId = $this->getMeta('class_name');
-        return $classId ? ClassModel::find($classId) : null;
+        return $classId ? SchoolClass::find($classId) : null;
     }
 
-    public function studentSection()
+    public function studentSection(): ?object
     {
         $sectionId = $this->getMeta('class_section');
         return $sectionId ? ClassSection::find($sectionId) : null;
     }
 
-    public function rollId()
+    public function rollId(): ?string
     {
         return $this->getMeta('roll_id');
     }
 
-    // Teacher specific
+    public function feesPayments()
+    {
+        return $this->hasMany(FeesPayment::class, 'student_id', 'id');
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class, 'user_id', 'id');
+    }
+
+    public function marks()
+    {
+        return $this->hasMany(Mark::class, 'student_id', 'id');
+    }
+
+    public function leaveRequests()
+    {
+        return $this->hasMany(Leave::class, 'student_id', 'id');
+    }
+
+    // ─── Teacher-specific relationships ────────────────────────────────────────
+
+    public function subjects()
+    {
+        return $this->hasMany(Subject::class, 'teacher_id', 'id');
+    }
+
     public function teacherClasses()
     {
-        return $this->belongsToMany(ClassModel::class, 'teacher_class', 'teacher_id', 'class_id', 'ID', 'class_id');
+        return $this->belongsToMany(SchoolClass::class, 'teacher_class', 'teacher_id', 'class_id', 'id', 'class_id');
     }
 
     public function teacherSubjects()
     {
-        return $this->belongsToMany(Subject::class, 'teacher_subject', 'teacher_id', 'subject_id', 'ID', 'subid');
+        return $this->belongsToMany(Subject::class, 'teacher_subject', 'teacher_id', 'subject_id', 'id', 'id');
+    }
+
+    public function timetables()
+    {
+        return $this->hasMany(TimeTable::class, 'teacher_id', 'id');
+    }
+
+    // ─── Common scopes ─────────────────────────────────────────────────────────
+
+    public function scopeStudents($query)
+    {
+        return $query->where('type', 'student');
+    }
+
+    public function scopeTeachers($query)
+    {
+        return $query->where('type', 'teacher');
+    }
+
+    public function scopeAdmins($query)
+    {
+        return $query->where('type', 'admin');
     }
 }

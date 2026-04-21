@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\BlogController as AdminBlogController;
+use App\Http\Controllers\Amin\LeaveController as AdminLeaveController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\AuthController;
@@ -74,6 +76,20 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard');
         Route::get('/profile', [AdminDashboardController::class, 'profile'])->name('profile');
+
+
+        // Leave approvals
+        Route::patch('/leaves/{leave}/approve', [AdminLeaveController::class, 'approveLeave'])->name('leaves.approve');
+        Route::patch('/leaves/{leave}/reject',  [AdminLeaveController::class, 'rejectLeave'])->name('leaves.reject');
+
+        // ── Blog CRUD ──────────────────────────────────────────────────────────
+        Route::get('/blog',              [AdminBlogController::class, 'index'])->name('blogs.index');
+        Route::get('/blog/create',       [AdminBlogController::class, 'create'])->name('blogs.create');
+        Route::post('/blog',             [AdminBlogController::class, 'store'])->name('blogs.store');
+        Route::get('/blog/{blog}',       [AdminBlogController::class, 'show'])->name('blogs.show');
+        Route::get('/blog/{blog}/edit',  [AdminBlogController::class, 'edit'])->name('blogs.edit');
+        Route::put('/blog/{blog}',       [AdminBlogController::class, 'update'])->name('blogs.update');
+        Route::delete('/blog/{blog}',    [AdminBlogController::class, 'destroy'])->name('blogs.destroy');
     });
 
     // Student Routes

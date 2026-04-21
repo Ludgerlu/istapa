@@ -29,4 +29,9 @@ class Event extends Model
     {
         return $this->belongsTo(User::class, 'created_by', 'ID');
     }
+
+    public function scopeUpcoming($query)
+    {
+        return $query->where('start_date', '>=', now()->toDateString())->orderBy('start_date');
+    }
 }

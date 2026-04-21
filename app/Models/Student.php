@@ -10,77 +10,61 @@ class Student extends User
 
     protected $table = 'users';
 
-    // Override boot method to filter only students
-    protected static function booted()
+    /**
+     * Filter only students using the `type` column (replaces the old
+     * WordPress wp_capabilities meta key approach).
+     */
+    protected static function booted(): void
     {
-        static::addGlobalScope('student', function ($builder) {
-            $builder->whereHas('userMeta', function($q) {
-                $q->where('meta_key', 'wp_capabilities')
-                  ->where('meta_value', 'like', '%student%');
-            });
-        });
+        static::addGlobalScope('student', fn ($q) => $q->where('type', 'student'));
     }
 
-    // Student specific accessors
-    public function getFullNameAttribute()
-    {
-        $firstName = $this->getMeta('first_name');
-        $lastName = $this->getMeta('last_name');
-        return trim($firstName . ' ' . $lastName);
-    }
+    // ─── Computed attributes ────────────────────────────────────────────────────
 
-    public function getPhoneAttribute()
-    {
-        return $this->getMeta('mobile_number');
-    }
-
-    public function getAddressAttribute()
-    {
-        return $this->getMeta('address');
-    }
-
-    public function getGenderAttribute()
-    {
-        return $this->getMeta('gender');
-    }
-
-    public function getBirthDateAttribute()
-    {
-        return $this->getMeta('birth_date');
-    }
-
-    public function feesPayments()
-    {
-        return $this->hasMany(FeesPayment::class, 'student_id', 'ID');
-    }
-
-    public function attendances()
-    {
-        return $this->hasMany(Attendance::class, 'user_id', 'ID');
-    }
-
-    public function marks()
-    {
-        return $this->hasMany(Mark::class, 'student_id', 'ID');
-    }
-
-    public function leaveRequests()
-    {
-        return $this->hasMany(Leave::class, 'student_id', 'ID');
-    }
-
-    public function getTotalPaidAttribute()
+    public function getTotalPaidAttribute(): float
     {
         return $this->feesPayments()->sum('fees_paid_amount');
     }
 
-    public function getTotalFeesAttribute()
+    public function getTotalFeesAttribute(): float
     {
         return $this->feesPayments()->sum('total_amount');
     }
 
-    public function getBalanceAttribute()
+    public function getBalanceAttribute(): float
     {
-        return $this->getTotalFeesAttribute() - $this->getTotalPaidAttribute();
+        return $this->total_fees - $this->total_paid;
+    }
+
+    // ─── Relationships ──────────────────────────────────────────────────────────
+
+    public function homeworks()
+    {
+        return $this->hasMany(StudentHomework::class, 'student_id', 'id');
+    }
+
+    public function subAttendances()
+    {
+        return $this->hasMany(SubAttendance::class, 'student_id', 'id');
+    }
+
+    public function examHallReceipts()
+    {
+        return $this->hasMany(ExamHallReceipt::class, 'student_id', 'id');
+    }
+
+    public function libraryIssues()
+    {
+        return $this->hasMany(LibraryBookIssue::class, 'student_id', 'id');
+    }
+
+    public function assignedBed()
+    {
+        return $this->hasOne(AssignBed::class, 'student_id', 'id');
+    }
+
+    public function transport()
+    {
+        return $this->hasOne(AssignTransport::class, 'route_user', 'id');
     }
 }
