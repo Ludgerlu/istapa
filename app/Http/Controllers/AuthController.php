@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-use Validator;
 
 class AuthController extends Controller
 {
@@ -23,32 +21,32 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        // Find user by email or username
-        $user = User::where('email', $request->email)
-                    ->orWhere('login', $request->email)
-                    ->first();
+        $credentials = [
+            'email' => $request->email,
+            'password' => $request->password,
+        ];
 
-        if ($user && Hash::check($request->password, $user->password)) {
-            Auth::login($user, $request->remember);
-            
-            // Log the login
-            $this->logLogin($user);
-            
+        if (Auth::attempt($credentials, $request->remember)) {
+            $user = Auth::user();
+            // Update last login
+            $user->last_login_at = now();
+            $user->save();
+
             // Redirect based on role
-            if ($user->type === 'admin') {
+            if ($user->isAdmin()) {
                 return redirect()->route('admin.dashboard');
-            } elseif ($user->type === 'teacher') {
+            } elseif ($user->isTeacher()) {
                 return redirect()->route('teacher.dashboard');
-            } elseif ($user->type === 'student') {
+            } elseif ($user->isStudent()) {
                 return redirect()->route('student.dashboard');
             }
-            
-            return redirect()->route('home');
+
+            return redirect()->intended('/');
         }
 
         return back()->withErrors([
-            'login' => 'Les identifiants fournis ne correspondent pas à nos enregistrements.',
-        ])->onlyInput('login');
+            'email' => 'Les identifiants fournis ne correspondent pas à nos enregistrements.',
+        ])->onlyInput('email');
     }
 
     public function logout(Request $request)
@@ -56,83 +54,56 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
         return redirect('/');
     }
 
-    protected function logLogin($user)
+    public function profile()
     {
-        \App\Models\UserLog::create([
-            'user_login' => $user->login,
-            'role' => $user->getRole(),
-            'ip_address' => request()->ip(),
-            'created_at' => now(),
-            'date_time' => now(),
-            'deleted_status' => 0
-        ]);
-    }
-
-   public function profile()
-    {
-        // Get authenticated user
         $user = Auth::user();
-
-        // dd($user);
-        // Check if user is authenticated
         if (!$user) {
             return redirect()->route('login');
         }
-        // return redirect()->intended($this->getUserDashboardRoute($user->type));
-
         return view('profile.profil', [
             'user' => $user,
-            'userType' => $user->usertype,
-            'link' => $this->getUserDashboardRoute($user->usertype),
+            'userType' => $user->role,
+            'link' => $this->getUserDashboardRoute($user->role),
         ]);
     }
 
-     public function defaultPassword(Request $request)
+    public function showChangePasswordForm()
     {
         $user = Auth::user();
-        // Update password
-        $user->cryptedpwd = Hash::make('password');
-        $user->save();
-        return back()->with('success', 'Mot de passe modifié avec succès!'. Hash::make('password'));
+        if (!$user) {
+            return redirect()->route('login');
+        }
+        return view('profile.password', compact('user'));
     }
 
     public function changePassword(Request $request)
     {
         $user = Auth::user();
-        // Validation rules
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'current_password' => 'required',
             'new_password' => 'required|string|min:8|confirmed|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/',
-        ], [
-            'new_password.regex' => 'Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial.'
         ]);
-        // Check current password
-        if (!Hash::check($request->current_password, $user->cryptedpwd)) {
+
+        if (!Hash::check($request->current_password, $user->password_hash)) {
             return back()->withErrors(['current_password' => 'Le mot de passe actuel est incorrect']);
         }
-        // Update password
-        $user->cryptedpwd = Hash::make($request->new_password);
+
+        $user->password_hash = Hash::make($request->new_password);
         $user->save();
+
         return back()->with('success', 'Mot de passe modifié avec succès!');
     }
 
-        public function showChangePasswordForm()
+    protected function getUserDashboardRoute(string $role): string
     {
-        $user = Auth::user();
-
-        if (!$user) {
-            return redirect()->route('login');
-        }
-
-        return view('profile.password', [
-            'user' => $user,
-            'userType' => $user->type,
-        ]);
+        return match ($role) {
+            'admin' => route('admin.dashboard'),
+            'teacher' => route('teacher.dashboard'),
+            'student' => route('student.dashboard'),
+            default => '/',
+        };
     }
-
-
 }

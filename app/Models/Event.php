@@ -2,32 +2,38 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {
-    use HasFactory;
-
-    protected $table = 'event';
-    protected $primaryKey = 'event_id';
-    public $timestamps = false;
+    protected $table = 'events';
+    public $timestamps = true;
 
     protected $fillable = [
-        'event_title',
-        'description',
-        'start_date',
-        'start_time',
-        'end_date',
-        'end_time',
-        'event_doc',
-        'created_by',
-        'created_date'
+        'slug', 'title_en', 'title_fr', 'short_description_en', 'short_description_fr',
+        'content_en', 'content_fr', 'cover_image', 'video_url', 'location',
+        'start_date', 'start_time', 'end_date', 'end_time', 'is_published', 'created_by'
     ];
 
-    public function createdBy()
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'is_published' => 'boolean',
+    ];
+
+    public function creator()
     {
-        return $this->belongsTo(User::class, 'created_by', 'ID');
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(EventImage::class, 'event_id');
+    }
+
+    public function translations()
+    {
+        return $this->hasMany(EventTranslation::class, 'event_id');
     }
 
     public function scopeUpcoming($query)

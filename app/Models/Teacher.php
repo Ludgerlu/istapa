@@ -8,10 +8,15 @@ class Teacher extends User
 {
     use HasFactory;
 
-    protected $table = 'users';
-
-    protected static function booted(): void
+    protected static function booted()
     {
-        static::addGlobalScope('teacher', fn ($q) => $q->where('type', 'teacher'));
+        static::addGlobalScope('teacher', function ($query) {
+            $query->where('role', 'teacher');
+        });
+    }
+
+    public function details()
+    {
+        return $this->hasOne(TeacherDetail::class, 'user_id');
     }
 }

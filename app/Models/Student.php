@@ -9,62 +9,48 @@ class Student extends User
     use HasFactory;
 
     protected $table = 'users';
+    protected $primaryKey = 'id';
 
-    /**
-     * Filter only students using the `type` column (replaces the old
-     * WordPress wp_capabilities meta key approach).
-     */
-    protected static function booted(): void
+    protected static function booted()
     {
-        static::addGlobalScope('student', fn ($q) => $q->where('type', 'student'));
+        static::addGlobalScope('student', function ($query) {
+            $query->where('role', 'student');
+        });
     }
 
-    // ─── Computed attributes ────────────────────────────────────────────────────
-
-    public function getTotalPaidAttribute(): float
+    public function details()
     {
-        return $this->feesPayments()->sum('fees_paid_amount');
+        return $this->hasOne(StudentDetail::class, 'user_id');
     }
 
-    public function getTotalFeesAttribute(): float
+    // Accessors for student-specific fields via details
+    public function getMatriculeAttribute()
     {
-        return $this->feesPayments()->sum('total_amount');
+        return $this->details->matricule ?? null;
     }
 
-    public function getBalanceAttribute(): float
+    public function getGuardianNameAttribute()
     {
-        return $this->total_fees - $this->total_paid;
+        return $this->details->guardian_name ?? null;
     }
 
-    // ─── Relationships ──────────────────────────────────────────────────────────
-
-    public function homeworks()
+    // Access the extra fields stored in the students table
+    public function studentDetails()
     {
-        return $this->hasMany(StudentHomework::class, 'student_id', 'id');
+        return $this->hasOne(StudentDetail::class, 'user_id');
     }
 
-    public function subAttendances()
+    // Or use a direct relationship to the students table (one-to-one)
+    public function studentRecord()
     {
-        return $this->hasMany(SubAttendance::class, 'student_id', 'id');
+        return $this->hasOne(Student::class, 'user_id', 'id'); // careful: recursive
+        // Better to have a separate model for the student extension
     }
 
-    public function examHallReceipts()
+    // The actual student-specific data is in 'students' table
+    // We'll define a relationship to that table
+    public function info()
     {
-        return $this->hasMany(ExamHallReceipt::class, 'student_id', 'id');
-    }
-
-    public function libraryIssues()
-    {
-        return $this->hasMany(LibraryBookIssue::class, 'student_id', 'id');
-    }
-
-    public function assignedBed()
-    {
-        return $this->hasOne(AssignBed::class, 'student_id', 'id');
-    }
-
-    public function transport()
-    {
-        return $this->hasOne(AssignTransport::class, 'route_user', 'id');
+        return $this->hasOne(StudentInfo::class, 'user_id');
     }
 }

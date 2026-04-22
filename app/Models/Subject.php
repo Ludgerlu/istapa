@@ -2,65 +2,38 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Subject extends Model
 {
-    use HasFactory;
-
-    protected $table = 'subject';
-    protected $primaryKey = 'id';
+    protected $table = 'subjects';
     public $timestamps = false;
 
     protected $fillable = [
-        'name',
-        'teacher_id',
-        'class_id',
-        'author_name',
-        'edition',
-        'syllabus',
-        'created_by',
-        'section_id',
-        'subject_code',
+        'class_id', 'teacher_id', 'name', 'code', 'coefficient', 'hours_per_week', 'description'
     ];
 
-    // ─── Relationships ──────────────────────────────────────────────────────────
+    protected $casts = [
+        'coefficient' => 'float',
+    ];
 
-    public function schoolClass()
+    public function class()
     {
-        return $this->belongsTo(SchoolClass::class, 'class_id', 'class_id');
-    }
-
-    public function section()
-    {
-        return $this->belongsTo(ClassSection::class, 'section_id', 'id');
+        return $this->belongsTo(Classes::class);
     }
 
     public function teacher()
     {
-        // teacher_id now refers to users.id (not wp_users.ID)
-        return $this->belongsTo(User::class, 'teacher_id', 'id');
+        return $this->belongsTo(TeacherDetail::class, 'teacher_id', 'user_id');
     }
 
-    public function marks()
+    public function examSubjects()
     {
-        // subject FK in marks table is subject_id referencing subject.id
-        return $this->hasMany(Mark::class, 'subject_id', 'id');
+        return $this->hasMany(ExamSubject::class, 'subject_id');
     }
 
-    public function homeworks()
+    public function attendanceSessions()
     {
-        return $this->hasMany(Homework::class, 'subject_id', 'id');
-    }
-
-    public function timetables()
-    {
-        return $this->hasMany(TimeTable::class, 'subject_id', 'id');
-    }
-
-    public function teachers()
-    {
-        return $this->belongsToMany(User::class, 'teacher_subject', 'subject_id', 'teacher_id', 'id', 'id');
+        return $this->hasMany(AttendanceSession::class, 'subject_id');
     }
 }

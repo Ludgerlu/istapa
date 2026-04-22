@@ -2,54 +2,31 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Leave extends Model
 {
-    use HasFactory;
-
-    protected $table = 'leave';
-    public $timestamps = false;
+    protected $table = 'leave_requests';
+    public $timestamps = true;
 
     protected $fillable = [
-        'student_id',
-        'leave_type',
-        'leave_duration',
-        'start_date',
-        'end_date',
-        'reason',
-        'status',
-        'status_comment',
-        'created_by',
-        'created_at'
+        'student_id', 'leave_type', 'start_date', 'end_date', 'reason',
+        'attachment', 'status', 'reviewed_by', 'review_comment', 'reviewed_at'
     ];
 
-    const STATUS_PENDING = 'pending';
-    const STATUS_APPROVED = 'approved';
-    const STATUS_REJECTED = 'rejected';
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'reviewed_at' => 'datetime',
+    ];
 
     public function student()
     {
-        return $this->belongsTo(User::class, 'student_id', 'ID');
+        return $this->belongsTo(StudentDetail::class, 'student_id', 'user_id');
     }
 
-    public function createdBy()
+    public function reviewer()
     {
-        return $this->belongsTo(User::class, 'created_by', 'ID');
-    }
-
-    public function getStatusBadgeAttribute()
-    {
-        switch($this->status) {
-            case self::STATUS_PENDING:
-                return '<span class="badge bg-warning-600">En attente</span>';
-            case self::STATUS_APPROVED:
-                return '<span class="badge bg-success-600">Approuvé</span>';
-            case self::STATUS_REJECTED:
-                return '<span class="badge bg-danger-600">Refusé</span>';
-            default:
-                return '<span class="badge bg-secondary">Non défini</span>';
-        }
+        return $this->belongsTo(User::class, 'reviewed_by');
     }
 }

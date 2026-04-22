@@ -2,51 +2,36 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Mark extends Model
 {
-    use HasFactory;
-
     protected $table = 'marks';
-    protected $primaryKey = 'mark_id';
-    public $timestamps = false;
+    public $timestamps = true;
 
-    protected $fillable = [
-        'exam_id',
-        'class_id',
-        'subject_id',
-        'marks',
-        'class_marks',
-        'contributions',
-        'attendance',
-        'grade_id',
-        'student_id',
-        'marks_comment',
-        'created_date',
-        'modified_date',
-        'created_by',
-        'section_id'
+    protected $fillable = ['exam_subject_id', 'student_id', 'mark', 'grade_id', 'comment', 'entered_by'];
+
+    protected $casts = [
+        'mark' => 'float',
     ];
 
-    public function exam()
+    public function examSubject()
     {
-        return $this->belongsTo(Exam::class, 'exam_id', 'exam_id');
-    }
-
-    public function subject()
-    {
-        return $this->belongsTo(Subject::class, 'subject_id', 'subid');
+        return $this->belongsTo(ExamSubject::class);
     }
 
     public function student()
     {
-        return $this->belongsTo(User::class, 'student_id', 'ID');
+        return $this->belongsTo(StudentDetail::class, 'student_id', 'user_id');
     }
 
-    public function class()
+    public function grade()
     {
-        return $this->belongsTo(ClassModel::class, 'class_id', 'class_id');
+        return $this->belongsTo(Grade::class);
+    }
+
+    public function enteredBy()
+    {
+        return $this->belongsTo(User::class, 'entered_by');
     }
 }

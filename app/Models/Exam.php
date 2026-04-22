@@ -2,47 +2,42 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Exam extends Model
 {
-    use HasFactory;
-
-    protected $table = 'exam';
-    protected $primaryKey = 'exam_id';
+    protected $table = 'exams';
     public $timestamps = false;
 
     protected $fillable = [
-        'exam_name',
-        'class_id',
-        'section_id',
-        'exam_term',
-        'passing_mark',
-        'total_mark',
-        'exam_start_date',
-        'exam_end_date',
-        'exam_syllabus',
-        'exam_comment',
-        'created_date',
-        'modified_date',
-        'exam_creater_id',
-        'contributions',
-        'contributions_data'
+        'class_id', 'academic_year_id', 'name', 'term', 'exam_type',
+        'passing_mark', 'total_mark', 'start_date', 'end_date', 'created_by'
+    ];
+
+    protected $casts = [
+        'passing_mark' => 'float',
+        'total_mark' => 'float',
+        'start_date' => 'date',
+        'end_date' => 'date',
     ];
 
     public function class()
     {
-        return $this->belongsTo(ClassModel::class, 'class_id', 'class_id');
+        return $this->belongsTo(Classes::class);
     }
 
-    public function section()
+    public function academicYear()
     {
-        return $this->belongsTo(ClassSection::class, 'section_id', 'id');
+        return $this->belongsTo(AcademicYear::class);
     }
 
-    public function marks()
+    public function creator()
     {
-        return $this->hasMany(Mark::class, 'exam_id', 'exam_id');
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function examSubjects()
+    {
+        return $this->hasMany(ExamSubject::class, 'exam_id');
     }
 }
