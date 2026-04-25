@@ -3,16 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\BlogPost;
-use App\Models\BlogCategory;
-use App\Models\BlogComment;
 use App\Models\Event;
-use App\Models\Testimonial;
-use App\Models\UpcomingSession;
 use App\Models\Classes;
+use App\Models\Program;
+use App\Models\BlogPost;
+use App\Models\Testimonial;
+use App\Models\BlogComment;
+use App\Models\GalleryAlbum;
+use App\Models\BlogCategory;
+use App\Models\UpcomingSession;
 use App\Models\AdmissionRequest;
 use App\Models\AdmissionDocument;
-use App\Models\Program;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -227,7 +228,11 @@ class PageController extends Controller
      */
     public function gallery()
     {
-        return view('gallery');
+         $albums = GalleryAlbum::with(['images' => function ($query) {
+            $query->orderBy('sort_order', 'asc');
+        }])->orderBy('sort_order', 'asc')->get();
+
+        return view('gallery', compact('albums'));
     }
 
     /**

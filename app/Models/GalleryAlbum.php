@@ -10,7 +10,7 @@ class GalleryAlbum extends Model
     use HasFactory;
     protected $table = 'gallery_albums';
     public $timestamps = false;
-    protected $fillable = ['slug', 'cover_image', 'sort_order', 'created_at'];
+    protected $fillable = ['slug', 'cover_image','title_en','title_fr','description_en','description_fr', 'sort_order', 'created_at'];
     public function images() { return $this->hasMany(GalleryImage::class, 'album_id'); }
     public function translations() { return $this->hasMany(GalleryAlbumTranslation::class, 'album_id'); }
 
