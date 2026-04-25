@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\ClassModel as SchoolClass;
+use App\Models\Attendance;
+use App\Models\Fee;
+use App\Models\Classes;
 use App\Models\FeesPayment;
 use App\Models\Event;
 use App\Models\Leave;
@@ -22,25 +25,24 @@ class DashboardController extends Controller
     {
         // KPI stats
         $stats = [
-            'total_students'      => User::students()->count(),
-            'total_teachers'      => User::teachers()->count(),
-            'total_classes'       => SchoolClass::count(),
-            'total_fees_collected'=> FeesPayment::sum('fees_paid_amount'),
-            'pending_fees'        => FeesPayment::selectRaw('SUM(total_amount - fees_paid_amount) as pending')
-                                        ->value('pending') ?? 0,
+            'total_students'      => User::where('role', 'student')->count() ?? 0,
+            'total_teachers'      => User::where('role', 'teacher')->count() ?? 0,
+            'total_classes'       => Classes::count(),
+            'total_fees_collected'=> FeesPayment::sum('amount_paid') ?? 0,
+            'pending_fees'        => 0,
             'upcoming_events'     => Event::upcoming()->count(),
         ];
 
         // Chart data — students registered per month (current year)
         $currentYear  = now()->year;
-        $monthlyStudents = User::students()
-            ->selectRaw('MONTH(registered) as month, COUNT(*) as total')
-            ->whereYear('registered', $currentYear)
+        $monthlyStudents = User::where('role', 'student')
+            ->selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+            ->whereYear('created_at', $currentYear)
             ->groupBy('month')
             ->pluck('total', 'month');
 
-        $monthlyFees = FeesPayment::selectRaw('MONTH(created_date) as month, SUM(fees_paid_amount) as total')
-            ->whereYear('created_date', $currentYear)
+        $monthlyFees = FeesPayment::selectRaw('MONTH(created_at) as month, SUM(amount_paid) as total')
+            ->whereYear('created_at', $currentYear)
             ->groupBy('month')
             ->pluck('total', 'month');
 
@@ -50,7 +52,7 @@ class DashboardController extends Controller
         ];
 
         // Tables
-        $recentStudents  = User::students()->with('userMeta')->latest('registered')->take(7)->get();
+        $recentStudents  = User::where('role', 'student')->latest('created_at')->take(7)->get();
         $upcomingEvents  = Event::upcoming()->take(7)->get();
         $pendingLeaves   = Leave::with('student')->where('status', 'pending')->latest()->take(6)->get();
         // $recentMessages  = Message::with('sender')->latest('send_date')->take(6)->get();

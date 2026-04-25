@@ -184,10 +184,7 @@
                                 </div>
                             </td>
                             <td class="text-14 fw-normal py-16 px-20 shadow-none text-neutral-500">
-                                {{ $student->getMeta('class_name') ?? '—' }}
-                            </td>
-                            <td class="text-14 fw-normal py-16 px-20 shadow-none text-neutral-500">
-                                {{ $student->registered->format('d/m/Y') }}
+                                {{ $student->created_at->format('d/m/Y') }}
                             </td>
                         </tr>
                         @empty
