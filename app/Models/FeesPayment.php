@@ -9,23 +9,23 @@ class FeesPayment extends Model
 {
     use HasFactory;
 
-    protected $table = 'fees_payment';
-    protected $primaryKey = 'fees_pay_id';
-    public $timestamps = false;
+    protected $table = 'fee_payments';
+    protected $primaryKey = 'id';
+    public $timestamps = true;
 
     protected $fillable = [
         'class_id',
         'student_id',
         'fees_id',
-        'total_amount',
-        'fees_paid_amount',
-        'payment_status',
+        'amount_paid',
+        'payment_method',
         'description',
+        'note',
+        'received_by',
         'start_year',
         'end_year',
-        'paid_by_date',
-        'created_date',
-        'created_by',
+        'paid_on',
+        'created_at',
         'tax',
         'tax_amount',
         'fees_amount',

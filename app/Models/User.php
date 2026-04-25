@@ -134,4 +134,21 @@ class User extends Authenticatable
     {
         return $this->hasMany(LeaveRequest::class, 'reviewed_by');
     }
+
+    // ─── Common scopes ─────────────────────────────────────────────────────────
+
+    public function scopeStudents($query)
+    {
+        return $query->where('role', 'student');
+    }
+
+    public function scopeTeachers($query)
+    {
+        return $query->where('role', 'teacher');
+    }
+
+    public function scopeAdmins($query)
+    {
+        return $query->where('role', 'admin');
+    }
 }

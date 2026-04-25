@@ -51,4 +51,22 @@ class BlogPost extends Model
     {
         return $query->where('status', 'draft');
     }
+
+    public function getTitleAttribute()
+    {
+        $locale = app()->getLocale();
+        return $locale === 'fr' ? $this->title_fr : $this->title_en;
+    }
+
+    public function getContentAttribute()
+    {
+        $locale = app()->getLocale();
+        return $locale === 'fr' ? $this->content_fr : $this->content_en;
+    }
+
+    public function getExcerptAttribute()
+    {
+        $locale = app()->getLocale();
+        return $locale === 'fr' ? $this->excerpt_fr : $this->excerpt_en;
+    }
 }

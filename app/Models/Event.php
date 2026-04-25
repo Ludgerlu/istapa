@@ -40,4 +40,16 @@ class Event extends Model
     {
         return $query->where('start_date', '>=', now()->toDateString())->orderBy('start_date');
     }
+
+    public function getTitleAttribute()
+    {
+        $locale = app()->getLocale();
+        return $locale === 'fr' ? $this->title_fr : $this->title_en;
+    }
+
+    public function getShortDescriptionAttribute()
+    {
+        $locale = app()->getLocale();
+        return $locale === 'fr' ? $this->short_description_fr : $this->short_description_en;
+    }
 }

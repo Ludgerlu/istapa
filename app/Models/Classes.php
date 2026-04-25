@@ -10,7 +10,12 @@ class Classes extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'program_id', 'academic_year_id', 'name', 'section', 'capacity', 'head_teacher_id'
+        'program_id', 
+        'academic_year_id', 
+        'name', 
+        'section', 
+        'capacity', 
+        'head_teacher_id'
     ];
 
     public function program()
