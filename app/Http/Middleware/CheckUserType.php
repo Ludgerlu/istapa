@@ -23,7 +23,7 @@ class CheckUserType
         $user = Auth::user();
         
         foreach ($roles as $role) {
-            if ($role === 'admin' && $user->type === 'admin') {
+            if ($role === 'admin') {
                 return $next($request);
             }
             if ($role === 'teacher' && $user->type === 'teacher') {
