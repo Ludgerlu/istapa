@@ -50,9 +50,9 @@
         </div>
 
         <div class="border border-neutral-30 rounded-12 bg-main-25 p-24">
-            <form action="#" method="POST" id="admissionForm">
+            <form action="{{ route('admission.store') }}" method="POST" id="admissionForm" enctype="multipart/form-data">
                 @csrf
-                <h3 class="mb-24">Formulaire de Candidature</h3> 
+                <h3 class="mb-24">Formulaire de Candidature</h3>
 
                 <!-- Personal information Start -->
                 <div class="border border-neutral-30 rounded-12 bg-white p-24">
@@ -60,59 +60,62 @@
                     <span class="d-block border border-main-50 my-24 border-dashed"></span>
                     <div class="row gy-4">
                         <div class="col-sm-6">
-                            <label for="name" class="text-neutral-700 text-lg fw-medium mb-12">Nom complet <span class="text-danger-600">*</span> </label>
-                            <input type="text" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="name" name="name" placeholder="Entrez votre nom...">
+                            <label for="first_name" class="text-neutral-700 text-lg fw-medium mb-12">Prénom <span class="text-danger-600">*</span></label>
+                            <input type="text" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="first_name" name="first_name" value="{{ old('first_name') }}" required>
                         </div>
                         <div class="col-sm-6">
-                            <label for="email" class="text-neutral-700 text-lg fw-medium mb-12">Email <span class="text-danger-600">*</span> </label>
-                            <input type="email" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="email" name="email" placeholder="Entrez votre email...">
+                            <label for="last_name" class="text-neutral-700 text-lg fw-medium mb-12">Nom <span class="text-danger-600">*</span></label>
+                            <input type="text" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="last_name" name="last_name" value="{{ old('last_name') }}" required>
                         </div>
                         <div class="col-sm-6">
-                            <label for="phone" class="text-neutral-700 text-lg fw-medium mb-12">Téléphone <span class="text-danger-600">*</span> </label>
-                            <input type="tel" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="phone" name="phone" placeholder="Entrez votre numéro...">
+                            <label for="email" class="text-neutral-700 text-lg fw-medium mb-12">Email <span class="text-danger-600">*</span></label>
+                            <input type="email" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="email" name="email" value="{{ old('email') }}" required>
                         </div>
                         <div class="col-sm-6">
-                            <label for="dateBirth" class="text-neutral-700 text-lg fw-medium mb-12">Date de naissance <span class="text-danger-600">*</span> </label>
-                            <input type="date" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="dateBirth" name="date_birth">
+                            <label for="phone" class="text-neutral-700 text-lg fw-medium mb-12">Téléphone <span class="text-danger-600">*</span></label>
+                            <input type="tel" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="phone" name="phone" value="{{ old('phone') }}" required>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="birth_date" class="text-neutral-700 text-lg fw-medium mb-12">Date de naissance <span class="text-danger-600">*</span></label>
+                            <input type="date" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="birth_date" name="birth_date" value="{{ old('birth_date') }}" required>
                         </div>
                         <div class="col-sm-12">
-                            <label class="text-neutral-700 text-lg fw-medium mb-12">Genre <span class="text-danger-600">*</span> </label>
+                            <label class="text-neutral-700 text-lg fw-medium mb-12">Genre <span class="text-danger-600">*</span></label>
                             <div class="flex-align gap-24">
                                 <div class="form-check common-check common-radio mb-0">
-                                    <input class="form-check-input" type="radio" name="gender" id="Male" value="male">
+                                    <input class="form-check-input" type="radio" name="gender" id="Male" value="M" {{ old('gender') == 'M' ? 'checked' : '' }} required>
                                     <label class="form-check-label fw-normal flex-grow-1" for="Male">Masculin</label>
                                 </div>
                                 <div class="form-check common-check common-radio mb-0">
-                                    <input class="form-check-input" type="radio" name="gender" id="Female" value="female">
+                                    <input class="form-check-input" type="radio" name="gender" id="Female" value="F" {{ old('gender') == 'F' ? 'checked' : '' }} required>
                                     <label class="form-check-label fw-normal flex-grow-1" for="Female">Féminin</label>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <label for="selectCountry" class="text-neutral-700 text-lg fw-medium mb-12">Pays <span class="text-danger-600">*</span> </label>
-                            <select class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600 form-select py-14" id="selectCountry" name="country">
+                            <label for="country" class="text-neutral-700 text-lg fw-medium mb-12">Pays <span class="text-danger-600">*</span></label>
+                            <select class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600 form-select py-14" id="country" name="country" required>
                                 <option value="">Sélectionnez votre pays</option>
-                                <option value="CM">Cameroun</option>
-                                <option value="CI">Côte d'Ivoire</option>
-                                <option value="SN">Sénégal</option>
-                                <option value="ML">Mali</option>
-                                <option value="BF">Burkina Faso</option>
-                                <option value="GA">Gabon</option>
-                                <option value="CG">Congo</option>
-                                <option value="CD">RDC</option>
+                                <option value="Cameroun" {{ old('country') == 'Cameroun' ? 'selected' : '' }}>Cameroun</option>
+                                <option value="Côte d'Ivoire" {{ old('country') == 'Côte d\'Ivoire' ? 'selected' : '' }}>Côte d'Ivoire</option>
+                                <option value="Sénégal" {{ old('country') == 'Sénégal' ? 'selected' : '' }}>Sénégal</option>
+                                <option value="Mali" {{ old('country') == 'Mali' ? 'selected' : '' }}>Mali</option>
+                                <option value="Burkina Faso" {{ old('country') == 'Burkina Faso' ? 'selected' : '' }}>Burkina Faso</option>
+                                <option value="Gabon" {{ old('country') == 'Gabon' ? 'selected' : '' }}>Gabon</option>
+                                <option value="Congo" {{ old('country') == 'Congo' ? 'selected' : '' }}>Congo</option>
+                                <option value="RDC" {{ old('country') == 'RDC' ? 'selected' : '' }}>RDC</option>
                             </select>
                         </div>
                         <div class="col-sm-6">
-                            <label for="selectCity" class="text-neutral-700 text-lg fw-medium mb-12">Ville <span class="text-danger-600">*</span> </label>
-                            <input type="text" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="selectCity" name="city" placeholder="Entrez votre ville">
+                            <label for="city" class="text-neutral-700 text-lg fw-medium mb-12">Ville <span class="text-danger-600">*</span></label>
+                            <input type="text" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="city" name="city" value="{{ old('city') }}" required>
                         </div>
                         <div class="col-sm-12">
-                            <label for="address" class="text-neutral-700 text-lg fw-medium mb-12">Adresse complète </label>
-                            <textarea class="common-input bg-main-25 rounded-24 border-transparent focus-border-main-600" id="address" name="address" rows="3" placeholder="Entrez votre adresse..."></textarea>
+                            <label for="address" class="text-neutral-700 text-lg fw-medium mb-12">Adresse complète</label>
+                            <textarea class="common-input bg-main-25 rounded-24 border-transparent focus-border-main-600" id="address" name="address" rows="3">{{ old('address') }}</textarea>
                         </div>
                     </div>
                 </div>
-                <!-- Personal information End -->
 
                 <!-- Program Selection Start -->
                 <div class="border border-neutral-30 rounded-12 bg-white p-24 mt-24">
@@ -120,59 +123,16 @@
                     <span class="d-block border border-main-50 my-24 border-dashed"></span>
                     <div class="row gy-4">
                         <div class="col-sm-12">
-                            <label for="program" class="text-neutral-700 text-lg fw-medium mb-12">Filière de formation <span class="text-danger-600">*</span> </label>
-                            <select class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600 form-select py-14" id="program" name="program">
+                            <label for="program_id" class="text-neutral-700 text-lg fw-medium mb-12">Filière de formation <span class="text-danger-600">*</span></label>
+                            <select class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600 form-select py-14" id="program_id" name="program_id" required>
                                 <option value="">Sélectionnez votre programme</option>
-                                <option value="agro">Techniques Agro-Pastorales</option>
-                                <option value="agroalimentaire">Transformation Agroalimentaire</option>
-                                <option value="elevage">Élevage et Santé Animale</option>
-                                <option value="agriculture">Agriculture Durable</option>
-                                <option value="gestion">Gestion des Ressources Naturelles</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="preferredStart" class="text-neutral-700 text-lg fw-medium mb-12">Date de début souhaitée <span class="text-danger-600">*</span> </label>
-                            <input type="date" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="preferredStart" name="preferred_start">
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="hearAbout" class="text-neutral-700 text-lg fw-medium mb-12">Comment avez-vous connu ISTAPA ? <span class="text-danger-600">*</span> </label>
-                            <select class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600 form-select py-14" id="hearAbout" name="hear_about">
-                                <option value="">Sélectionnez</option>
-                                <option value="internet">Internet / Réseaux sociaux</option>
-                                <option value="friend">Recommandation d'un ami</option>
-                                <option value="radio">Radio / Télévision</option>
-                                <option value="school">Établissement scolaire</option>
-                                <option value="other">Autre</option>
+                                @foreach($programs as $program)
+                                    <option value="{{ $program->id }}" {{ old('program_id') == $program->id ? 'selected' : '' }}>{{ $program->title_en }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
                 </div>
-                <!-- Program Selection End -->
-
-                <!-- Parent detail Start -->
-                <div class="border border-neutral-30 rounded-12 bg-white p-24 mt-24">
-                    <h5 class="mb-0">Informations du tuteur / parent</h5>
-                    <span class="d-block border border-main-50 my-24 border-dashed"></span>
-                    <div class="row gy-4">
-                        <div class="col-sm-6">
-                            <label for="parentName" class="text-neutral-700 text-lg fw-medium mb-12">Nom du parent/tuteur <span class="text-danger-600">*</span> </label>
-                            <input type="text" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="parentName" name="parent_name" placeholder="Entrez le nom...">
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="parentPhone" class="text-neutral-700 text-lg fw-medium mb-12">Téléphone <span class="text-danger-600">*</span> </label>
-                            <input type="tel" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="parentPhone" name="parent_phone" placeholder="Entrez le numéro...">
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="parentEmail" class="text-neutral-700 text-lg fw-medium mb-12">Email <span class="text-danger-600">*</span> </label>
-                            <input type="email" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="parentEmail" name="parent_email" placeholder="Entrez l'email...">
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="relation" class="text-neutral-700 text-lg fw-medium mb-12">Lien de parenté <span class="text-danger-600">*</span> </label>
-                            <input type="text" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="relation" name="relation" placeholder="Ex: Père, Mère, Tuteur...">
-                        </div>
-                    </div>
-                </div>
-                <!-- Parent detail End -->
 
                 <!-- Previous Education Start -->
                 <div class="border border-neutral-30 rounded-12 bg-white p-24 mt-24">
@@ -180,24 +140,15 @@
                     <span class="d-block border border-main-50 my-24 border-dashed"></span>
                     <div class="row gy-4">
                         <div class="col-sm-6">
-                            <label for="lastSchool" class="text-neutral-700 text-lg fw-medium mb-12">Dernier établissement fréquenté <span class="text-danger-600">*</span> </label>
-                            <input type="text" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="lastSchool" name="last_school" placeholder="Nom de l'établissement">
+                            <label for="previous_school" class="text-neutral-700 text-lg fw-medium mb-12">Dernier établissement fréquenté</label>
+                            <input type="text" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="previous_school" name="previous_school" value="{{ old('previous_school') }}">
                         </div>
                         <div class="col-sm-6">
-                            <label for="diploma" class="text-neutral-700 text-lg fw-medium mb-12">Diplôme obtenu <span class="text-danger-600">*</span> </label>
-                            <input type="text" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="diploma" name="diploma" placeholder="Ex: BAC, BEPC, Probatoire...">
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="passYear" class="text-neutral-700 text-lg fw-medium mb-12">Année d'obtention <span class="text-danger-600">*</span> </label>
-                            <input type="text" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="passYear" name="pass_year" placeholder="Ex: 2024">
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="average" class="text-neutral-700 text-lg fw-medium mb-12">Moyenne / Mention </label>
-                            <input type="text" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="average" name="average" placeholder="Ex: 14/20, Bien...">
+                            <label for="previous_diploma" class="text-neutral-700 text-lg fw-medium mb-12">Diplôme obtenu</label>
+                            <input type="text" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="previous_diploma" name="previous_diploma" value="{{ old('previous_diploma') }}">
                         </div>
                     </div>
                 </div>
-                <!-- Previous Education End -->
 
                 <!-- Documents Upload Start -->
                 <div class="border border-neutral-30 rounded-12 bg-white p-24 mt-24">
@@ -205,28 +156,27 @@
                     <span class="d-block border border-main-50 my-24 border-dashed"></span>
                     <div class="row gy-4">
                         <div class="col-sm-6">
-                            <label for="cv" class="text-neutral-700 text-lg fw-medium mb-12">CV / Curriculum Vitae </label>
-                            <input type="file" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="cv" name="cv">
+                            <label for="doc_cv" class="text-neutral-700 text-lg fw-medium mb-12">CV / Curriculum Vitae</label>
+                            <input type="file" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="doc_cv" name="documents[cv]">
                             <small class="text-neutral-500">Format: PDF, DOC (Max 5MB)</small>
                         </div>
                         <div class="col-sm-6">
-                            <label for="diplomaFile" class="text-neutral-700 text-lg fw-medium mb-12">Copie du diplôme </label>
-                            <input type="file" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="diplomaFile" name="diploma_file">
+                            <label for="doc_diploma" class="text-neutral-700 text-lg fw-medium mb-12">Copie du diplôme</label>
+                            <input type="file" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="doc_diploma" name="documents[diploma]">
                             <small class="text-neutral-500">Format: PDF, JPG (Max 5MB)</small>
                         </div>
                         <div class="col-sm-6">
-                            <label for="idFile" class="text-neutral-700 text-lg fw-medium mb-12">Pièce d'identité </label>
-                            <input type="file" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="idFile" name="id_file">
+                            <label for="doc_id" class="text-neutral-700 text-lg fw-medium mb-12">Pièce d'identité</label>
+                            <input type="file" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="doc_id" name="documents[id]">
                             <small class="text-neutral-500">Format: PDF, JPG (Max 5MB)</small>
                         </div>
                         <div class="col-sm-6">
-                            <label for="photo" class="text-neutral-700 text-lg fw-medium mb-12">Photo d'identité </label>
-                            <input type="file" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="photo" name="photo">
+                            <label for="doc_photo" class="text-neutral-700 text-lg fw-medium mb-12">Photo d'identité</label>
+                            <input type="file" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="doc_photo" name="documents[photo]">
                             <small class="text-neutral-500">Format: JPG, PNG (Max 2MB)</small>
                         </div>
                     </div>
                 </div>
-                <!-- Documents Upload End -->
 
                 <!-- Additional Info Start -->
                 <div class="border border-neutral-30 rounded-12 bg-white p-24 mt-24">
@@ -234,8 +184,8 @@
                     <span class="d-block border border-main-50 my-24 border-dashed"></span>
                     <div class="row gy-4">
                         <div class="col-sm-12">
-                            <label for="motivation" class="text-neutral-700 text-lg fw-medium mb-12">Lettre de motivation </label>
-                            <textarea class="common-input bg-main-25 rounded-24 border-transparent focus-border-main-600" id="motivation" name="motivation" rows="4" placeholder="Dites-nous pourquoi vous souhaitez rejoindre ISTAPA..."></textarea>
+                            <label for="motivation" class="text-neutral-700 text-lg fw-medium mb-12">Lettre de motivation</label>
+                            <textarea class="common-input bg-main-25 rounded-24 border-transparent focus-border-main-600" id="motivation" name="motivation" rows="4">{{ old('motivation') }}</textarea>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-check common-check mb-0">
@@ -253,7 +203,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Additional Info End -->
             </form>
         </div>
     </div>
@@ -293,13 +242,3 @@
 </div>
 <!-- ================================= Certificate Section End ================================= -->
 @endsection
-
-@push('scripts')
-<script>
-    document.getElementById('admissionForm')?.addEventListener('submit', function(e) {
-        e.preventDefault();
-        alert('Votre candidature a été envoyée avec succès ! Nous vous contacterons sous 48h.');
-        // Here you would normally send the form data via AJAX
-    });
-</script>
-@endpush

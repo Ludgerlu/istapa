@@ -5,6 +5,9 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\BlogController as AdminBlogController;
 use App\Http\Controllers\Amin\LeaveController as AdminLeaveController;
+use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
+use App\Http\Controllers\Admin\FeesController as AdminFeesController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\AuthController;
@@ -41,6 +44,7 @@ Route::prefix('blog')->group(function () {
 
 // Admission page
 Route::get('/admission', [PageController::class, 'admission'])->name('admission');
+Route::post('/admission', [PageController::class, 'storeAdmission'])->name('admission.store');
 
 // Gallery page
 Route::get('/gallery', [PageController::class, 'gallery'])->name('gallery');
@@ -93,26 +97,26 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/blog/{blog}',    [AdminBlogController::class, 'destroy'])->name('blogs.destroy');
 
         // ── Users ─────────────────────────────────────────────────────────────
-        Route::resource('users', UserController::class);
+        Route::resource('users', AdminUserController::class);
 
         // ── Attendance ────────────────────────────────────────────────────────
         Route::prefix('attendance')->name('attendance.')->group(function () {
-            Route::get('/',                              [AttendanceController::class, 'index'])         ->name('index');
-            Route::get('/mark',                          [AttendanceController::class, 'mark'])          ->name('mark');
-            Route::post('/store',                        [AttendanceController::class, 'store'])         ->name('store');
-            Route::get('/class-summary',                 [AttendanceController::class, 'classSummary'])  ->name('class-summary');
-            Route::get('/student/{student}/report',      [AttendanceController::class, 'studentReport']) ->name('student-report');
+            Route::get('/',                              [AdminAttendanceController::class, 'index'])         ->name('index');
+            Route::get('/mark',                          [AdminAttendanceController::class, 'mark'])          ->name('mark');
+            Route::post('/store',                        [AdminAttendanceController::class, 'store'])         ->name('store');
+            Route::get('/class-summary',                 [AdminAttendanceController::class, 'classSummary'])  ->name('class-summary');
+            Route::get('/student/{student}/report',      [AdminAttendanceController::class, 'studentReport']) ->name('student-report');
         });
 
         // ── Fees ──────────────────────────────────────────────────────────────
         Route::prefix('fees')->name('fees.')->group(function () {
-            Route::get('/',                              [FeesController::class, 'index'])           ->name('index');
-            Route::get('/payment/create',                [FeesController::class, 'createPayment'])   ->name('create-payment');
-            Route::post('/payment',                      [FeesController::class, 'storePayment'])    ->name('store-payment');
-            Route::get('/student/{student}',             [FeesController::class, 'studentFees'])     ->name('student');
-            Route::get('/receipt/{payment}',             [FeesController::class, 'receipt'])         ->name('receipt');
-            Route::get('/structure',                     [FeesController::class, 'structure'])       ->name('structure');
-            Route::put('/structure',                     [FeesController::class, 'updateStructure']) ->name('update-structure');
+            Route::get('/',                              [AdminFeesController::class, 'index'])           ->name('index');
+            Route::get('/payment/create',                [AdminFeesController::class, 'createPayment'])   ->name('create-payment');
+            Route::post('/payment',                      [AdminFeesController::class, 'storePayment'])    ->name('store-payment');
+            Route::get('/student/{student}',             [AdminFeesController::class, 'studentFees'])     ->name('student');
+            Route::get('/receipt/{payment}',             [AdminFeesController::class, 'receipt'])         ->name('receipt');
+            Route::get('/structure',                     [AdminFeesController::class, 'structure'])       ->name('structure');
+            Route::put('/structure',                     [AdminFeesController::class, 'updateStructure']) ->name('update-structure');
         });
     });
 

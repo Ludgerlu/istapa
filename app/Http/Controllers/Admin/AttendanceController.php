@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Attendance;
-use App\Models\SchoolClass;
+use App\Models\Classes;
+use App\Models\AttendanceSession;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -18,15 +20,20 @@ class AttendanceController extends Controller
         $today = Carbon::today();
 
         $stats = [
-            'present' => Attendance::whereDate('date', $today)->where('status', 'present')->count(),
-            'absent'  => Attendance::whereDate('date', $today)->where('status', 'absent')->count(),
-            'late'    => Attendance::whereDate('date', $today)->where('status', 'late')->count(),
+            'present' => AttendanceSession::whereDate('session_date', $today)->with('details',function($query) {
+                $query->where('status', 'present');
+            })->count(),
+            'absent'  => AttendanceSession::whereDate('session_date', $today)->with('details',function($query) {
+                $query->where('status', 'absent');
+            })->count(),
+            'late'    => AttendanceSession::whereDate('session_date', $today)->with('details',function($query) {
+                $query->where('status', 'late');
+            })->count(),
             'rate'    => $this->monthlyRate(),
         ];
 
-        $classes = SchoolClass::orderBy('name')->get();
-
-        return view('attendance.index', compact('stats', 'classes'));
+        $classes = Classes::orderBy('name')->get();
+        return view('admin.attendance.index', compact('stats', 'classes'));
     }
 
     /**
@@ -39,7 +46,7 @@ class AttendanceController extends Controller
             'date'     => 'required|date',
         ]);
 
-        $class    = SchoolClass::findOrFail($request->class_id);
+        $class    = Classes::findOrFail($request->class_id);
         $date     = Carbon::parse($request->date);
         $students = User::where('role', 'student')
                         ->where('class_id', $class->id)
@@ -52,7 +59,7 @@ class AttendanceController extends Controller
                                ->where('class_id', $class->id)
                                ->pluck('status', 'student_id');
 
-        return view('attendance.mark', compact('class', 'date', 'students', 'existing'));
+        return view('admin.attendance.mark', compact('class', 'date', 'students', 'existing'));
     }
 
     /**
@@ -86,7 +93,7 @@ class AttendanceController extends Controller
             );
         }
 
-        return redirect()->route('attendance.index')
+        return redirect()->route('admin.attendance.index')
             ->with('success', 'Attendance saved successfully.');
     }
 
@@ -108,7 +115,7 @@ class AttendanceController extends Controller
         $presentCount = $records->where('status', 'present')->count();
         $rate         = $totalDays > 0 ? round(($presentCount / $totalDays) * 100) : 0;
 
-        return view('attendance.student-report', compact('student', 'records', 'start', 'end', 'rate', 'month'));
+        return view('admin.attendance.student-report', compact('student', 'records', 'start', 'end', 'rate', 'month'));
     }
 
     /**
@@ -143,7 +150,7 @@ class AttendanceController extends Controller
             ];
         });
 
-        return view('attendance.class-summary', compact('summary', 'month'));
+        return view('admin.attendance.class-summary', compact('summary', 'month'));
     }
 
     // ── helpers ──────────────────────────────────────────────────────────────
@@ -153,10 +160,12 @@ class AttendanceController extends Controller
         $start = Carbon::now()->startOfMonth();
         $end   = Carbon::now();
 
-        $total   = Attendance::whereBetween('date', [$start, $end])->count();
-        $present = Attendance::whereBetween('date', [$start, $end])
-                              ->where('status', 'present')
-                              ->count();
+        $total   = AttendanceSession::whereBetween('session_date', [$start, $end])->count();
+        $present = AttendanceSession::whereBetween('session_date', [$start, $end])
+                                    ->whereHas('details', function($query) {
+                                        $query->where('status', 'present');
+                                    })
+                                     ->count();
 
         return $total > 0 ? round(($present / $total) * 100, 1) : 0;
     }

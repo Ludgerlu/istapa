@@ -47,4 +47,26 @@ class Program extends Model
     {
         return $this->hasMany(UpcomingSession::class, 'program_id');
     }
+
+    public function scopePublished($query)
+    {
+        return $query->where('is_published', 1)->orderBy('sort_order');
+    }
+    public function getTitleAttribute()
+    {
+        $locale = app()->getLocale();
+        return $locale === 'fr' ? $this->title_fr : $this->title_en;
+    }
+
+    public function getContentAttribute()
+    {
+        $locale = app()->getLocale();
+        return $locale === 'fr' ? $this->content_fr : $this->content_en;
+    }
+
+    public function getExcerptAttribute()
+    {
+        $locale = app()->getLocale();
+        return $locale === 'fr' ? $this->short_description_fr : $this->short_description_en;
+    }
 }

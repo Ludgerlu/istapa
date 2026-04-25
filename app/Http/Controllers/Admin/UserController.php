@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -33,10 +34,10 @@ class UserController extends Controller
             'students' => User::where('role', 'student')->count(),
             'teachers' => User::where('role', 'teacher')->count(),
             'admins'   => User::where('role', 'admin')->count(),
-            'active'   => User::where('status', 'active')->count(),
+            'active'   => User::where('is_active', 1)->count(),
         ];
 
-        return view('users.index', compact('users', 'stats'));
+        return view('admin.users.index', compact('users', 'stats'));
     }
 
     /**
@@ -44,7 +45,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        return view('admin.users.create');
     }
 
     /**
@@ -83,7 +84,7 @@ class UserController extends Controller
 
         User::create($validated);
 
-        return redirect()->route('users.index')
+        return redirect()->route('admin.users.index')
             ->with('success', 'User created successfully.');
     }
 
@@ -93,7 +94,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         $user->load('attendances', 'fees');
-        return view('users.show', compact('user'));
+        return view('admin.users.show', compact('user'));
     }
 
     /**
@@ -101,7 +102,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('users.edit', compact('user'));
+        return view('admin.users.edit', compact('user'));
     }
 
     /**
@@ -125,7 +126,7 @@ class UserController extends Controller
 
         $user->update($validated);
 
-        return redirect()->route('users.index')
+        return redirect()->route('admin.users.index')
             ->with('success', 'User updated successfully.');
     }
 
@@ -134,9 +135,9 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $user->update(['status' => 'inactive']);
+        $user->update(['is_active' => 0]);
 
-        return redirect()->route('users.index')
+        return redirect()->route('admin.users.index')
             ->with('success', 'User deactivated.');
     }
 }

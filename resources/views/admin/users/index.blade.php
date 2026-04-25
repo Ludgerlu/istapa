@@ -1,10 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Users')
 @section('page-title', 'Users')
 
 @section('topbar-actions')
-    <a href="{{ route('users.create') }}" class="btn btn-primary">+ Add user</a>
+    <a href="{{ route('admin.users.create') }}" class="btn btn-primary">+ Add user</a>
 @endsection
 
 @section('content')
@@ -29,29 +29,34 @@
     </div>
 </div>
 
-{{-- Filters --}}
+{{-- Filters + Table Card --}}
 <div class="card">
-    <div class="card-header">
+    <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
         <span class="card-title">All users</span>
-        <form method="GET" style="display:flex;gap:8px;align-items:center">
-            <input name="search" placeholder="Search name / email…"
-                   value="{{ request('search') }}" style="width:200px">
-            <select name="role" onchange="this.form.submit()">
-                <option value="">All roles</option>
-                <option value="student"  {{ request('role') === 'student'  ? 'selected' : '' }}>Student</option>
-                <option value="teacher"  {{ request('role') === 'teacher'  ? 'selected' : '' }}>Teacher</option>
-                <option value="admin"    {{ request('role') === 'admin'    ? 'selected' : '' }}>Admin</option>
-            </select>
-            <button type="submit" class="btn">Filter</button>
-            @if(request()->hasAny(['role','search']))
-                <a href="{{ route('users.index') }}" class="btn">Clear</a>
-            @endif
-        </form>
+        <div class="d-flex gap-2">
+            {{-- Role filter (refresh page) – light and simple --}}
+            <form method="GET" id="role-form" class="d-flex gap-2">
+                <select name="role" class="form-select form-select-sm" style="width:130px" onchange="this.form.submit()">
+                    <option value="">All roles</option>
+                    <option value="student" {{ request('role') === 'student' ? 'selected' : '' }}>Student</option>
+                    <option value="teacher" {{ request('role') === 'teacher' ? 'selected' : '' }}>Teacher</option>
+                    <option value="admin" {{ request('role') === 'admin' ? 'selected' : '' }}>Admin</option>
+                </select>
+                @if(request()->has('role') && request('role') !== '')
+                    <a href="{{ route('admin.users.index') }}" class="btn btn-sm btn-secondary">Clear</a>
+                @endif
+            </form>
+            {{-- Real‑time search (JS) – only filters visible rows on current page --}}
+            <div class="input-group input-group-sm" style="width:250px">
+                <input type="text" id="liveSearch" class="form-control" placeholder="Search name / email...">
+                <span class="input-group-text"><i class="ph ph-magnifying-glass"></i></span>
+            </div>
+        </div>
     </div>
 
-    <div class="table-wrap">
-        <table>
-            <thead>
+    <div class="table-responsive">
+        <table class="table table-hover table-striped align-middle" id="usersTable">
+            <thead class="table-light">
                 <tr>
                     <th>Name</th>
                     <th>Role</th>
@@ -65,51 +70,69 @@
                 @forelse($users as $user)
                     @php
                         $initials = strtoupper(substr($user->first_name ?? $user->name, 0, 1) . substr($user->last_name ?? '', 0, 1));
-                        $avColors = ['student' => '#E6F1FB:#185FA5', 'teacher' => '#E1F5EE:#0F6E56', 'admin' => '#FAEEDA:#854F0B'];
-                        [$avBg, $avFg] = explode(':', $avColors[$user->role] ?? '#F1EFE8:#5F5E5A');
-                        $roleBadge = ['student' => 'badge-blue', 'teacher' => 'badge-green', 'admin' => 'badge-amber'];
+                        $bgColor = match($user->role) { 'student' => '#E6F1FB', 'teacher' => '#E1F5EE', default => '#FAEEDA' };
+                        $textColor = match($user->role) { 'student' => '#185FA5', 'teacher' => '#0F6E56', default => '#854F0B' };
+                        $roleBadge = match($user->role) { 'student' => 'bg-info bg-opacity-10 text-info', 'teacher' => 'bg-success bg-opacity-10 text-success', default => 'bg-warning bg-opacity-10 text-warning' };
                     @endphp
-                    <tr>
+                    <tr data-name="{{ strtolower($user->full_name) }}" data-email="{{ strtolower($user->email) }}">
                         <td>
-                            <div style="display:flex;align-items:center">
-                                <div class="avatar" style="background:{{ $avBg }};color:{{ $avFg }}">{{ $initials }}</div>
-                                <a href="{{ route('users.show', $user) }}" style="color:inherit;text-decoration:none;font-weight:500">{{ $user->name }}</a>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar" style="background:{{ $bgColor }};color:{{ $textColor }};width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-right:8px">{{ $initials }}</div>
+                                <a href="{{ route('admin.users.show', $user) }}" style="color:inherit;text-decoration:none;font-weight:500">{{ $user->full_name }}</a>
                             </div>
                         </td>
-                        <td><span class="badge {{ $roleBadge[$user->role] ?? 'badge-gray' }}">{{ $user->role }}</span></td>
-                        <td style="color:#888780">{{ $user->email }}</td>
-                        <td style="color:#888780">{{ $user->class ?? $user->subject ?? $user->title ?? '—' }}</td>
+                        <td><span class="badge {{ $roleBadge }} px-3 py-2">{{ ucfirst($user->role) }}</span></td>
+                        <td>{{ $user->email }}</td>
+                        <td>{{ $user->class_dept ?? '—' }}</td>
                         <td>
-                            <span class="badge {{ $user->status === 'active' ? 'badge-green' : 'badge-gray' }}">
-                                {{ $user->status }}
+                            <span class="badge {{ $user->is_active ? 'bg-success' : 'bg-secondary' }} px-3 py-2">
+                                {{ $user->is_active ? 'Active' : 'Inactive' }}
                             </span>
                         </td>
                         <td>
-                            <div style="display:flex;gap:6px">
-                                <a href="{{ route('users.edit', $user) }}" class="btn btn-sm">Edit</a>
-                                <form method="POST" action="{{ route('users.destroy', $user) }}"
-                                      onsubmit="return confirm('Deactivate this user?')">
+                            <div class="d-flex gap-2">
+                                <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                <form method="POST" action="{{ route('admin.users.destroy', $user) }}" onsubmit="return confirm('Deactivate this user?')">
                                     @csrf @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
                                 </form>
                             </div>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" style="text-align:center;color:#888780;padding:2rem">
-                            No users found.
-                        </td>
+                        <td colspan="6" class="text-center text-muted py-4">No users found.</td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
 
-    {{-- Pagination --}}
+    {{-- Laravel pagination links (styled with Bootstrap) --}}
     @if($users->hasPages())
-        <div style="padding-top:1rem">{{ $users->links() }}</div>
+        <div class="mt-3 d-flex justify-content-end">
+            {{ $users->appends(request()->query())->links('pagination::bootstrap-5') }}
+        </div>
     @endif
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+    // Live client-side search (filters rows on current page)
+    document.getElementById('liveSearch').addEventListener('keyup', function() {
+        let searchValue = this.value.toLowerCase();
+        let rows = document.querySelectorAll('#usersTable tbody tr');
+        rows.forEach(row => {
+            let name = row.getAttribute('data-name') || row.cells[0]?.innerText.toLowerCase() || '';
+            let email = row.getAttribute('data-email') || row.cells[2]?.innerText.toLowerCase() || '';
+            if (name.includes(searchValue) || email.includes(searchValue)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
+@endpush

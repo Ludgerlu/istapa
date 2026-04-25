@@ -9,6 +9,14 @@ use App\Models\BlogComment;
 use App\Models\Event;
 use App\Models\Testimonial;
 use App\Models\UpcomingSession;
+use App\Models\Classes;
+use App\Models\AdmissionRequest;
+use App\Models\AdmissionDocument;
+use App\Models\Program;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
 
 
 class PageController extends Controller
@@ -58,7 +66,8 @@ class PageController extends Controller
      */
     public function courses()
     {
-        return view('course');
+        $courses = Classes::with(['program', 'academicYear', 'headTeacher', 'classEnrollments'])->latest()->get();
+        return view('course', compact('courses'));
     }
 
     /**
@@ -145,7 +154,72 @@ class PageController extends Controller
      */
     public function admission()
     {
-        return view('apply-admission');
+        $programs = Program::get();
+        return view('apply-admission', compact('programs'));
+    }
+
+    public function storeAdmission(Request $request)
+    {
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:100',
+            'last_name'  => 'required|string|max:100',
+            'email'      => 'required|email|max:150|unique:admission_requests,email',
+            'phone'      => 'required|string|max:30',
+            'birth_date' => 'required|date',
+            'gender'     => 'required|in:M,F',
+            'country'    => 'required|string|max:100',
+            'city'       => 'required|string|max:100',
+            'address'    => 'nullable|string',
+            'program_id' => 'required|exists:programs,id',
+            'previous_school'   => 'nullable|string|max:200',
+            'previous_diploma'  => 'nullable|string|max:200',
+            'motivation'        => 'nullable|string',
+            'documents'   => 'nullable|array',
+            'documents.cv'   => 'nullable|file|mimes:pdf,doc,docx|max:5120',
+            'documents.diploma' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'documents.id'      => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'documents.photo'   => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        // Generate unique reference code
+        $referenceCode = 'ISTAPA-' . strtoupper(Str::random(10));
+        while (AdmissionRequest::where('reference_code', $referenceCode)->exists()) {
+            $referenceCode = 'ISTAPA-' . strtoupper(Str::random(10));
+        }
+
+        // Create admission request
+        $admission = AdmissionRequest::create([
+            'reference_code'    => $referenceCode,
+            'first_name'        => $validated['first_name'],
+            'last_name'         => $validated['last_name'],
+            'email'             => $validated['email'],
+            'phone'             => $validated['phone'],
+            'birth_date'        => $validated['birth_date'],
+            'gender'            => $validated['gender'],
+            'address'           => $validated['address'] ?? null,
+            'city'              => $validated['city'],
+            'country'           => $validated['country'],
+            'program_id'        => $validated['program_id'],
+            'previous_school'   => $validated['previous_school'] ?? null,
+            'previous_diploma'  => $validated['previous_diploma'] ?? null,
+            'motivation'        => $validated['motivation'] ?? null,
+            'status'            => 'pending',  // default status
+        ]);
+
+        // Handle document uploads
+        if ($request->hasFile('documents')) {
+            foreach ($request->file('documents') as $type => $file) {
+                $path = $file->store('admission_documents/' . $admission->id, 'public');
+                AdmissionDocument::create([
+                    'admission_request_id' => $admission->id,
+                    'doc_type'             => $type,
+                    'file_path'            => $path,
+                    'original_name'        => $file->getClientOriginalName(),
+                ]);
+            }
+        };
+
+        return back()->with('success', 'success', 'Votre candidature a été enregistrée avec succès. Votre référence : ' . $referenceCode);
     }
 
     /**
