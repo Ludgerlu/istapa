@@ -85,7 +85,7 @@
                             </a>
                         </li>
                         <li class="nav-submenu__item">
-                            <a href="{{ route('courses.list') }}" class="nav-submenu__link hover-bg-neutral-30">
+                            <a href="{{ route('courses') }}" class="nav-submenu__link hover-bg-neutral-30">
                                 Vue Liste des Cours
                             </a>
                         </li>
@@ -335,7 +335,7 @@
         <div class="bottom-footer bg-main-25 border-top border-dashed border-main-100 border-0 py-32">
             <div class="container container-two">
                 <div class="bottom-footer__inner flex-between gap-3 flex-wrap">
-                    <p class="bottom-footer__text"> Copyright &copy; {{ date('Y') }} <span class="fw-semibold">EduAll</span> All Rights Reserved.</p>
+                    <p class="bottom-footer__text"> Copyright &copy; {{ date('Y') }} <span class="fw-semibold">ISTAPA</span> All Rights Reserved.</p>
                     <div class="footer-links">
                         <a href="#" class="text-neutral-500 hover-text-main-600 hover-text-decoration-underline">Privacy Policy</a>
                         <a href="#" class="text-neutral-500 hover-text-main-600 hover-text-decoration-underline">Terms & Conditions</a>

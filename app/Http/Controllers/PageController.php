@@ -252,19 +252,29 @@ class PageController extends Controller
     }
 
     /**
-     * Display events page
+     * Display events page with paginated list
      */
     public function events()
     {
-        return view('events');
+        // Get published events, upcoming first (start_date >= today), order by start_date ASC
+        $events = Event::where('is_published', true)
+            ->orderBy('start_date', 'asc')
+            ->orderBy('start_time', 'asc')
+            ->paginate(6); // 6 events per page
+
+        return view('events', compact('events'));
     }
 
     /**
-     * Display event details page
+     * Display single event details page
      */
     public function eventDetails($id)
     {
-        return view('event-details');
+        
+        $event = Event::with(['images'])->where('is_published', true)->findOrFail($id);
+        // $event->increment('views');
+
+        return view('event-details', compact('event'));
     }
 
     /**
