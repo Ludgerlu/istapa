@@ -36,6 +36,7 @@ Route::prefix('courses')->group(function () {
 Route::prefix('blog')->group(function () {
     Route::get('/', [PageController::class, 'blog'])->name('blog');
     Route::get('/{id}', [PageController::class, 'blogDetails'])->name('blog.details');
+    Route::post('/blog/{postId}/comment', [PageController::class, 'storeComment'])->name('blog.comment.store')->middleware('auth');
 });
 
 // Admission page
@@ -90,6 +91,29 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/blog/{blog}/edit',  [AdminBlogController::class, 'edit'])->name('blogs.edit');
         Route::put('/blog/{blog}',       [AdminBlogController::class, 'update'])->name('blogs.update');
         Route::delete('/blog/{blog}',    [AdminBlogController::class, 'destroy'])->name('blogs.destroy');
+
+        // ── Users ─────────────────────────────────────────────────────────────
+        Route::resource('users', UserController::class);
+
+        // ── Attendance ────────────────────────────────────────────────────────
+        Route::prefix('attendance')->name('attendance.')->group(function () {
+            Route::get('/',                              [AttendanceController::class, 'index'])         ->name('index');
+            Route::get('/mark',                          [AttendanceController::class, 'mark'])          ->name('mark');
+            Route::post('/store',                        [AttendanceController::class, 'store'])         ->name('store');
+            Route::get('/class-summary',                 [AttendanceController::class, 'classSummary'])  ->name('class-summary');
+            Route::get('/student/{student}/report',      [AttendanceController::class, 'studentReport']) ->name('student-report');
+        });
+
+        // ── Fees ──────────────────────────────────────────────────────────────
+        Route::prefix('fees')->name('fees.')->group(function () {
+            Route::get('/',                              [FeesController::class, 'index'])           ->name('index');
+            Route::get('/payment/create',                [FeesController::class, 'createPayment'])   ->name('create-payment');
+            Route::post('/payment',                      [FeesController::class, 'storePayment'])    ->name('store-payment');
+            Route::get('/student/{student}',             [FeesController::class, 'studentFees'])     ->name('student');
+            Route::get('/receipt/{payment}',             [FeesController::class, 'receipt'])         ->name('receipt');
+            Route::get('/structure',                     [FeesController::class, 'structure'])       ->name('structure');
+            Route::put('/structure',                     [FeesController::class, 'updateStructure']) ->name('update-structure');
+        });
     });
 
     // Student Routes
