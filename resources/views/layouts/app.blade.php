@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'ISTAPA')</title>
     <!-- Favicon -->
@@ -197,6 +197,10 @@
                         <option value="1">Fr</option>
                         <option value="1">En</option>
                     </select>
+                    <select class="js-example-basic-single border-0" name="lang" id="fld-lang">
+                        <option value="fr" {{ app()->getLocale() == 'fr' ? 'selected' : '' }}>Français</option>
+                        <option value="en" {{ app()->getLocale() == 'en' ? 'selected' : '' }}>English</option>
+                    </select>
                 </div>
                 <a href="{{ route('signin') }}" class="info-action w-52 h-52 bg-main-25 hover-bg-main-600 border border-neutral-30 rounded-circle flex-center text-2xl text-neutral-500 hover-text-white hover-border-main-600">
                     <i class="ph ph-user-circle"></i>
@@ -215,7 +219,7 @@
     @yield('content')
 
     <!-- ==================== Footer Start Here ==================== -->
-<footer class="footer bg-main-25 position-relative z-1 container">
+<footer class="footer bg-main-25 position-relative z-1">
     <img src="{{ asset('assets/images/shapes/shape2.png') }}" alt="" class="shape five animation-scalation">
     <img src="{{ asset('assets/images/shapes/shape6.png') }}" alt="" class="shape one animation-scalation">
     
@@ -347,8 +351,8 @@
 
 
 <!-- Scripts -->
-<script src="{{ asset('assets/js/boostrap.bundle.min.js') }}"></script>
 <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script> 
+<script src="{{ asset('assets/js/boostrap.bundle.min.js') }}"></script>
 <script src="{{ asset('assets/js/select2.min.js') }}"></script>
 <script src="{{ asset('assets/js/phosphor-icon.js') }}"></script>
 <script src="{{ asset('assets/js/slick.min.js') }}"></script>
@@ -364,6 +368,14 @@
 <script src="{{ asset('assets/js/wow.min.js') }}"></script>
 <script src="{{ asset('assets/js/aos.js') }}"></script>
 <script src="{{ asset('assets/js/main.js') }}"></script>
+<script>
+    document.getElementById('fld-lang').addEventListener('change', function() {
+        var lang = this.value;
+        var url = new URL(window.location.href);
+        url.searchParams.set('lang', lang);
+        window.location.href = url.href;
+    });
+</script>
 @stack('scripts')
 </body>
 </html>

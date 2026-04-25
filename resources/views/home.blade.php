@@ -319,66 +319,38 @@
         <div class="row gy-4 align-items-center flex-wrap-reverse">
             <div class="col-xl-7">
                 <div class="testimonials-three-slider">
+                    @forelse($testimonials as $testimonial)
                     <div class="testimonials-three-item bg-white p-24 rounded-12 box-shadow-md">
                         <div class="w-90 h-90 rounded-circle position-relative mb-4">
-                            <img src="{{ asset('assets/images/thumbs/testimonials-three-img2.png') }}" alt="" class="cover-img rounded-circle" />
+                            @if($testimonial->author_photo)
+                            <img src="{{ asset('storage/' . $testimonial->author_photo) }}" alt="{{ $testimonial->author_name }}" class="cover-img rounded-circle" />
+                            @else
+                            <img src="{{ asset('assets/images/thumbs/testimonials-three-img1.png') }}" alt="Avatar" class="cover-img rounded-circle" />
+                            @endif
                             <span class="w-40 h-40 bg-main-two-600 flex-center border border-white border-2 rounded-circle position-absolute inset-block-end-0 inset-inline-end-0 mt--5 me--5">
                                 <img src="{{ asset('assets/images/icons/quote-two-icon.png') }}" alt="" />
                             </span>
                         </div>
-                        <p class="text-neutral-500 my-24">
-                            Fréquenter [Nom de l'Université] a été l'une des meilleures décisions que j'ai prises. Le
-                        </p>
+                        <p class="text-neutral-500 my-24">{{ $testimonial->content }}</p>
                         <ul class="flex-align gap-8 mb-16">
-                            <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
-                            <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
-                            <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
-                            <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
-                            <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star-half"></i></li>
+                            @for($i = 1; $i <= 5; $i++)
+                                @if($i <= $testimonial->rating)
+                                <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
+                                @elseif($i == round($testimonial->rating) && $testimonial->rating - floor($testimonial->rating) >= 0.5)
+                                <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star-half"></i></li>
+                                @else
+                                <li class="text-warning-600 text-xl d-flex"><i class="ph ph-star"></i></li>
+                                @endif
+                            @endfor
                         </ul>
-                        <h4 class="mb-16 text-lg">Ronald Richards</h4>
-                        <span class="text-neutral-500">Étudiant</span>
+                        <h4 class="mb-16 text-lg">{{ $testimonial->author_name }}</h4>
+                        <span class="text-neutral-500">{{ $testimonial->author_role ?? 'Étudiant' }}</span>
                     </div>
-                    <div class="testimonials-three-item bg-white p-24 rounded-12 box-shadow-md">
-                        <div class="w-90 h-90 rounded-circle position-relative mb-4">
-                            <img src="{{ asset('assets/images/thumbs/testimonials-three-img1.png') }}" alt="" class="cover-img rounded-circle" />
-                            <span class="w-40 h-40 bg-main-two-600 flex-center border border-white border-2 rounded-circle position-absolute inset-block-end-0 inset-inline-end-0 mt--5 me--5">
-                                <img src="{{ asset('assets/images/icons/quote-two-icon.png') }}" alt="" />
-                            </span>
-                        </div>
-                        <p class="text-neutral-500 my-24">
-                            "Le corps professoral n'est pas seulement des experts dans leurs domaines mais aussi des enseignants dévoués."
-                        </p>
-                        <ul class="flex-align gap-8 mb-16">
-                            <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
-                            <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
-                            <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
-                            <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
-                            <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star-half"></i></li>
-                        </ul>
-                        <h4 class="mb-16 text-lg">Brooklyn Simmons</h4>
-                        <span class="text-neutral-500">Étudiant</span>
+                    @empty
+                    <div class="testimonials-three-item bg-white p-24 rounded-12 box-shadow-md text-center">
+                        <p>Aucun témoignage pour le moment.</p>
                     </div>
-                    <div class="testimonials-three-item bg-white p-24 rounded-12 box-shadow-md">
-                        <div class="w-90 h-90 rounded-circle position-relative mb-4">
-                            <img src="{{ asset('assets/images/thumbs/testimonials-three-img3.png') }}" alt="" class="cover-img rounded-circle" />
-                            <span class="w-40 h-40 bg-main-two-600 flex-center border border-white border-2 rounded-circle position-absolute inset-block-end-0 inset-inline-end-0 mt--5 me--5">
-                                <img src="{{ asset('assets/images/icons/quote-two-icon.png') }}" alt="" />
-                            </span>
-                        </div>
-                        <p class="text-neutral-500 my-24">
-                            En tant que membre du corps professoral de [Nom de l'Université], j'ai eu le privilège de travailler
-                        </p>
-                        <ul class="flex-align gap-8 mb-16">
-                            <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
-                            <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
-                            <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
-                            <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
-                            <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star-half"></i></li>
-                        </ul>
-                        <h4 class="mb-16 text-lg">Courtney Henry</h4>
-                        <span class="text-neutral-500">Étudiant</span>
-                    </div>
+                    @endforelse
                 </div>
             </div>
 
@@ -422,87 +394,39 @@
                 </div>
 
                 <div class="event-item-wrapper overflow-x-auto scroll-sm scroll-sm-horizontal pb-4">
-                    <div class="event-item bg-main-25 rounded-12 p-24 d-flex align-items-center border border-neutral-20 min-width-max-content hover-bg-main-600 hover-border-main-600 hover-text-white transition-1 mb-24" data-aos="fade-up-left" data-aos-duration="200">
+                    @forelse($upcomingEvents as $event)
+                    <div class="event-item bg-main-25 rounded-12 p-24 d-flex align-items-center border flex-wrap  border-neutral-20 hover-bg-main-600 hover-border-main-600 hover-text-white transition-1 mb-24" data-aos="fade-up-left" data-aos-duration="200">
                         <div class="">
-                            <h3 class="mb-8 text-main-600">25</h3>
-                            <span class="text-neutral-500">Mai, 2024</span>
+                            <h3 class="mb-8 text-main-600">{{ $event->start_date->format('d') }}</h3>
+                            <span class="text-neutral-500">{{ $event->start_date->translatedFormat('M, Y') }}</span>
                         </div>
                         <span class="border border-neutral-40 border-dashed h-72"></span>
                         <div class="">
                             <div class="flex-between gap-16 flex-wrap mb-16">
                                 <div class="flex-align gap-8">
                                     <span class="text-neutral-700 text-lg d-flex"><i class="ph-bold ph-clock"></i></span>
-                                    <span class="text-neutral-700 text-lg fw-normal">02h30 à 16h25</span>
+                                    <span class="text-neutral-700 text-lg fw-normal">
+                                        {{ $event->start_time ? \Carbon\Carbon::parse($event->start_time)->format('H:i') : '00:00' }} à {{ $event->end_time ? \Carbon\Carbon::parse($event->end_time)->format('H:i') : '23:59' }}
+                                    </span>
                                 </div>
                                 <div class="flex-align gap-8">
                                     <span class="text-neutral-700 text-lg d-flex"><i class="ph-bold ph-map-trifold"></i></span>
-                                    <span class="text-neutral-700 text-lg fw-normal">Ebogo 1 - Yaoundé, Cameroun</span>
+                                     <span class="text-neutral-700 text-lg fw-normal">{{ $event->location ?? 'Ebogo 1 - Yaoundé, Cameroun' }}</span>
                                 </div>
                             </div>
-                            <h4 class="mt-12 mb-0">CONCOURS D'ENTRÉE No1</h4>
+                            <h4 class="mt-12 mb-0">{{ $event->title }}</h4>
                         </div>
-                        <span class="border border-neutral-40 border-dashed h-72"></span>
+                        <span class="border border-neutral-40 border-dashed h-72 d-none d-md-inline"></span>
                         <div class="flex-shrink-0">
-                            <a href="{{ route('about.founder') }}" class="btn btn-outline-main rounded-pill flex-align d-inline-flex gap-8">
+                            <a href="{{ route('event.details', $event->id) }}" class="btn btn-outline-main rounded-pill flex-align d-inline-flex gap-8">
                                 Rejoindre
                                 <i class="ph-bold ph-arrow-up-right d-flex text-lg"></i>
                             </a>
                         </div>
                     </div>
-                    <div class="event-item bg-main-25 rounded-12 p-24 d-flex align-items-center border border-neutral-20 min-width-max-content hover-bg-main-600 hover-border-main-600 hover-text-white transition-1 mb-24" data-aos="fade-up-left" data-aos-duration="400">
-                        <div class="">
-                            <h3 class="mb-8 text-main-600">12</h3>
-                            <span class="text-neutral-500">Juin, 2024</span>
-                        </div>
-                        <span class="border border-neutral-40 border-dashed h-72"></span>
-                        <div class="">
-                            <div class="flex-between gap-16 flex-wrap mb-16">
-                                <div class="flex-align gap-8">
-                                    <span class="text-neutral-700 text-lg d-flex"><i class="ph-bold ph-clock"></i></span>
-                                    <span class="text-neutral-700 text-lg fw-normal">02h30 à 16h25</span>
-                                </div>
-                                <div class="flex-align gap-8">
-                                    <span class="text-neutral-700 text-lg d-flex"><i class="ph-bold ph-map-trifold"></i></span>
-                                    <span class="text-neutral-700 text-lg fw-normal">Ebogo 1 - Yaoundé, Cameroun</span>
-                                </div>
-                            </div>
-                            <h4 class="mt-12 mb-0">CONCOURS D'ENTRÉE No2</h4>
-                        </div>
-                        <span class="border border-neutral-40 border-dashed h-72"></span>
-                        <div class="flex-shrink-0">
-                            <a href="#" class="btn btn-outline-main rounded-pill flex-align d-inline-flex gap-8">
-                                Rejoindre
-                                <i class="ph-bold ph-arrow-up-right d-flex text-lg"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="event-item bg-main-25 rounded-12 p-24 d-flex align-items-center border border-neutral-20 min-width-max-content hover-bg-main-600 hover-border-main-600 hover-text-white transition-1 mb-0" data-aos="fade-up-left" data-aos-duration="500">
-                        <div class="">
-                            <h3 class="mb-8 text-main-600">29</h3>
-                            <span class="text-neutral-500">Juillet, 2024</span>
-                        </div>
-                        <span class="border border-neutral-40 border-dashed h-72"></span>
-                        <div class="">
-                            <div class="flex-between gap-16 flex-wrap mb-16">
-                                <div class="flex-align gap-8">
-                                    <span class="text-neutral-700 text-lg d-flex"><i class="ph-bold ph-clock"></i></span>
-                                    <span class="text-neutral-700 text-lg fw-normal">02h30 à 16h25</span>
-                                </div>
-                                <div class="flex-align gap-8">
-                                    <span class="text-neutral-700 text-lg d-flex"><i class="ph-bold ph-map-trifold"></i></span>
-                                    <span class="text-neutral-700 text-lg fw-normal">Ebogo 1 - Yaoundé, Cameroun</span>
-                                </div>
-                            </div>
-                            <h4 class="mt-12 mb-0">CONCOURS D'ENTRÉE No3</h4>
-                        </div>
-                        <span class="border border-neutral-40 border-dashed h-72"></span>
-                        <div class="flex-shrink-0">
-                            <a href="#" class="btn btn-outline-main rounded-pill flex-align d-inline-flex gap-8">
-                                Rejoindre
-                                <i class="ph-bold ph-arrow-up-right d-flex text-lg"></i>
-                            </a>
-                        </div>
-                    </div>
+                    @empty
+                    <p>Aucun événement à venir pour le moment.</p>
+                    @endforelse
                 </div>
 
                 <a href="{{ route('events') }}" class="btn btn-outline-main rounded-pill flex-align d-inline-flex gap-8 mt-40">
@@ -529,120 +453,41 @@
             </p>
         </div>
         <div class="blog-two-slider">
-            <div class="scale-hover-item bg-white rounded-16 p-12 h-100" data-aos="fade-up" data-aos-duration="200">
+            @foreach($latestBlogs as $blog)
+            <div class="scale-hover-item bg-white rounded-16 p-12 h-100" data-aos="fade-up" data-aos-duration="{{ $loop->iteration * 200 }}">
                 <div class="course-item__thumb rounded-12 overflow-hidden position-relative">
-                    <a href="{{ route('blog.details', 1) }}" class="w-100 h-100">
-                        <img src="https://istapa.com/wp-content/uploads/2025/06/457771823_964342839041510_542102488472291096_n-1-768x1024.jpg" alt="Image du Cours" class="scale-hover-item__img rounded-12 cover-img transition-2" />
+                    <a href="{{ route('blog.details', $blog->slug) }}" class="w-100 h-100">
+                        <img src="{{ $blog->cover_image ? asset('storage/' . $blog->cover_image) : asset('assets/images/thumbs/blog-two-img1.png') }}" alt="{{ $blog->title }}" class="scale-hover-item__img rounded-12 cover-img transition-2" />
                     </a>
                     <div class="position-absolute inset-inline-end-0 inset-block-end-0 me-16 mb-16 py-12 px-24 rounded-8 bg-main-three-600 text-white fw-medium">
-                        <h3 class="mb-0 text-white fw-medium">21</h3>
-                        DÉC
+                        <h3 class="mb-0 text-white fw-medium">{{ $blog->published_at ? $blog->published_at->format('d') : '' }}</h3>
+                        {{ $blog->published_at ? strtoupper($blog->published_at->translatedFormat('M')) : '' }}
                     </div>
                 </div>
                 <div class="pt-32 pb-24 px-16 position-relative">
                     <h4 class="mb-28">
-                        <a href="{{ route('blog.details', 1) }}" class="link text-line-2">Journée mondiale de l'environnement</a>
+                        <a href="{{ route('blog.details', $blog->slug) }}" class="link text-line-2">{{ $blog->title }}</a>
                     </h4>
                     <div class="flex-align gap-14 flex-wrap my-20">
                         <div class="flex-align gap-8">
-                            <span class="text-neutral-500 text-2xl d-flex"><i class="ph ph-user-circle"></i></span>
-                            <span class="text-neutral-500 text-lg">Par Admin</span>
-                        </div>
-                        <span class="w-8 h-8 bg-neutral-100 rounded-circle"></span>
-                        <div class="flex-align gap-8">
                             <span class="text-neutral-500 text-2xl d-flex"><i class="ph-bold ph-eye"></i></span>
-                            <span class="text-neutral-500 text-lg">1.6k</span>
+                            <span class="text-neutral-500 text-lg">{{ $blog->view_count }}</span>
                         </div>
                         <span class="w-8 h-8 bg-neutral-100 rounded-circle"></span>
                         <div class="flex-align gap-8">
                             <span class="text-neutral-500 text-2xl d-flex"><i class="ph ph-chat-dots"></i></span>
-                            <span class="text-neutral-500 text-lg">24</span>
+                            <span class="text-neutral-500 text-lg">{{ $blog->comments->where('is_approved', true)->count() }}</span>
                         </div>
                     </div>
                     <div class="flex-between gap-8 pt-24 border-top border-neutral-50 mt-28 border-dashed border-0">
-                        <a href="{{ route('blog.details', 1) }}" class="flex-align gap-8 text-main-600 hover-text-decoration-underline transition-1 fw-semibold">
+                        <a href="{{ route('blog.details', $blog->slug) }}" class="flex-align gap-8 text-main-600 hover-text-decoration-underline transition-1 fw-semibold">
                             Lire la Suite
                             <i class="ph ph-arrow-right"></i>
                         </a>
                     </div>
                 </div>
             </div>
-            <div class="scale-hover-item bg-white rounded-16 p-12 h-100" data-aos="fade-up" data-aos-duration="400">
-                <div class="course-item__thumb rounded-12 overflow-hidden position-relative">
-                    <a href="{{ route('blog.details', 2) }}" class="w-100 h-100">
-                        <img src="https://istapa.com/wp-content/uploads/2025/06/457515455_122130412748331499_8951399709054450752_n-1-768x576.jpg" alt="Image du Cours" class="scale-hover-item__img rounded-12 cover-img transition-2" />
-                    </a>
-                    <div class="position-absolute inset-inline-end-0 inset-block-end-0 me-16 mb-16 py-12 px-24 rounded-8 bg-main-three-600 text-white fw-medium">
-                        <h3 class="mb-0 text-white fw-medium">21</h3>
-                        DÉC
-                    </div>
-                </div>
-                <div class="pt-32 pb-24 px-16 position-relative">
-                    <h4 class="mb-28">
-                        <a href="{{ route('blog.details', 2) }}" class="link text-line-2">ISTAPA Accueille Les Délégations De l'Université De Bertoua Et De l'ISSABEE Pour Une Mission D'évaluation Dans Le Cadre De La Demande De Tutorat Académique</a>
-                    </h4>
-                    <div class="flex-align gap-14 flex-wrap my-20">
-                        <div class="flex-align gap-8">
-                            <span class="text-neutral-500 text-2xl d-flex"><i class="ph ph-user-circle"></i></span>
-                            <span class="text-neutral-500 text-lg">Par Admin</span>
-                        </div>
-                        <span class="w-8 h-8 bg-neutral-100 rounded-circle"></span>
-                        <div class="flex-align gap-8">
-                            <span class="text-neutral-500 text-2xl d-flex"><i class="ph-bold ph-eye"></i></span>
-                            <span class="text-neutral-500 text-lg">1.6k</span>
-                        </div>
-                        <span class="w-8 h-8 bg-neutral-100 rounded-circle"></span>
-                        <div class="flex-align gap-8">
-                            <span class="text-neutral-500 text-2xl d-flex"><i class="ph ph-chat-dots"></i></span>
-                            <span class="text-neutral-500 text-lg">24</span>
-                        </div>
-                    </div>
-                    <div class="flex-between gap-8 pt-24 border-top border-neutral-50 mt-28 border-dashed border-0">
-                        <a href="{{ route('blog.details', 2) }}" class="flex-align gap-8 text-main-600 hover-text-decoration-underline transition-1 fw-semibold">
-                            Lire la Suite
-                            <i class="ph ph-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="scale-hover-item bg-white rounded-16 p-12 h-100" data-aos="fade-up" data-aos-duration="600">
-                <div class="course-item__thumb rounded-12 overflow-hidden position-relative">
-                    <a href="{{ route('blog.details', 3) }}" class="w-100 h-100">
-                        <img src="https://istapa.com/wp-content/uploads/2025/06/475105121_122156457968331499_8259807869563249512_n1-768x962.jpg" alt="Image du Cours" class="scale-hover-item__img rounded-12 cover-img transition-2" />
-                    </a>
-                    <div class="position-absolute inset-inline-end-0 inset-block-end-0 me-16 mb-16 py-12 px-24 rounded-8 bg-main-three-600 text-white fw-medium">
-                        <h3 class="mb-0 text-white fw-medium">21</h3>
-                        DÉC
-                    </div>
-                </div>
-                <div class="pt-32 pb-24 px-16 position-relative">
-                    <h4 class="mb-28">
-                        <a href="{{ route('blog.details', 3) }}" class="link text-line-2">Jardinage Vertical à ISTAPA</a>
-                    </h4>
-                    <div class="flex-align gap-14 flex-wrap my-20">
-                        <div class="flex-align gap-8">
-                            <span class="text-neutral-500 text-2xl d-flex"><i class="ph ph-user-circle"></i></span>
-                            <span class="text-neutral-500 text-lg">Par Admin</span>
-                        </div>
-                        <span class="w-8 h-8 bg-neutral-100 rounded-circle"></span>
-                        <div class="flex-align gap-8">
-                            <span class="text-neutral-500 text-2xl d-flex"><i class="ph-bold ph-eye"></i></span>
-                            <span class="text-neutral-500 text-lg">1.6k</span>
-                        </div>
-                        <span class="w-8 h-8 bg-neutral-100 rounded-circle"></span>
-                        <div class="flex-align gap-8">
-                            <span class="text-neutral-500 text-2xl d-flex"><i class="ph ph-chat-dots"></i></span>
-                            <span class="text-neutral-500 text-lg">24</span>
-                        </div>
-                    </div>
-                    <div class="flex-between gap-8 pt-24 border-top border-neutral-50 mt-28 border-dashed border-0">
-                        <a href="{{ route('blog.details', 3) }}" class="flex-align gap-8 text-main-600 hover-text-decoration-underline transition-1 fw-semibold">
-                            Lire la Suite
-                            <i class="ph ph-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
         <div class="flex-align gap-16 mt-40 justify-content-center">
             <button type="button" id="blog-two-prev" class="slick-prev slick-arrow flex-center rounded-circle border border-gray-100 hover-border-main-600 text-xl hover-bg-main-600 hover-text-white transition-1 w-48 h-48">

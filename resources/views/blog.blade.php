@@ -46,32 +46,21 @@
             </div>
         </div>
         <div class="row gy-4">
-            @php
-                $blogs = [
-                    ['id' => 1, 'img' => 'assets/images/thumbs/blog-two-img1.png', 'title' => 'Naviguer sur le Marché du Travail: Conseils pour les Diplômés', 'date' => '21', 'month' => 'DEC', 'views' => '1.6k', 'comments' => '24'],
-                    ['id' => 2, 'img' => 'assets/images/thumbs/blog-two-img2.png', 'title' => 'L\'Importance de la Diversité dans l\'Enseignement Supérieur', 'date' => '21', 'month' => 'DEC', 'views' => '1.6k', 'comments' => '24'],
-                    ['id' => 3, 'img' => 'assets/images/thumbs/blog-two-img3.png', 'title' => '10 Conseils pour Réussir l\'Apprentissage en Ligne', 'date' => '21', 'month' => 'DEC', 'views' => '1.6k', 'comments' => '24'],
-                    ['id' => 4, 'img' => 'assets/images/thumbs/blog-two-img4.png', 'title' => 'Comment Rester Motivé en Étudiant à Domicile', 'date' => '21', 'month' => 'DEC', 'views' => '1.6k', 'comments' => '24'],
-                    ['id' => 5, 'img' => 'assets/images/thumbs/blog-two-img5.png', 'title' => 'Maîtriser Python: Astuces du Débutant à l\'Avancé', 'date' => '21', 'month' => 'DEC', 'views' => '1.6k', 'comments' => '24'],
-                    ['id' => 6, 'img' => 'assets/images/thumbs/blog-two-img6.png', 'title' => 'Équilibrer Travail et Études: Stratégies de Réussite', 'date' => '21', 'month' => 'DEC', 'views' => '1.6k', 'comments' => '24'],
-                ];
-            @endphp
-
             @foreach($blogs as $blog)
             <div class="col-lg-4 col-sm-6">
                 <div class="scale-hover-item bg-main-25 rounded-16 p-12 h-100 border border-neutral-30">
                     <div class="course-item__thumb rounded-12 overflow-hidden position-relative">
                         <a href="{{ route('blog.details', $blog['id']) }}" class="w-100 h-100">
-                            <img src="{{ asset($blog['img']) }}" alt="Course Image" class="scale-hover-item__img rounded-12 cover-img transition-2">
+                            <img src="{{ asset($blog['cover_image']) }}" alt="Course Image" class="scale-hover-item__img rounded-12 cover-img transition-2">
                         </a>
                         <div class="position-absolute inset-inline-end-0 inset-block-end-0 me-16 mb-16 py-12 px-24 rounded-8 bg-main-three-600 text-white fw-medium">
-                            <h3 class="mb-0 text-white fw-medium">{{ $blog['date'] }}</h3>
+                            <h3 class="mb-0 text-white fw-medium">{{ $blog['created_at'] }}</h3>
                             {{ $blog['month'] }}
                         </div>
                     </div>
                     <div class="pt-32 pb-24 px-16 position-relative">
                         <h4 class="mb-28">
-                            <a href="{{ route('blog.details', $blog['id']) }}" class="link text-line-2">{{ $blog['title'] }}</a>
+                            <a href="{{ route('blog.details', $blog['id']) }}" class="link text-line-2">{{ $blog['title_fr'] }}</a>
                         </h4>
                         <div class="flex-align gap-14 flex-wrap my-20">
                             <div class="flex-align gap-8">
@@ -81,12 +70,12 @@
                             <span class="w-8 h-8 bg-neutral-100 rounded-circle"></span>
                             <div class="flex-align gap-8">
                                 <span class="text-neutral-500 text-2xl d-flex"><i class="ph-bold ph-eye"></i></span>
-                                <span class="text-neutral-500 text-lg">{{ $blog['views'] }}</span>
+                                <span class="text-neutral-500 text-lg">{{ $blog['view_count'] }}</span>
                             </div>
                             <span class="w-8 h-8 bg-neutral-100 rounded-circle"></span>
                             <div class="flex-align gap-8">
                                 <span class="text-neutral-500 text-2xl d-flex"><i class="ph ph-chat-dots"></i></span>
-                                <span class="text-neutral-500 text-lg">{{ $blog['comments'] }}</span>
+                                <span class="text-neutral-500 text-lg">{{ $blog['comments']->count() }}</span>
                             </div>
                         </div>
                         <div class="flex-between gap-8 pt-24 border-top border-neutral-50 mt-28 border-dashed border-0">
@@ -100,7 +89,9 @@
             </div>
             @endforeach
         </div>
+
         <ul class="pagination mt-40 flex-align gap-12 flex-wrap justify-content-center">
+            {{ $blogs->links() }}
             <li class="page-item"><a class="page-link text-neutral-700 fw-semibold w-40 h-40 bg-main-25 rounded-circle hover-bg-main-600 border-neutral-30 hover-border-main-600 hover-text-white flex-center p-0" href="#"><i class="ph-bold ph-caret-left"></i></a></li>
             <li class="page-item"><a class="page-link text-neutral-700 fw-semibold w-40 h-40 bg-main-25 rounded-circle hover-bg-main-600 border-neutral-30 hover-border-main-600 hover-text-white flex-center p-0" href="#">1</a></li>
             <li class="page-item"><a class="page-link text-neutral-700 fw-semibold w-40 h-40 bg-main-25 rounded-circle hover-bg-main-600 border-neutral-30 hover-border-main-600 hover-text-white flex-center p-0" href="#">2</a></li>
