@@ -160,11 +160,11 @@
     });
 
     // Handle sign in form submission
-    document.getElementById('signinForm')?.addEventListener('submit', function(e) {
-        e.preventDefault();
-        alert('Connexion réussie ! Redirection vers votre tableau de bord...');
-        // window.location.href = "#";
-    });
+    // document.getElementById('signinForm')?.addEventListener('submit', function(e) {
+    //     e.preventDefault();
+    //     alert('Connexion réussie ! Redirection vers votre tableau de bord...');
+    //     // window.location.href = "#";
+    // });
 
     // Handle forgot password
     document.getElementById('forgotPassword')?.addEventListener('click', function() {

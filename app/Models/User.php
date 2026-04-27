@@ -110,6 +110,11 @@ class User extends Authenticatable
         return $this->hasMany(AttendanceSession::class, 'taken_by');
     }
 
+    public function attendances()
+    {
+        return $this->hasMany(AttendanceDetail::class, 'student_id');
+    }
+
     public function examsCreated()
     {
         return $this->hasMany(Exam::class, 'created_by');

@@ -4,9 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Classes;
+use App\Models\AttendanceSession;
+use App\Models\Fee;
+use App\Models\Payment;
+use App\Models\AttendanceDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -93,7 +103,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $user->load('attendances', 'fees');
+        $user->load('attendances');
         return view('admin.users.show', compact('user'));
     }
 
