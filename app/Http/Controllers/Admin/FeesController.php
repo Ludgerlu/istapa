@@ -8,6 +8,9 @@ use App\Models\FeePayment;
 use App\Models\FeeStructure;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\Classes;
+use App\Models\AcademicYear;
+use App\Models\FeeCategory;
 
 class FeesController extends Controller
 {
@@ -16,32 +19,95 @@ class FeesController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Fee::with('student', 'student.schoolClass');
-
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
+        $query = Fee::with(['class', 'academicYear', 'category']);
 
         if ($request->filled('class_id')) {
-            $query->whereHas('student', fn($q) => $q->where('class_id', $request->class_id));
+            $query->where('class_id', $request->class_id);
+        }
+        if ($request->filled('academic_year_id')) {
+            $query->where('academic_year_id', $request->academic_year_id);
+        }
+        if ($request->filled('fee_category_id')) {
+            $query->where('fee_category_id', $request->fee_category_id);
         }
 
-        if ($request->filled('search')) {
-            $query->whereHas('student', fn($q) => $q->where('name', 'like', '%' . $request->search . '%'));
-        }
+        $fees = $query->paginate(20);
+        $classes = Classes::all();
+        $academicYears = AcademicYear::all();
+        $categories = FeeCategory::all();
 
-        $fees = $query->latest()->paginate(20)->withQueryString();
-
-        $stats = [
-            'expected'    => Fee::sum('total_amount'),
-            'collected'   => FeePayment::sum('amount'),
-            'outstanding' => Fee::sum('total_amount') - FeePayment::sum('amount'),
-            'paid_full'   => Fee::where('status', 'paid')->count(),
-        ];
-
-        return view('fees.index', compact('fees', 'stats'));
+        return view('admin.fees.index', compact('fees', 'classes', 'academicYears', 'categories'));
     }
 
+
+    public function show(Fee $fee)
+    {
+        $fee->load(['class', 'academicYear', 'category', 'payments.student', 'payments.receivedBy']);
+        $totalPaid = $fee->payments->sum('amount_paid');
+        $remaining = $fee->amount - $totalPaid;
+        return view('admin.fees.show', compact('fee', 'totalPaid', 'remaining'));
+    }
+
+    public function create()
+    {
+        $classes = Classes::all();
+        $academicYears = AcademicYear::all();
+        $categories = FeeCategory::all();
+        return view('admin.fees.create', compact('classes', 'academicYears', 'categories'));
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'class_id' => 'required|exists:classes,id',
+            'academic_year_id' => 'required|exists:academic_years,id',
+            'fee_category_id' => 'required|exists:fee_categories,id',
+            'amount' => 'required|numeric|min:0',
+            'due_date' => 'nullable|date',
+            'description' => 'nullable|string',
+        ]);
+
+        Fee::create($validated);
+
+        return redirect()->route('admin.fees.index')
+                         ->with('success', 'Frais créé avec succès.');
+    }
+
+    public function edit(Fee $fee)
+    {
+        $classes = Classes::all();
+        $academicYears = AcademicYear::all();
+        $categories = FeeCategory::all();
+        return view('admin.fees.edit', compact('fee', 'classes', 'academicYears', 'categories'));
+    }
+
+    public function update(Request $request, Fee $fee)
+    {
+        $validated = $request->validate([
+            'class_id' => 'required|exists:classes,id',
+            'academic_year_id' => 'required|exists:academic_years,id',
+            'fee_category_id' => 'required|exists:fee_categories,id',
+            'amount' => 'required|numeric|min:0',
+            'due_date' => 'nullable|date',
+            'description' => 'nullable|string',
+        ]);
+
+        $fee->update($validated);
+
+        return redirect()->route('admin.fees.show', $fee)
+                         ->with('success', 'Frais mis à jour.');
+    }
+
+    public function destroy(Fee $fee)
+    {
+        if ($fee->payments()->count() > 0) {
+            return back()->with('error', 'Impossible de supprimer : des paiements existent.');
+        }
+        $fee->delete();
+        return redirect()->route('admin.fees.index')
+                         ->with('success', 'Frais supprimé.');
+    }
+    
     /**
      * Show the payment recording form.
      */

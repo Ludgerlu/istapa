@@ -1,133 +1,46 @@
-@extends('layouts.app')
-
-@section('title', 'Fees')
-@section('page-title', 'Fees Management')
-
-@section('topbar-actions')
-    <a href="{{ route('fees.create-payment') }}" class="btn btn-primary">+ Record payment</a>
-    <a href="{{ route('fees.structure') }}" class="btn">Fee structure</a>
-@endsection
+@extends('layouts.admin')
+@section('title', 'Gestion des frais')
 
 @section('content')
-
-{{-- Stats --}}
-<div class="stats-grid">
-    <div class="stat-card">
-        <div class="stat-label">Expected (term)</div>
-        <div class="stat-value">{{ number_format($stats['expected']) }} FCFA</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-label">Collected</div>
-        <div class="stat-value green">{{ number_format($stats['collected']) }} FCFA</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-label">Outstanding</div>
-        <div class="stat-value red">{{ number_format($stats['outstanding']) }} FCFA</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-label">Paid in full</div>
-        <div class="stat-value">{{ $stats['paid_full'] }} students</div>
-    </div>
+<div class="d-flex justify-content-between mb-24">
+    <h4>Frais scolaires</h4>
+    <a href="{{ route('admin.fees.create') }}" class="btn btn-main rounded-pill"><i class="ph ph-plus"></i> Nouveau frais</a>
 </div>
 
-{{-- Collection progress --}}
-@php
-    $collectionRate = $stats['expected'] > 0
-        ? round(($stats['collected'] / $stats['expected']) * 100)
-        : 0;
-@endphp
-<div class="card" style="margin-bottom:1rem">
-    <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-        <span style="font-size:13px;color:#888780">Collection progress</span>
-        <span style="font-size:13px;font-weight:500">{{ $collectionRate }}%</span>
-    </div>
-    <div class="progress" style="height:10px">
-        <div class="progress-bar {{ $collectionRate >= 80 ? 'bg-green' : ($collectionRate >= 50 ? 'bg-amber' : 'bg-red') }}"
-             style="width:{{ $collectionRate }}%"></div>
-    </div>
+<div class="bg-white rounded-10 p-20 mb-24">
+    <form method="GET" class="row g-3">
+        <div class="col-md-3"><label>Classe</label><select name="class_id" class="form-select"><option value="">Toutes</option>@foreach($classes as $c)<option value="{{ $c->id }}" {{ request('class_id')==$c->id ? 'selected' : '' }}>{{ $c->name }}</option>@endforeach</select></div>
+        <div class="col-md-3"><label>Année scolaire</label><select name="academic_year_id" class="form-select"><option value="">Toutes</option>@foreach($academicYears as $y)<option value="{{ $y->id }}" {{ request('academic_year_id')==$y->id ? 'selected' : '' }}>{{ $y->name }}</option>@endforeach</select></div>
+        <div class="col-md-3"><label>Catégorie</label><select name="fee_category_id" class="form-select"><option value="">Toutes</option>@foreach($categories as $cat)<option value="{{ $cat->id }}" {{ request('fee_category_id')==$cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>@endforeach</select></div>
+        <div class="col-md-3 d-flex align-items-end"><button type="submit" class="btn btn-main w-100">Filtrer</button></div>
+    </form>
 </div>
 
-{{-- Filters + table --}}
-<div class="card">
-    <div class="card-header">
-        <span class="card-title">Student fees</span>
-        <form method="GET" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-            <input name="search" placeholder="Search student…" value="{{ request('search') }}" style="width:160px">
-            <select name="status" onchange="this.form.submit()">
-                <option value="">All status</option>
-                <option value="paid"    {{ request('status') === 'paid'    ? 'selected' : '' }}>Paid</option>
-                <option value="partial" {{ request('status') === 'partial' ? 'selected' : '' }}>Partial</option>
-                <option value="unpaid"  {{ request('status') === 'unpaid'  ? 'selected' : '' }}>Unpaid</option>
-            </select>
-            <button type="submit" class="btn">Filter</button>
-            @if(request()->hasAny(['status','search']))
-                <a href="{{ route('fees.index') }}" class="btn">Clear</a>
-            @endif
-        </form>
-    </div>
-
-    <div class="table-wrap">
-        <table>
-            <thead>
-                <tr>
-                    <th>Student</th>
-                    <th>Class</th>
-                    <th>Total fees</th>
-                    <th>Paid</th>
-                    <th>Balance</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($fees as $fee)
-                    @php
-                        $balance   = $fee->total_amount - $fee->amount_paid;
-                        $statusBadge = ['paid' => 'badge-green', 'partial' => 'badge-amber', 'unpaid' => 'badge-red'];
-                    @endphp
-                    <tr>
-                        <td>
-                            <div style="display:flex;align-items:center">
-                                <div class="avatar" style="background:#E6F1FB;color:#185FA5">
-                                    {{ strtoupper(substr($fee->student->name, 0, 2)) }}
-                                </div>
-                                <a href="{{ route('fees.student', $fee->student) }}"
-                                   style="color:inherit;text-decoration:none;font-weight:500">
-                                    {{ $fee->student->name }}
-                                </a>
-                            </div>
-                        </td>
-                        <td style="color:#888780">{{ $fee->student->schoolClass->name ?? '—' }}</td>
-                        <td>{{ number_format($fee->total_amount) }}</td>
-                        <td>{{ number_format($fee->amount_paid) }}</td>
-                        <td style="{{ $balance > 0 ? 'color:#A32D2D;font-weight:500' : 'color:#888780' }}">
-                            {{ number_format($balance) }}
-                        </td>
-                        <td>
-                            <span class="badge {{ $statusBadge[$fee->status] ?? 'badge-gray' }}">
-                                {{ ucfirst($fee->status) }}
-                            </span>
-                        </td>
-                        <td>
-                            <div style="display:flex;gap:6px">
-                                <a href="{{ route('fees.student', $fee->student) }}" class="btn btn-sm">Details</a>
-                            </div>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="7" style="text-align:center;color:#888780;padding:2rem">
-                            No fee records found.
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-
-    @if($fees->hasPages())
-        <div style="padding-top:1rem">{{ $fees->links() }}</div>
-    @endif
+<div class="bg-white rounded-10 p-24">
+    <table class="table">
+        <thead><tr><th>Classe</th><th>Année scolaire</th><th>Catégorie</th><th>Montant</th><th>Échéance</th><th>Actions</th></tr></thead>
+        <tbody>
+            @forelse($fees as $fee)
+            <tr>
+                <td>{{ $fee->class->name ?? '—' }}</td>
+                <td>{{ $fee->academicYear->name ?? '—' }}</td>
+                <td>{{ $fee->category->name ?? '—' }}</td>
+                <td>{{ number_format($fee->amount, 2) }} FCFA</td>
+                <td>{{ $fee->due_date?->format('d/m/Y') ?? '—' }}</td>
+                <td class="d-flex gap-8">
+                    <a href="{{ route('admin.fees.show', $fee) }}" class="btn bg-main-600 text-white px-12 py-6 rounded-pill text-12"><i class="ph ph-eye"></i></a>
+                    <a href="{{ route('admin.fees.edit', $fee) }}" class="btn btn-sm bg-warning-100 text-warning-600 px-12 py-6 rounded-pill text-12"><i class="ph ph-pencil"></i></a>
+                    <form action="{{ route('admin.fees.destroy', $fee) }}" method="POST" onsubmit="return confirm('Supprimer définitivement ?')">
+                        @csrf @method('DELETE')
+                        <button class="btn btn-sm bg-danger-100 text-danger-600 px-12 py-6 rounded-pill text-12"><i class="ph ph-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+            @empty
+            <tr><td colspan="6" class="text-center py-40 text-muted">Aucun frais enregistré.</td></tr>
+            @endforelse
+        </tbody>
+    </table>
+    {{ $fees->withQueryString()->links() }}
 </div>
-
 @endsection

@@ -116,8 +116,8 @@ Route::middleware(['auth'])->group(function () {
         });
 
         // ── Fees ──────────────────────────────────────────────────────────────
+        Route::resource('fees', AdminFeesController::class);
         Route::prefix('fees')->name('fees.')->group(function () {
-            Route::get('/',                              [AdminFeesController::class, 'index'])           ->name('index');
             Route::get('/payment/create',                [AdminFeesController::class, 'createPayment'])   ->name('create-payment');
             Route::post('/payment',                      [AdminFeesController::class, 'storePayment'])    ->name('store-payment');
             Route::get('/student/{student}',             [AdminFeesController::class, 'studentFees'])     ->name('student');
