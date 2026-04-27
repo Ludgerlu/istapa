@@ -8,6 +8,9 @@ use App\Http\Controllers\Amin\LeaveController as AdminLeaveController;
 use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
 use App\Http\Controllers\Admin\FeesController as AdminFeesController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\EventController as AdminEventController;
+use App\Http\Controllers\Admin\GalleryAlbumController as AdminGalleryAlbumController;
+use App\Http\Controllers\Admin\GalleryImageController as AdminGalleryImageController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\AuthController;
@@ -122,6 +125,19 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/structure',                     [AdminFeesController::class, 'structure'])       ->name('structure');
             Route::put('/structure',                     [AdminFeesController::class, 'updateStructure']) ->name('update-structure');
         });
+
+         // ── Events ──────────────────────────────────────────────────────────
+        Route::resource('events', AdminEventController::class);
+        Route::post('events/{event}/images', [AdminEventController::class, 'storeImage'])->name('events.storeImage');
+        Route::delete('events/images/{image}', [AdminEventController::class, 'destroyImage'])->name('events.destroyImage');
+        Route::post('events/images/reorder', [AdminEventController::class, 'reorderImages'])->name('events.reorderImages');
+
+        //  ── Gallery Albums ────────────────────────────────────────────────────────
+        Route::resource('gallery', AdminGalleryAlbumController::class);
+        Route::post('gallery/{album}/images', [AdminGalleryImageController::class, 'store'])->name('gallery.images.store');
+        Route::delete('gallery/images/{image}', [AdminGalleryImageController::class, 'destroy'])->name('gallery.images.destroy');
+        Route::post('gallery/images/reorder', [AdminGalleryImageController::class, 'reorder'])->name('gallery.images.reorder');
+    
     });
 
     // Student Routes

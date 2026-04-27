@@ -222,7 +222,7 @@
                             ['route' => 'admin.subjects',   'icon' => 'ph ph-notepad',              'label' => 'Matières'],
                             ['route' => 'admin.exams',      'icon' => 'ph ph-exam',                 'label' => 'Examens'],
                             ['route' => 'admin.fees.index',       'icon' => 'ph ph-money',                'label' => 'Frais scolaires'],
-                            ['route' => 'admin.events',     'icon' => 'ph ph-calendar',             'label' => 'Événements'],
+                            ['route' => 'admin.events.index',     'icon' => 'ph ph-calendar',             'label' => 'Événements'],
                             ['route' => 'admin.blogs.index',      'icon' => 'ph ph-newspaper',            'label' => 'Blog'],
                             ['route' => 'admin.messages',   'icon' => 'ph ph-chat-dots',            'label' => 'Messages'],
                             ['route' => 'admin.profile',    'icon' => 'ph ph-user-circle',          'label' => 'Mon profil'],
