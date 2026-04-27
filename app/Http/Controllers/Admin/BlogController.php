@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Blog;
+use App\Models\BlogPost;
+use App\Models\BlogCategory;
+use App\Models\BlogComment;
 use App\Models\User;
 use App\Models\Event;
 
@@ -13,7 +16,7 @@ class BlogController extends Controller
 {
     public function index(Request $request)
     {
-        $blogs = Blog::with('author')
+        $blogs = BlogPost::with('author')
             ->when($request->q,      fn($q, $s) => $q->where('title', 'like', "%{$s}%"))
             ->when($request->status, fn($q, $s) => $q->where('status', $s))
             ->latest()
@@ -22,52 +25,68 @@ class BlogController extends Controller
         return view('admin.blog.index', compact('blogs'));
     }
 
+    /**
+     * Show form to create a new blog post
+     */
     public function create()
     {
-        $authors = User::admins()->orWhere('type', 'teacher')->orderBy('display_name')->get();
-        return view('admin.blog.create', compact('authors'));
+        $categories = BlogCategory::all();
+        return view('admin.blog.create', compact('categories'));
     }
 
+    /**
+     * Store a newly created blog post
+     */
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'title'       => 'required|string|max:255',
-            'excerpt'     => 'nullable|string',
-            'content'     => 'required|string',
-            'status'      => 'required|in:draft,published,archived',
-            'author_id'   => 'required|exists:users,id',
-            'cover_image' => 'nullable|image|max:2048',
+        $validated = $request->validate([
+            'blog_category_id' => 'nullable|exists:blog_categories,id',
+            'title_en'         => 'required|string|max:255',
+            'title_fr'         => 'required|string|max:255',
+            'excerpt_en'       => 'nullable|string',
+            'excerpt_fr'       => 'nullable|string',
+            'content_en'       => 'required|string',
+            'content_fr'       => 'required|string',
+            'meta_description_en' => 'nullable|string',
+            'meta_description_fr' => 'nullable|string',
+            'cover_image'      => 'nullable|image|max:2048',
+            'status'           => 'required|in:draft,published,archived',
+            'published_at'     => 'nullable|date',
         ]);
 
-        // Auto-generate slug if empty
-        // if (empty($data['slug'])) {
-        //     $data['slug'] = \Str::slug($data['title']);
-        // }
+        $validated['author_id'] = Auth::id();
+        $validated['slug'] = Str::slug($validated['title_en'] . '-' . uniqid());
 
         if ($request->hasFile('cover_image')) {
-            $data['cover_image'] = $request->file('cover_image')->store('blog', 'public');
+            $path = $request->file('cover_image')->store('blog_covers', 'public');
+            $validated['cover_image'] = $path;
         }
 
-        Blog::create($data);
+        BlogPost::create($validated);
 
-        return redirect()->route('admin.blogs')->with('success', 'Article créé avec succès.');
+        return redirect()->route('admin.blogs.index')
+                         ->with('success', 'Article créé avec succès.');
     }
 
-    public function show(Blog $blog)
+    /**
+     * Display a single blog post with its comments (for admin)
+     */
+    public function show(BlogPost $blog)
     {
-        $blog->load('author');
-        $recentPosts    = Blog::published()->where('id', '!=', $blog->id)->take(5)->get();
-        $upcomingEvents = Event::upcoming()->take(4)->get();
-        $previous       = Blog::published()->where('id', '<', $blog->id)->first();
-        $next           = Blog::published()->where('id', '>', $blog->id)->first();
+        // Load comments with user and replies (nested)
+        $comments = $blog->comments()
+            ->with(['user', 'replies.user'])
+            ->whereNull('parent_id')   // only top-level comments
+            ->latest()
+            ->get();
 
-        return view('admin.blog.show', compact('blog', 'recentPosts', 'upcomingEvents', 'previous', 'next'));
+        return view('admin.blog.show', compact('blog', 'comments'));
     }
 
-    public function edit(Blog $blog)
+    public function edit(BlogPost $blog)
     {
-        $authors = User::where('type', 'admin')->orWhere('type', 'teacher')->orderBy('display_name')->get();
-        return view('admin.blog.edit', compact('blog', 'authors'));
+        $categories = BlogCategory::all();
+        return view('admin.blog.edit', compact('blog', 'categories'));
     }
 
     public function update(Request $request, Blog $blog)
@@ -108,5 +127,36 @@ class BlogController extends Controller
         $blog->delete();
 
         return redirect()->route('admin.blogs')->with('success', 'Article supprimé.');
+    }
+
+    // ----- Comment approval methods (used in Show view) -----
+
+    /**
+     * Approve a comment
+     */
+    public function approveComment(BlogComment $comment)
+    {
+        $comment->update(['is_approved' => true]);
+        return back()->with('success', 'Commentaire approuvé.');
+    }
+
+    /**
+     * Unapprove (disapprove) a comment
+     */
+    public function disapproveComment(BlogComment $comment)
+    {
+        $comment->update(['is_approved' => false]);
+        return back()->with('success', 'Commentaire désapprouvé.');
+    }
+
+    /**
+     * Delete a comment
+     */
+    public function destroyComment(BlogComment $comment)
+    {
+        // Also delete its replies
+        $comment->replies()->delete();
+        $comment->delete();
+        return back()->with('success', 'Commentaire supprimé.');
     }
 }

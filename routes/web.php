@@ -95,6 +95,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/blog/{blog}/edit',  [AdminBlogController::class, 'edit'])->name('blogs.edit');
         Route::put('/blog/{blog}',       [AdminBlogController::class, 'update'])->name('blogs.update');
         Route::delete('/blog/{blog}',    [AdminBlogController::class, 'destroy'])->name('blogs.destroy');
+        // Comment moderation (nested under blogs, but can be separate)
+        Route::patch('comments/{comment}/approve', [AdminBlogController::class, 'approveComment'])->name('comments.approve');
+        Route::patch('comments/{comment}/disapprove', [AdminBlogController::class, 'disapproveComment'])->name('comments.disapprove');
+        Route::delete('comments/{comment}', [AdminBlogController::class, 'destroyComment'])->name('comments.destroy');
 
         // ── Users ─────────────────────────────────────────────────────────────
         Route::resource('users', AdminUserController::class);

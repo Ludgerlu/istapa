@@ -14,7 +14,7 @@
 
 {{-- Filters --}}
 <div class="bg-white rounded-10 px-20 py-16 mb-4 d-flex align-items-center gap-16 flex-wrap">
-    <form action="{{ route('admin.blogs') }}" method="GET" class="d-flex gap-12 flex-wrap align-items-center w-100">
+    <form action="{{ route('admin.blogs.index') }}" method="GET" class="d-flex gap-12 flex-wrap align-items-center w-100">
         <input type="text" name="q" value="{{ request('q') }}" placeholder="Rechercher un article…"
                class="form-control text-14 border-neutral-40 rounded-pill ps-16" style="max-width:280px">
         <select name="status" class="form-select text-14 border-neutral-40 w-auto">
@@ -25,7 +25,7 @@
         </select>
         <button type="submit" class="btn bg-main-600 text-white rounded-pill px-20 py-9 text-14">Filtrer</button>
         @if(request()->anyFilled(['q','status']))
-            <a href="{{ route('admin.blogs') }}" class="text-14 text-neutral-400 hover-text-main-600">Réinitialiser</a>
+            <a href="{{ route('admin.blogs.index') }}" class="text-14 text-neutral-400 hover-text-main-600">Réinitialiser</a>
         @endif
     </form>
 </div>
