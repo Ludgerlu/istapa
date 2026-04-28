@@ -34,7 +34,7 @@
                     <option value="">Sélectionner une année</option>
                     @foreach($academicYears as $year)
                         <option value="{{ $year->id }}" {{ old('academic_year_id', $fee->academic_year_id) == $year->id ? 'selected' : '' }}>
-                            {{ $year->name }}
+                            {{ $year->label }}
                         </option>
                     @endforeach
                 </select>

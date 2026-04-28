@@ -7,7 +7,7 @@
     <div class="bg-white rounded-10 p-24">
         <div class="row g-3">
             <div class="col-md-4"><label>Classe *</label><select name="class_id" class="form-select" required>@foreach($classes as $c)<option value="{{ $c->id }}">{{ $c->name }}</option>@endforeach</select></div>
-            <div class="col-md-4"><label>Année scolaire *</label><select name="academic_year_id" class="form-select" required>@foreach($academicYears as $y)<option value="{{ $y->id }}">{{ $y->name }}</option>@endforeach</select></div>
+            <div class="col-md-4"><label>Année scolaire *</label><select name="academic_year_id" class="form-select" required>@foreach($academicYears as $y)<option value="{{ $y->id }}">{{ $y->label }}</option>@endforeach</select></div>
             <div class="col-md-4"><label>Catégorie *</label><select name="fee_category_id" class="form-select" required>@foreach($categories as $cat)<option value="{{ $cat->id }}">{{ $cat->name }}</option>@endforeach</select></div>
             <div class="col-md-4"><label>Montant (FCFA) *</label><input type="number" step="0.01" name="amount" class="form-control" required></div>
             <div class="col-md-4"><label>Date d'échéance</label><input type="date" name="due_date" class="form-control"></div>

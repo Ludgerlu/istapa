@@ -10,7 +10,7 @@
 <div class="bg-white rounded-10 p-20 mb-24">
     <form method="GET" class="row g-3">
         <div class="col-md-3"><label>Classe</label><select name="class_id" class="form-select"><option value="">Toutes</option>@foreach($classes as $c)<option value="{{ $c->id }}" {{ request('class_id')==$c->id ? 'selected' : '' }}>{{ $c->name }}</option>@endforeach</select></div>
-        <div class="col-md-3"><label>Année scolaire</label><select name="academic_year_id" class="form-select"><option value="">Toutes</option>@foreach($academicYears as $y)<option value="{{ $y->id }}" {{ request('academic_year_id')==$y->id ? 'selected' : '' }}>{{ $y->name }}</option>@endforeach</select></div>
+        <div class="col-md-3"><label>Année scolaire</label><select name="academic_year_id" class="form-select"><option value="">Toutes</option>@foreach($academicYears as $y)<option value="{{ $y->id }}" {{ request('academic_year_id')==$y->id ? 'selected' : '' }}>{{ $y->label }}</option>@endforeach</select></div>
         <div class="col-md-3"><label>Catégorie</label><select name="fee_category_id" class="form-select"><option value="">Toutes</option>@foreach($categories as $cat)<option value="{{ $cat->id }}" {{ request('fee_category_id')==$cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>@endforeach</select></div>
         <div class="col-md-3 d-flex align-items-end"><button type="submit" class="btn btn-main w-100">Filtrer</button></div>
     </form>
