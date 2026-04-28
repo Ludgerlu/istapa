@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\GalleryAlbumController as AdminGalleryAlbumController;
 use App\Http\Controllers\Admin\GalleryImageController as AdminGalleryImageController;
+use App\Http\Controllers\Admin\ClassController as AdminClassController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\AuthController;
@@ -114,6 +115,12 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/class-summary',                 [AdminAttendanceController::class, 'classSummary'])  ->name('class-summary');
             Route::get('/student/{student}/report',      [AdminAttendanceController::class, 'studentReport']) ->name('student-report');
         });
+
+        // Classes
+    Route::resource('classes', AdminClassController::class);
+    
+    // Attendance sessions (for presence list)
+    Route::get('attendance-sessions/{session}/presence', [AdminClassController::class, 'showPresence'])->name('attendance-sessions.presence');
 
         // ── Fees ──────────────────────────────────────────────────────────────
         Route::resource('fees', AdminFeesController::class);

@@ -218,7 +218,7 @@
                             ['route' => 'admin.dashboard',  'icon' => 'ph-bold ph-house',          'label' => 'Tableau de bord'],
                             ['route' => 'admin.users.index',   'icon' => 'ph ph-student',              'label' => 'Utilisateurs'],
                             ['route' => 'admin.attendance.index',   'icon' => 'ph ph-chalkboard-teacher',   'label' => 'present'],
-                            ['route' => 'admin.classes',    'icon' => 'ph ph-books',                'label' => 'Classes'],
+                            ['route' => 'admin.classes.index',    'icon' => 'ph ph-books',                'label' => 'Classes'],
                             ['route' => 'admin.subjects',   'icon' => 'ph ph-notepad',              'label' => 'Matières'],
                             ['route' => 'admin.exams',      'icon' => 'ph ph-exam',                 'label' => 'Examens'],
                             ['route' => 'admin.fees.index',       'icon' => 'ph ph-money',                'label' => 'Frais scolaires'],
