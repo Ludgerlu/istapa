@@ -106,7 +106,11 @@ Route::middleware(['auth'])->group(function () {
 
         // ── Users ─────────────────────────────────────────────────────────────
         Route::resource('users', AdminUserController::class);
-
+        
+        // ── Attendances ────────────────────────────────────────────────────────
+        Route::resource('attendances', AdminAttendanceController::class);
+        Route::get('attendances/get-subjects/{classId}', [AdminAttendanceController::class, 'getSubjectsByClassJson'])->name('attendances.getSubjects');
+        Route::get('attendances/get-students/{classId}', [AdminAttendanceController::class, 'getStudentsByClassJson'])->name('attendances.getStudents');
         // ── Attendance ────────────────────────────────────────────────────────
         Route::prefix('attendance')->name('attendance.')->group(function () {
             Route::get('/',                              [AdminAttendanceController::class, 'index'])         ->name('index');
