@@ -244,6 +244,44 @@ class PageController extends Controller
     }
 
     /**
+     * Store a new contact message.
+     */
+    public function storeContact(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'full_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'nullable|string|max:20',
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors(),
+                'message' => 'Veuillez corriger les erreurs ci-dessous.'
+            ], 422);
+        }
+
+        ContactMessage::create([
+            'full_name' => $request->full_name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'subject' => $request->subject,
+            'message' => $request->message,
+            'status' => 'unread',
+            'ip_address' => $request->ip(),
+            'created_at' => now(),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Votre message a été envoyé avec succès ! Nous vous répondrons sous 24h.'
+        ]);
+    }
+
+    /**
      * Display FAQ page
      */
     public function faq()

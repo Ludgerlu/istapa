@@ -114,20 +114,23 @@
                     <h3 class="mb-24">Envoyez-nous un message</h3>
                     <p class="text-neutral-500 mb-32">Nous vous répondrons dans les plus brefs délais</p>
                     
-                    <form action="#" method="POST" id="contactForm">
+                    <form action="{{ route('contact.store') }}" method="POST" id="contactForm">
                         @csrf
                         <div class="row gy-4">
                             <div class="col-sm-6">
                                 <label for="name" class="text-neutral-700 fw-medium mb-12">Votre nom <span class="text-danger-600">*</span></label>
-                                <input type="text" class="common-input rounded-pill" id="name" name="name" placeholder="Jean Dupont" required>
+                                <input type="text" class="common-input rounded-pill" id="name" name="full_name" placeholder="Jean Dupont" required>
+                                <div class="invalid-feedback name-error"></div>
                             </div>
                             <div class="col-sm-6">
                                 <label for="email" class="text-neutral-700 fw-medium mb-12">Votre email <span class="text-danger-600">*</span></label>
                                 <input type="email" class="common-input rounded-pill" id="email" name="email" placeholder="jean@exemple.com" required>
+                                <div class="invalid-feedback email-error"></div>
                             </div>
                             <div class="col-sm-6">
                                 <label for="phone" class="text-neutral-700 fw-medium mb-12">Téléphone</label>
                                 <input type="tel" class="common-input rounded-pill" id="phone" name="phone" placeholder="+237 6XX XXX XXX">
+                                <div class="invalid-feedback phone-error"></div>
                             </div>
                             <div class="col-sm-6">
                                 <label for="subject" class="text-neutral-700 fw-medium mb-12">Sujet <span class="text-danger-600">*</span></label>
@@ -139,10 +142,12 @@
                                     <option value="support">Support technique</option>
                                     <option value="other">Autre</option>
                                 </select>
+                                <div class="invalid-feedback subject-error"></div>
                             </div>
                             <div class="col-sm-12">
                                 <label for="message" class="text-neutral-700 fw-medium mb-12">Message <span class="text-danger-600">*</span></label>
                                 <textarea class="common-input rounded-24" id="message" name="message" rows="6" placeholder="Votre message..." required></textarea>
+                                <div class="invalid-feedback message-error"></div>
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-check common-check mb-3">
@@ -150,16 +155,19 @@
                                     <label class="form-check-label" for="privacy">
                                         J'accepte la <a href="#" class="text-main-600">politique de confidentialité</a>
                                     </label>
+                                    <div class="invalid-feedback privacy-error"></div>
                                 </div>
                             </div>
                             <div class="col-sm-12">
-                                <button type="submit" class="btn btn-main rounded-pill flex-center gap-8">
+                                <button type="submit" class="btn btn-main rounded-pill flex-center gap-8" id="submitBtn">
                                     Envoyer le message
                                     <i class="ph-bold ph-paper-plane-tilt d-flex text-lg"></i>
                                 </button>
                             </div>
                         </div>
                     </form>
+                    <div id="formSuccessMessage" class="alert alert-success mt-24 d-none" role="alert"></div>
+                    <div id="formErrorMessage" class="alert alert-danger mt-24 d-none" role="alert"></div>
                 </div>
             </div>
         </div>
@@ -251,8 +259,55 @@
 <script>
     document.getElementById('contactForm')?.addEventListener('submit', function(e) {
         e.preventDefault();
-        alert('Votre message a été envoyé avec succès ! Nous vous répondrons sous 24h.');
-        this.reset();
+        
+        // Reset previous errors & messages
+        document.querySelectorAll('.invalid-feedback').forEach(el => el.textContent = '');
+        document.getElementById('formSuccessMessage').classList.add('d-none');
+        document.getElementById('formErrorMessage').classList.add('d-none');
+        
+        const submitBtn = document.getElementById('submitBtn');
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Envoi en cours...';
+        
+        const formData = new FormData(this);
+        
+        fetch(this.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+            
+            if (data.success) {
+                document.getElementById('formSuccessMessage').textContent = data.message;
+                document.getElementById('formSuccessMessage').classList.remove('d-none');
+                document.getElementById('contactForm').reset();
+                // Scroll to success message
+                document.getElementById('formSuccessMessage').scrollIntoView({ behavior: 'smooth' });
+            } else {
+                if (data.errors) {
+                    for (let field in data.errors) {
+                        const errorDiv = document.querySelector(`.${field}-error`);
+                        if (errorDiv) errorDiv.textContent = data.errors[field][0];
+                    }
+                }
+                document.getElementById('formErrorMessage').textContent = data.message || 'Une erreur est survenue. Veuillez réessayer.';
+                document.getElementById('formErrorMessage').classList.remove('d-none');
+            }
+        })
+        .catch(error => {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+            document.getElementById('formErrorMessage').textContent = 'Erreur réseau. Vérifiez votre connexion.';
+            document.getElementById('formErrorMessage').classList.remove('d-none');
+        });
     });
 </script>
 @endpush

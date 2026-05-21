@@ -320,37 +320,55 @@
             <div class="col-xl-7">
                 <div class="testimonials-three-slider">
                     @forelse($testimonials as $testimonial)
+                        <div class="testimonials-three-item bg-white p-24 rounded-12 box-shadow-md">
+                            <div class="w-90 h-90 rounded-circle position-relative mb-4">
+                                @if($testimonial->author_photo)
+                                <img src="{{ asset('storage/' . $testimonial->author_photo) }}" alt="{{ $testimonial->author_name }}" class="cover-img rounded-circle" />
+                                @else
+                                <img src="{{ asset('assets/images/thumbs/testimonials-three-img1.png') }}" alt="Avatar" class="cover-img rounded-circle" />
+                                @endif
+                                <span class="w-40 h-40 bg-main-two-600 flex-center border border-white border-2 rounded-circle position-absolute inset-block-end-0 inset-inline-end-0 mt--5 me--5">
+                                    <img src="{{ asset('assets/images/icons/quote-two-icon.png') }}" alt="" />
+                                </span>
+                            </div>
+                            <p class="text-neutral-500 my-24">{{ $testimonial->content }}</p>
+                            <ul class="flex-align gap-8 mb-16">
+                                @for($i = 1; $i <= 5; $i++)
+                                    @if($i <= $testimonial->rating)
+                                    <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
+                                    @elseif($i == round($testimonial->rating) && $testimonial->rating - floor($testimonial->rating) >= 0.5)
+                                    <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star-half"></i></li>
+                                    @else
+                                    <li class="text-warning-600 text-xl d-flex"><i class="ph ph-star"></i></li>
+                                    @endif
+                                @endfor
+                            </ul>
+                            <h4 class="mb-16 text-lg">{{ $testimonial->author_name }}</h4>
+                            <span class="text-neutral-500">{{ $testimonial->author_role ?? 'Étudiant' }}</span>
+                        </div>
+                    @empty
+                        <div class="testimonials-three-item bg-white p-24 rounded-12 box-shadow-md text-center">
+                            <p>Aucun témoignage pour le moment.</p>
+                        </div>
+                    @endforelse
                     <div class="testimonials-three-item bg-white p-24 rounded-12 box-shadow-md">
                         <div class="w-90 h-90 rounded-circle position-relative mb-4">
-                            @if($testimonial->author_photo)
-                            <img src="{{ asset('storage/' . $testimonial->author_photo) }}" alt="{{ $testimonial->author_name }}" class="cover-img rounded-circle" />
-                            @else
-                            <img src="{{ asset('assets/images/thumbs/testimonials-three-img1.png') }}" alt="Avatar" class="cover-img rounded-circle" />
-                            @endif
+                            <img src="assets/images/thumbs/testimonials-three-img2.png" alt="" class="cover-img rounded-circle">
                             <span class="w-40 h-40 bg-main-two-600 flex-center border border-white border-2 rounded-circle position-absolute inset-block-end-0 inset-inline-end-0 mt--5 me--5">
-                                <img src="{{ asset('assets/images/icons/quote-two-icon.png') }}" alt="" />
+                                <img src="assets/images/icons/quote-two-icon.png" alt="">
                             </span>
                         </div>
-                        <p class="text-neutral-500 my-24">{{ $testimonial->content }}</p>
+                        <p class="text-neutral-500 my-24">Attending [University Name] was one of the best decisions I've made. The </p>
                         <ul class="flex-align gap-8 mb-16">
-                            @for($i = 1; $i <= 5; $i++)
-                                @if($i <= $testimonial->rating)
-                                <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
-                                @elseif($i == round($testimonial->rating) && $testimonial->rating - floor($testimonial->rating) >= 0.5)
-                                <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star-half"></i></li>
-                                @else
-                                <li class="text-warning-600 text-xl d-flex"><i class="ph ph-star"></i></li>
-                                @endif
-                            @endfor
+                            <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
+                            <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
+                            <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
+                            <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
+                            <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star-half"></i></li>
                         </ul>
-                        <h4 class="mb-16 text-lg">{{ $testimonial->author_name }}</h4>
-                        <span class="text-neutral-500">{{ $testimonial->author_role ?? 'Étudiant' }}</span>
+                        <h4 class="mb-16 text-lg">Ronald Richards</h4>
+                        <span class="text-neutral-500">Student</span>
                     </div>
-                    @empty
-                    <div class="testimonials-three-item bg-white p-24 rounded-12 box-shadow-md text-center">
-                        <p>Aucun témoignage pour le moment.</p>
-                    </div>
-                    @endforelse
                 </div>
             </div>
 
@@ -395,37 +413,37 @@
 
                 <div class="event-item-wrapper overflow-x-auto scroll-sm scroll-sm-horizontal pb-4">
                     @forelse($upcomingEvents as $event)
-                    <div class="event-item bg-main-25 rounded-12 p-24 d-flex align-items-center border flex-wrap  border-neutral-20 hover-bg-main-600 hover-border-main-600 hover-text-white transition-1 mb-24" data-aos="fade-up-left" data-aos-duration="200">
-                        <div class="">
-                            <h3 class="mb-8 text-main-600">{{ $event->start_date->format('d') }}</h3>
-                            <span class="text-neutral-500">{{ $event->start_date->translatedFormat('M, Y') }}</span>
-                        </div>
-                        <span class="border border-neutral-40 border-dashed h-72"></span>
-                        <div class="">
-                            <div class="flex-between gap-16 flex-wrap mb-16">
-                                <div class="flex-align gap-8">
-                                    <span class="text-neutral-700 text-lg d-flex"><i class="ph-bold ph-clock"></i></span>
-                                    <span class="text-neutral-700 text-lg fw-normal">
-                                        {{ $event->start_time ? \Carbon\Carbon::parse($event->start_time)->format('H:i') : '00:00' }} à {{ $event->end_time ? \Carbon\Carbon::parse($event->end_time)->format('H:i') : '23:59' }}
-                                    </span>
-                                </div>
-                                <div class="flex-align gap-8">
-                                    <span class="text-neutral-700 text-lg d-flex"><i class="ph-bold ph-map-trifold"></i></span>
-                                     <span class="text-neutral-700 text-lg fw-normal">{{ $event->location ?? 'Ebogo 1 - Yaoundé, Cameroun' }}</span>
-                                </div>
+                        <div class="event-item bg-main-25 rounded-12 p-24 d-flex align-items-center border flex-wrap  border-neutral-20 hover-bg-main-600 hover-border-main-600 hover-text-white transition-1 mb-24" data-aos="fade-up-left" data-aos-duration="200">
+                            <div class="">
+                                <h3 class="mb-8 text-main-600">{{ $event->start_date->format('d') }}</h3>
+                                <span class="text-neutral-500">{{ $event->start_date->translatedFormat('M, Y') }}</span>
                             </div>
-                            <h4 class="mt-12 mb-0">{{ $event->title }}</h4>
+                            <span class="border border-neutral-40 border-dashed h-72"></span>
+                            <div class="">
+                                <div class="flex-between gap-16 flex-wrap mb-16">
+                                    <div class="flex-align gap-8">
+                                        <span class="text-neutral-700 text-lg d-flex"><i class="ph-bold ph-clock"></i></span>
+                                        <span class="text-neutral-700 text-lg fw-normal">
+                                            {{ $event->start_time ? \Carbon\Carbon::parse($event->start_time)->format('H:i') : '00:00' }} à {{ $event->end_time ? \Carbon\Carbon::parse($event->end_time)->format('H:i') : '23:59' }}
+                                        </span>
+                                    </div>
+                                    <div class="flex-align gap-8">
+                                        <span class="text-neutral-700 text-lg d-flex"><i class="ph-bold ph-map-trifold"></i></span>
+                                        <span class="text-neutral-700 text-lg fw-normal">{{ $event->location ?? 'Ebogo 1 - Yaoundé, Cameroun' }}</span>
+                                    </div>
+                                </div>
+                                <h4 class="mt-12 mb-0">{{ $event->title }}</h4>
+                            </div>
+                            <span class="border border-neutral-40 border-dashed h-72 d-none d-md-inline"></span>
+                            <div class="flex-shrink-0">
+                                <a href="{{ route('event.details', $event->id) }}" class="btn btn-outline-main rounded-pill flex-align d-inline-flex gap-8">
+                                    Rejoindre
+                                    <i class="ph-bold ph-arrow-up-right d-flex text-lg"></i>
+                                </a>
+                            </div>
                         </div>
-                        <span class="border border-neutral-40 border-dashed h-72 d-none d-md-inline"></span>
-                        <div class="flex-shrink-0">
-                            <a href="{{ route('event.details', $event->id) }}" class="btn btn-outline-main rounded-pill flex-align d-inline-flex gap-8">
-                                Rejoindre
-                                <i class="ph-bold ph-arrow-up-right d-flex text-lg"></i>
-                            </a>
-                        </div>
-                    </div>
                     @empty
-                    <p>Aucun événement à venir pour le moment.</p>
+                        <p>Aucun événement à venir pour le moment.</p>
                     @endforelse
                 </div>
 
@@ -454,39 +472,39 @@
         </div>
         <div class="blog-two-slider">
             @foreach($latestBlogs as $blog)
-            <div class="scale-hover-item bg-white rounded-16 p-12 h-100" data-aos="fade-up" data-aos-duration="{{ $loop->iteration * 200 }}">
-                <div class="course-item__thumb rounded-12 overflow-hidden position-relative">
-                    <a href="{{ route('blog.details', $blog->slug) }}" class="w-100 h-100">
-                        <img src="{{ $blog->cover_image ? asset('storage/' . $blog->cover_image) : asset('assets/images/thumbs/blog-two-img1.png') }}" alt="{{ $blog->title }}" class="scale-hover-item__img rounded-12 cover-img transition-2" />
-                    </a>
-                    <div class="position-absolute inset-inline-end-0 inset-block-end-0 me-16 mb-16 py-12 px-24 rounded-8 bg-main-three-600 text-white fw-medium">
-                        <h3 class="mb-0 text-white fw-medium">{{ $blog->published_at ? $blog->published_at->format('d') : '' }}</h3>
-                        {{ $blog->published_at ? strtoupper($blog->published_at->translatedFormat('M')) : '' }}
-                    </div>
-                </div>
-                <div class="pt-32 pb-24 px-16 position-relative">
-                    <h4 class="mb-28">
-                        <a href="{{ route('blog.details', $blog->slug) }}" class="link text-line-2">{{ $blog->title }}</a>
-                    </h4>
-                    <div class="flex-align gap-14 flex-wrap my-20">
-                        <div class="flex-align gap-8">
-                            <span class="text-neutral-500 text-2xl d-flex"><i class="ph-bold ph-eye"></i></span>
-                            <span class="text-neutral-500 text-lg">{{ $blog->view_count }}</span>
-                        </div>
-                        <span class="w-8 h-8 bg-neutral-100 rounded-circle"></span>
-                        <div class="flex-align gap-8">
-                            <span class="text-neutral-500 text-2xl d-flex"><i class="ph ph-chat-dots"></i></span>
-                            <span class="text-neutral-500 text-lg">{{ $blog->comments->where('is_approved', true)->count() }}</span>
-                        </div>
-                    </div>
-                    <div class="flex-between gap-8 pt-24 border-top border-neutral-50 mt-28 border-dashed border-0">
-                        <a href="{{ route('blog.details', $blog->slug) }}" class="flex-align gap-8 text-main-600 hover-text-decoration-underline transition-1 fw-semibold">
-                            Lire la Suite
-                            <i class="ph ph-arrow-right"></i>
+                <div class="scale-hover-item bg-white rounded-16 p-12 h-100" data-aos="fade-up" data-aos-duration="{{ $loop->iteration * 200 }}">
+                    <div class="course-item__thumb rounded-12 overflow-hidden position-relative">
+                        <a href="{{ route('blog.details', $blog->slug) }}" class="w-100 h-100">
+                            <img src="{{ $blog->cover_image ? asset('storage/' . $blog->cover_image) : asset('assets/images/thumbs/blog-two-img1.png') }}" alt="{{ $blog->title }}" class="scale-hover-item__img rounded-12 cover-img transition-2" />
                         </a>
+                        <div class="position-absolute inset-inline-end-0 inset-block-end-0 me-16 mb-16 py-12 px-24 rounded-8 bg-main-three-600 text-white fw-medium">
+                            <h3 class="mb-0 text-white fw-medium">{{ $blog->published_at ? $blog->published_at->format('d') : '' }}</h3>
+                            {{ $blog->published_at ? strtoupper($blog->published_at->translatedFormat('M')) : '' }}
+                        </div>
+                    </div>
+                    <div class="pt-32 pb-24 px-16 position-relative">
+                        <h4 class="mb-28">
+                            <a href="{{ route('blog.details', $blog->slug) }}" class="link text-line-2">{{ $blog->title }}</a>
+                        </h4>
+                        <div class="flex-align gap-14 flex-wrap my-20">
+                            <div class="flex-align gap-8">
+                                <span class="text-neutral-500 text-2xl d-flex"><i class="ph-bold ph-eye"></i></span>
+                                <span class="text-neutral-500 text-lg">{{ $blog->view_count }}</span>
+                            </div>
+                            <span class="w-8 h-8 bg-neutral-100 rounded-circle"></span>
+                            <div class="flex-align gap-8">
+                                <span class="text-neutral-500 text-2xl d-flex"><i class="ph ph-chat-dots"></i></span>
+                                <span class="text-neutral-500 text-lg">{{ $blog->comments->where('is_approved', true)->count() }}</span>
+                            </div>
+                        </div>
+                        <div class="flex-between gap-8 pt-24 border-top border-neutral-50 mt-28 border-dashed border-0">
+                            <a href="{{ route('blog.details', $blog->slug) }}" class="flex-align gap-8 text-main-600 hover-text-decoration-underline transition-1 fw-semibold">
+                                Lire la Suite
+                                <i class="ph ph-arrow-right"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
             @endforeach
         </div>
         <div class="flex-align gap-16 mt-40 justify-content-center">
@@ -577,141 +595,3 @@
 <!-- ========================== Brand Section End =========================== -->
 @endsection
 
-@push('scripts')
-<script>
-    // Banner slider initialization
-    $(document).ready(function() {
-        if ($('.banner-three__slider').length) {
-            $('.banner-three__slider').slick({
-                dots: false,
-                infinite: true,
-                speed: 1000,
-                slidesToShow: 1,
-                slidesToScroll: 1,
-                autoplay: true,
-                autoplaySpeed: 5000,
-                prevArrow: '#banner-three-prev',
-                nextArrow: '#banner-three-next',
-                fade: true,
-                cssEase: 'linear'
-            });
-        }
-
-        if ($('.category-item-slider').length) {
-            $('.category-item-slider').slick({
-                dots: false,
-                infinite: true,
-                speed: 1000,
-                slidesToShow: 4,
-                slidesToScroll: 1,
-                autoplay: true,
-                autoplaySpeed: 3000,
-                prevArrow: '#category-prev',
-                nextArrow: '#category-next',
-                responsive: [
-                    {
-                        breakpoint: 1200,
-                        settings: {
-                            slidesToShow: 3,
-                        }
-                    },
-                    {
-                        breakpoint: 768,
-                        settings: {
-                            slidesToShow: 2,
-                        }
-                    },
-                    {
-                        breakpoint: 480,
-                        settings: {
-                            slidesToShow: 1,
-                        }
-                    }
-                ]
-            });
-        }
-
-        if ($('.testimonials-three-slider').length) {
-            $('.testimonials-three-slider').slick({
-                dots: false,
-                infinite: true,
-                speed: 1000,
-                slidesToShow: 1,
-                slidesToScroll: 1,
-                autoplay: true,
-                autoplaySpeed: 4000,
-                prevArrow: '#testimonials-three-prev',
-                nextArrow: '#testimonials-three-next',
-                fade: true,
-                cssEase: 'linear'
-            });
-        }
-
-        if ($('.blog-two-slider').length) {
-            $('.blog-two-slider').slick({
-                dots: false,
-                infinite: true,
-                speed: 1000,
-                slidesToShow: 3,
-                slidesToScroll: 1,
-                autoplay: true,
-                autoplaySpeed: 3000,
-                prevArrow: '#blog-two-prev',
-                nextArrow: '#blog-two-next',
-                responsive: [
-                    {
-                        breakpoint: 992,
-                        settings: {
-                            slidesToShow: 2,
-                        }
-                    },
-                    {
-                        breakpoint: 576,
-                        settings: {
-                            slidesToShow: 1,
-                        }
-                    }
-                ]
-            });
-        }
-
-        if ($('.brand-slider').length) {
-            $('.brand-slider').slick({
-                dots: false,
-                infinite: true,
-                speed: 800,
-                slidesToShow: 6,
-                slidesToScroll: 1,
-                autoplay: true,
-                autoplaySpeed: 2000,
-                responsive: [
-                    {
-                        breakpoint: 1200,
-                        settings: {
-                            slidesToShow: 5,
-                        }
-                    },
-                    {
-                        breakpoint: 992,
-                        settings: {
-                            slidesToShow: 4,
-                        }
-                    },
-                    {
-                        breakpoint: 768,
-                        settings: {
-                            slidesToShow: 3,
-                        }
-                    },
-                    {
-                        breakpoint: 480,
-                        settings: {
-                            slidesToShow: 2,
-                        }
-                    }
-                ]
-            });
-        }
-    });
-</script>
-@endpush

@@ -7,17 +7,21 @@ use App\Models\Classes;
 use App\Models\Program;
 use App\Models\AcademicYear;
 use App\Models\TeacherDetail;
-use App\Models\ClassEnrollment; // assume this model exists
 use App\Models\Subject;
+use App\Models\Exam;
+use App\Models\ClassEnrollment;
 use App\Models\AttendanceSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ClassController extends Controller
 {
+    /**
+     * Display a listing of classes.
+     */
     public function index(Request $request)
     {
-        $query = Classes::with(['program', 'academicYear', 'headTeacher']);
+        $query = Classes::with(['program', 'academicYear', 'headTeacher.user']);
 
         if ($request->filled('program_id')) {
             $query->where('program_id', $request->program_id);
@@ -25,14 +29,22 @@ class ClassController extends Controller
         if ($request->filled('academic_year_id')) {
             $query->where('academic_year_id', $request->academic_year_id);
         }
+        if ($request->filled('q')) {
+            $search = $request->q;
+            $query->where('name', 'like', "%{$search}%")
+                  ->orWhere('section', 'like', "%{$search}%");
+        }
 
-        $classes = $query->paginate(15);
+        $classes = $query->orderBy('name')->paginate(15);
         $programs = Program::all();
         $academicYears = AcademicYear::all();
 
         return view('admin.classes.index', compact('classes', 'programs', 'academicYears'));
     }
 
+    /**
+     * Show form to create a new class.
+     */
     public function create()
     {
         $programs = Program::all();
@@ -41,6 +53,9 @@ class ClassController extends Controller
         return view('admin.classes.create', compact('programs', 'academicYears', 'teachers'));
     }
 
+    /**
+     * Store a newly created class.
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -58,64 +73,44 @@ class ClassController extends Controller
                          ->with('success', 'Classe créée avec succès.');
     }
 
+    /**
+     * Display the specified class with all related data.
+     */
     public function show(Classes $class)
     {
-        // Load relationships
+        // Load basic relationships
         $class->load(['program', 'academicYear', 'headTeacher.user']);
 
-        // Students enrolled in this class (via ClassEnrollment)
+        // Subjects
+        $subjects = Subject::with('teacher.user')
+            ->where('class_id', $class->id)
+            ->get();
+
+        // Exams (with exam subjects and subjects)
+        $exams = Exam::with(['examSubjects.subject', 'examSubjects.marks'])
+            ->where('class_id', $class->id)
+            ->orderBy('start_date', 'desc')
+            ->get();
+
+        // Students (active enrollments)
         $students = ClassEnrollment::with('student.user')
             ->where('class_id', $class->id)
             ->where('status', 'active')
             ->get();
 
-        // Subjects taught in this class
-        $subjects = Subject::with('teacher.user')
-            ->where('class_id', $class->id)
-            ->get();
-
-        // Attendance sessions for this class (with subject and takenBy)
+        // Attendance sessions (last 10)
         $attendanceSessions = AttendanceSession::with(['subject', 'takenBy'])
             ->where('class_id', $class->id)
             ->orderBy('session_date', 'desc')
             ->orderBy('start_time', 'desc')
             ->paginate(10);
 
-        return view('admin.classes.show', compact('class', 'students', 'subjects', 'attendanceSessions'));
+        return view('admin.classes.show', compact('class', 'subjects', 'exams', 'students', 'attendanceSessions'));
     }
 
-
-    public function showPresence(AttendanceSession $session)
-    {
-        // Load session with relationships
-        $session->load(['class', 'subject', 'takenBy']);
-
-        // Get all active students in the class
-        $students = ClassEnrollment::with('student.user')
-            ->where('class_id', $session->class_id)
-            ->where('status', 'active')
-            ->get();
-
-        // Get attendance details for this session
-        $attendanceDetails = AttendanceDetail::where('attendance_session_id', $session->id)
-            ->get()
-            ->keyBy('student_id');
-
-        // Prepare presence list with status for each student
-        $presenceList = [];
-        foreach ($students as $enrollment) {
-            $student = $enrollment->student;
-            $detail = $attendanceDetails->get($student->user_id);
-            $presenceList[] = [
-                'student' => $student,
-                'status' => $detail ? $detail->status : 'not_taken',
-                'comment' => $detail ? $detail->comment : null,
-            ];
-        }
-
-        return view('admin.classes.presence', compact('session', 'presenceList'));
-    }
-
+    /**
+     * Show form to edit a class.
+     */
     public function edit(Classes $class)
     {
         $programs = Program::all();
@@ -124,6 +119,9 @@ class ClassController extends Controller
         return view('admin.classes.edit', compact('class', 'programs', 'academicYears', 'teachers'));
     }
 
+    /**
+     * Update the specified class.
+     */
     public function update(Request $request, Classes $class)
     {
         $validated = $request->validate([
@@ -141,18 +139,28 @@ class ClassController extends Controller
                          ->with('success', 'Classe mise à jour.');
     }
 
+    /**
+     * Remove the specified class (with checks).
+     */
     public function destroy(Classes $class)
     {
-        // Check if any enrollments, subjects, attendance sessions exist
+        // Check for related records
         if ($class->classEnrollments()->count() > 0) {
-            return back()->with('error', 'Impossible de supprimer : des élèves sont inscrits.');
+            return back()->with('error', 'Impossible de supprimer : des élèves sont inscrits dans cette classe.');
         }
         if ($class->subjects()->count() > 0) {
-            return back()->with('error', 'Impossible de supprimer : des matières sont liées.');
+            return back()->with('error', 'Impossible de supprimer : des matières sont associées.');
         }
         if ($class->attendanceSessions()->count() > 0) {
-            return back()->with('error', 'Impossible de supprimer : des sessions de présence existent.');
+            return back()->with('error', 'Impossible de supprimer : des séances de présence existent.');
         }
+        if ($class->exams()->count() > 0) {
+            return back()->with('error', 'Impossible de supprimer : des examens sont planifiés.');
+        }
+        if ($class->fees()->count() > 0) {
+            return back()->with('error', 'Impossible de supprimer : des frais sont associés.');
+        }
+
         $class->delete();
         return redirect()->route('admin.classes.index')
                          ->with('success', 'Classe supprimée.');

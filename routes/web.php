@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\BlogController as AdminBlogController;
-use App\Http\Controllers\Amin\LeaveController as AdminLeaveController;
+use App\Http\Controllers\Admin\LeaveController as AdminLeaveController;
 use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
 use App\Http\Controllers\Admin\FeesController as AdminFeesController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
@@ -12,6 +12,13 @@ use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\GalleryAlbumController as AdminGalleryAlbumController;
 use App\Http\Controllers\Admin\GalleryImageController as AdminGalleryImageController;
 use App\Http\Controllers\Admin\ClassController as AdminClassController;
+USE App\Http\Controllers\Admin\AdmissionRequestController as AdminAdmissionRequestController;
+use App\Http\Controllers\Admin\SubjectController as AdminSubjectController;
+use App\Http\Controllers\Admin\ExamController as AdminExamController;
+use App\Http\Controllers\Admin\ExamSubjectController as AdminExamSubjectController;
+use App\Http\Controllers\Admin\MarkController as AdminMarkController;
+use App\Http\Controllers\Admin\AcademicYearController as AdminAcademicYearController;
+use App\Http\Controllers\Admin\ContactMessageController as AdminContactMessageController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\AuthController;
@@ -55,6 +62,7 @@ Route::get('/gallery', [PageController::class, 'gallery'])->name('gallery');
 
 // Contact page
 Route::get('/contact', [PageController::class, 'contact'])->name('contact');
+Route::post('/contact/store', [PageController::class, 'storeContact'])->name('contact.store');
 
 // FAQ page
 Route::get('/faq', [PageController::class, 'faq'])->name('faq');
@@ -86,11 +94,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard');
         Route::get('/profile', [AdminDashboardController::class, 'profile'])->name('profile');
 
-
-        // Leave approvals
-        Route::patch('/leaves/{leave}/approve', [AdminLeaveController::class, 'approveLeave'])->name('leaves.approve');
-        Route::patch('/leaves/{leave}/reject',  [AdminLeaveController::class, 'rejectLeave'])->name('leaves.reject');
-
         // ── Blog CRUD ──────────────────────────────────────────────────────────
         Route::get('/blog',              [AdminBlogController::class, 'index'])->name('blogs.index');
         Route::get('/blog/create',       [AdminBlogController::class, 'create'])->name('blogs.create');
@@ -121,10 +124,13 @@ Route::middleware(['auth'])->group(function () {
         });
 
         // Classes
-    Route::resource('classes', AdminClassController::class);
+        Route::resource('classes', AdminClassController::class);
+        Route::resource('subjects', AdminSubjectController::class);
+        Route::resource('academic-years', AdminAcademicYearController::class);
+        // Route::get('subjects/create?class_id={class_id}', [AdminSubjectController::class, 'create'])->name('subjects.create');
     
-    // Attendance sessions (for presence list)
-    Route::get('attendance-sessions/{session}/presence', [AdminClassController::class, 'showPresence'])->name('attendance-sessions.presence');
+        // Attendance sessions (for presence list)
+        Route::get('attendance-sessions/{session}/presence', [AdminClassController::class, 'showPresence'])->name('attendance-sessions.presence');
 
         // ── Fees ──────────────────────────────────────────────────────────────
         Route::resource('fees', AdminFeesController::class);
@@ -138,17 +144,49 @@ Route::middleware(['auth'])->group(function () {
         });
 
          // ── Events ──────────────────────────────────────────────────────────
-        Route::resource('events', AdminEventController::class);
+        // Route::resource('events', AdminEventController::class);
         Route::post('events/{event}/images', [AdminEventController::class, 'storeImage'])->name('events.storeImage');
         Route::delete('events/images/{image}', [AdminEventController::class, 'destroyImage'])->name('events.destroyImage');
         Route::post('events/images/reorder', [AdminEventController::class, 'reorderImages'])->name('events.reorderImages');
 
         //  ── Gallery Albums ────────────────────────────────────────────────────────
-        Route::resource('gallery', AdminGalleryAlbumController::class);
+        Route::resource('gallery', AdminGalleryImageController::class);
+        
+        // Gallery Images (nested under albums)
         Route::post('gallery/{album}/images', [AdminGalleryImageController::class, 'store'])->name('gallery.images.store');
         Route::delete('gallery/images/{image}', [AdminGalleryImageController::class, 'destroy'])->name('gallery.images.destroy');
         Route::post('gallery/images/reorder', [AdminGalleryImageController::class, 'reorder'])->name('gallery.images.reorder');
+
+        // ── Admission Requests ────────────────────────────────────────────────────────
+        // Admission requests
+        Route::get('admissions', [AdminAdmissionRequestController::class, 'index'])->name('admissions.index');
+        Route::post('admissions/{admission}/approve', [AdminAdmissionRequestController::class, 'approve'])->name('admissions.approve');
+        Route::post('admissions/{admission}/reject', [AdminAdmissionRequestController::class, 'reject'])->name('admissions.reject');
+        Route::delete('admissions/{admission}', [AdminAdmissionRequestController::class, 'destroy'])->name('admissions.destroy');
+        Route::get('admissions/{admission}', [AdminAdmissionRequestController::class, 'show'])->name('admissions.show');
+        // Leave requests
+        Route::get('leaves', [AdminLeaveController::class, 'index'])->name('leaves.index');
+        Route::post('leaves/{leave}/approve', [AdminLeaveController::class, 'approve'])->name('leaves.approve');
+        Route::post('leaves/{leave}/reject', [AdminLeaveController::class, 'reject'])->name('leaves.reject');
+        Route::delete('leaves/{leave}', [AdminLeaveController::class, 'destroy'])->name('leaves.destroy');
+        Route::get('leaves/{leave}', [AdminLeaveController::class, 'show'])->name('leaves.show');
+
+        // Exams
+        Route::resource('exams', AdminExamController::class);
+        
+        // Manage exam subjects (add/remove)
+        Route::post('exams/{exam}/subjects', [AdminExamSubjectController::class, 'store'])->name('exams.subjects.store');
+        Route::delete('exam-subjects/{examSubject}', [AdminExamSubjectController::class, 'destroy'])->name('exams.subjects.destroy');
+        
+        // Marks entry
+        Route::get('exam-subjects/{examSubject}/marks', [AdminMarkController::class, 'edit'])->name('exam-subjects.marks.edit');
+        Route::put('exam-subjects/{examSubject}/marks', [AdminMarkController::class, 'update'])->name('exam-subjects.marks.update');
     
+        Route::get('contact-messages', [AdminContactMessageController::class, 'index'])->name('contact-messages.index');
+        Route::get('contact-messages/{message}', [AdminContactMessageController::class, 'show'])->name('contact-messages.show');
+        Route::patch('contact-messages/{message}/mark-read', [AdminContactMessageController::class, 'markAsRead'])->name('contact-messages.mark-read');
+        Route::patch('contact-messages/{message}/mark-unread', [AdminContactMessageController::class, 'markAsUnread'])->name('contact-messages.mark-unread');
+        Route::delete('contact-messages/{message}', [AdminContactMessageController::class, 'destroy'])->name('contact-messages.destroy');
     });
 
     // Student Routes

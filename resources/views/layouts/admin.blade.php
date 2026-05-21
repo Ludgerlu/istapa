@@ -2,7 +2,8 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Tableau de bord') — ISTAP Admin</title>
     <link rel="shortcut icon" href="https://istapa.com/wp-content/uploads/2025/06/cropped-logo-modif-180x180.png">
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
@@ -219,13 +220,16 @@
                             ['route' => 'admin.users.index',   'icon' => 'ph ph-student',              'label' => 'Utilisateurs'],
                             ['route' => 'admin.attendance.index',   'icon' => 'ph ph-chalkboard-teacher',   'label' => 'present'],
                             ['route' => 'admin.classes.index',    'icon' => 'ph ph-books',                'label' => 'Classes'],
-                            ['route' => 'admin.subjects',   'icon' => 'ph ph-notepad',              'label' => 'Matières'],
-                            ['route' => 'admin.exams',      'icon' => 'ph ph-exam',                 'label' => 'Examens'],
+                            ['route' => 'admin.subjects.index',   'icon' => 'ph ph-notepad',              'label' => 'Matières'],
+                            ['route' => 'admin.exams.index',      'icon' => 'ph ph-exam',                 'label' => 'Examens'],
                             ['route' => 'admin.fees.index',       'icon' => 'ph ph-money',                'label' => 'Frais scolaires'],
                             ['route' => 'admin.events.index',     'icon' => 'ph ph-calendar',             'label' => 'Événements'],
                             ['route' => 'admin.blogs.index',      'icon' => 'ph ph-newspaper',            'label' => 'Blog'],
-                            ['route' => 'admin.messages',   'icon' => 'ph ph-chat-dots',            'label' => 'Messages'],
+                            ['route' => 'admin.contact-messages.index',   'icon' => 'ph ph-chat-dots',            'label' => 'Messages'],
                             ['route' => 'admin.profile',    'icon' => 'ph ph-user-circle',          'label' => 'Mon profil'],
+                            ['route' => 'admin.gallery.index',    'icon' => 'ph ph-image',                'label' => 'Albums photo'],
+                            ['route' => 'admin.admissions.index',    'icon' => 'ph ph-user-plus',            'label' => 'Admissions'],
+                            ['route' => 'admin.leaves.index',    'icon' => 'ph ph-door-open',            'label' => 'Congés'],
                         ];
                     @endphp
 
@@ -367,13 +371,13 @@
 
 <!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<script src="{{ asset('assets/js/jquery-3.7.1.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script src="{{ asset('assets/js/main.js') }}"></script>
 <script src="{{ asset('assets/js/boostrap.bundle.min.js') }}"></script>
 <script src="{{ asset('assets/js/select2.min.js') }}"></script>
 <script src="{{ asset('assets/js/phosphor-icon.js') }}"></script>
 <script src="{{ asset('assets/js/apexcharts.js') }}"></script>
 <script src="{{ asset('assets/js/dataTables.min.js') }}"></script>
-<script src="{{ asset('assets/js/main.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
