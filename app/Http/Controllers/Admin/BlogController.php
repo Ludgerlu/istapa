@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Blog;
 use App\Models\BlogPost;
@@ -89,7 +91,7 @@ class BlogController extends Controller
         return view('admin.blog.edit', compact('blog', 'categories'));
     }
 
-    public function update(Request $request, Blog $blog)
+    public function update(Request $request, BlogPost $blog)
     {
         $data = $request->validate([
             'title'       => 'required|string|max:255',

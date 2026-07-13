@@ -3,12 +3,14 @@
 /public/build
 /public/hot
 /public/storage
+/public/assets/merchandising_pictures
+/public/assets/promotion_pictures
 /storage/*.key
 /vendor
-/vendor~
 .env
 .env.backup
 .env.production
+.phpunit.result.cache
 Homestead.json
 Homestead.yaml
 auth.json
@@ -17,3 +19,4 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+composer.lock

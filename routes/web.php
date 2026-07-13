@@ -151,11 +151,12 @@ Route::middleware(['auth'])->group(function () {
 
         //  ── Gallery Albums ────────────────────────────────────────────────────────
         Route::resource('gallery', AdminGalleryImageController::class);
-        
-        // Gallery Images (nested under albums)
-        Route::post('gallery/{album}/images', [AdminGalleryImageController::class, 'store'])->name('gallery.images.store');
-        Route::delete('gallery/images/{image}', [AdminGalleryImageController::class, 'destroy'])->name('gallery.images.destroy');
-        Route::post('gallery/images/reorder', [AdminGalleryImageController::class, 'reorder'])->name('gallery.images.reorder');
+                                                                                 
+        // Image management
+        Route::post('gallery/{id}/upload', [AdminGalleryImageController::class, 'upload'])->name('gallery.upload');
+        Route::delete('gallery/image/{id}', [AdminGalleryImageController::class, 'deleteImage'])->name('gallery.image.delete');
+        Route::post('gallery/{albumId}/cover/{imageId}', [AdminGalleryImageController::class, 'setCover'])->name('gallery.set-cover');
+        Route::post('gallery/{albumId}/reorder', [AdminGalleryImageController::class, 'reorder'])->name('gallery.reorder');
 
         // ── Admission Requests ────────────────────────────────────────────────────────
         // Admission requests
