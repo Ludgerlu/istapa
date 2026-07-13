@@ -23,6 +23,7 @@ class DashboardController extends Controller
 
     public function dashboard()
     {
+        // dd(auth()->user());
         // KPI stats
         $stats = [
             'total_students'      => User::where('role', 'student')->count() ?? 0,

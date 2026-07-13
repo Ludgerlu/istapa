@@ -13,7 +13,7 @@
     </button>
 
     <div class="banner-three__slider">
-        <div class="banner-three__item background-img bg-img linear-overlay position-relative" data-background-image="https://istapa.com/wp-content/uploads/2025/07/slide4.png">
+        <div class="banner-three__item background-img bg-img linear-overlay position-relative" data-background-image="{{ asset('assets/images/thumbs/slide3.png') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-xxl-6 col-xl-8 col-lg-10 z-1">
@@ -39,7 +39,7 @@
                 </div>
             </div>
         </div>
-        <div class="banner-three__item background-img bg-img linear-overlay position-relative" data-background-image="https://istapa.com/wp-content/uploads/2025/07/slide3.png">
+        <div class="banner-three__item background-img bg-img linear-overlay position-relative" data-background-image="{{ asset('assets/images/thumbs/slide4.png') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-xxl-6 col-xl-8 col-lg-10 z-1">
@@ -66,7 +66,7 @@
                 </div>
             </div>
         </div>
-        <div class="banner-three__item background-img bg-img linear-overlay position-relative" data-background-image="https://istapa.com/wp-content/uploads/2025/07/slide3.png">
+        <div class="banner-three__item background-img bg-img linear-overlay position-relative" data-background-image="{{ asset('assets/images/thumbs/slide3.png') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-xxl-6 col-xl-8 col-lg-10 z-1">
@@ -97,6 +97,50 @@
 </section>
 <!-- ================================== Banner Three End =============================== -->
 
+
+    <!-- ========================== Info Two Section Start =================================== -->
+    <section class="info-two half-bg">
+        <div class="container">
+            <div class="bg-white box-shadow-md rounded-16 p-16">
+                <div class="row gy-4 justify-content-center">
+                    <div class="col-xl-4 col-sm-6" data-aos="fade-up" data-aos-duration="400">
+                        <div class="info-two-item flex-align animation-item h-100 gap-28 border border-neutral-30 rounded-12 bg-main-25">
+                            <span class="flex-shrink-0">
+                                <img src="assets/images/icons/info-two-icon1.png" class="animate__heartBeat" alt="">
+                            </span>
+                            <div>
+                                <h4 class="mb-16">Scholarship Facility</h4>
+                                <p class="text-neutral-700">These facilities provide students with an inspiring </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-sm-6" data-aos="fade-up" data-aos-duration="600">
+                        <div class="info-two-item flex-align animation-item h-100 gap-28 border border-neutral-30 rounded-12 bg-main-two-25">
+                            <span class="flex-shrink-0">
+                                <img src="assets/images/icons/info-two-icon2.png" class="animate__heartBeat" alt="">
+                            </span>
+                            <div>
+                                <h4 class="mb-16">Esteemed Faculty</h4>
+                                <p class="text-neutral-700">Our university boasts a team of renowned faculty members</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-sm-6" data-aos="fade-up" data-aos-duration="800">
+                        <div class="info-two-item flex-align animation-item h-100 gap-28 border border-neutral-30 rounded-12 bg-main-three-25">
+                            <span class="flex-shrink-0">
+                                <img src="assets/images/icons/info-two-icon3.png" class="animate__heartBeat" alt="">
+                            </span>
+                            <div>
+                                <h4 class="mb-16">Diverse Programs</h4>
+                                <p class="text-neutral-700">From undergraduate degrees to postgraduate research </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ========================== Info Two Section End =================================== -->
 <!-- ================================ About Section Start ==================================== -->
 <section class="about py-120 position-relative z-1 mash-bg-main mash-bg-main-two">
     <img src="{{ asset('assets/images/shapes/shape2.png') }}" alt="" class="shape one animation-scalation" />
@@ -104,13 +148,14 @@
 
     <div class="position-relative">
         <div class="container">
-            <div class="row gy-xl-0 gy-5 flex-wrap-reverse align-items-center">
+            <div class="row gy-xl-0 gy-5 flex-wrap align-items-center">
+                   
                 <div class="col-xl-6">
                     <div class="about-thumbs position-relative pe-lg-5">
                         <img src="{{ asset('assets/images/shapes/shape7.png') }}" alt="" class="shape seven animation-scalation" />
                         <div class="row gy-4">
                             <div class="col-sm-6">
-                                <img src="https://istapa.com/wp-content/uploads/2025/06/475105121_122156457968331499_8259807869563249512_n1-1-768x962.jpg" alt="" class="rounded-12 w-100" data-tilt data-tilt-max="15" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening />
+                                <img src="{{ asset('assets/images/thumbs/about-5.jpg') }}" alt="" class="rounded-12 w-100" data-tilt data-tilt-max="15" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening />
                             </div>
                             <div class="col-sm-6">
                                 <div class="flex-align gap-24 mb-24">
@@ -123,7 +168,7 @@
                                         <span class="text-white">Étudiants diplômés</span>
                                     </div>
                                 </div>
-                                <img src="https://istapa.com/wp-content/uploads/2025/07/WhatsApp-Image-2025-07-01-at-16.29.59_248a4706-768x1024.jpg" alt="" class="rounded-12 w-100" data-tilt data-tilt-max="20" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening />
+                                <img src="{{ asset('assets/images/thumbs/about-6.jpg') }}" alt="" class="rounded-12 w-100" data-tilt data-tilt-max="20" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening />
                             </div>
                         </div>
                     </div>
@@ -181,86 +226,21 @@
                             </a>
                         </div>
                     </div>
-                </div>
+                </div>             
             </div>
         </div>
     </div>
 </section>
 <!-- ================================ About Section End ==================================== -->
 
-<!-- ============================ Category Section Start ==================================== -->
-<section class="category py-120 position-relative z-1 mash-bg-main mash-bg-main-two mash-reverse">
-    <div class="container">
-        <div class="section-heading text-center">
-            <div class="flex-align d-inline-flex gap-8 mb-16 wow bounceInDown">
-                <span class="text-main-600 text-2xl d-flex"><i class="ph-bold ph-book"></i></span>
-                <h5 class="text-main-600 mb-0">Catégories</h5>
-            </div>
-            <h2 class="mb-24 wow bounceIn">Élevez Votre Expérience d'Apprentissage</h2>
-            <p class="wow bounceInUp">
-                Notre plateforme est construite sur les principes d'innovation, de qualité et d'inclusivité, visant à offrir une expérience d'apprentissage fluide.
-            </p>
-        </div>
-        <div class="category-item-slider">
-            <div class="category-item animation-item h-100 text-center px-16 py-32 rounded-12 bg-main-25 border border-neutral-30 hover-border-main-600 transition-2" data-aos="fade-up" data-aos-duration="200">
-                <span class="w-96 h-96 flex-center d-inline-flex bg-white text-main-600 text-40 rounded-circle box-shadow-md mb-24">
-                    <img src="{{ asset('assets/images/icons/category-icon1.png') }}" class="animate__flipInY" alt="" />
-                </span>
-                <h4 class="display-four mb-16 text-neutral-700">TROUVER UNE FORMATION</h4>
-                <p class="text-neutral-500 text-lg">
-                    Nous proposons une vaste gamme de formations adaptées à divers secteurs professionnels, permettant aux étudiants de choisir des cursus alignés avec leurs aspirations et les besoins du marché.
-                </p>
-            </div>
-            <div class="category-item animation-item h-100 text-center px-16 py-32 rounded-12 bg-main-two-25 border border-neutral-30 hover-border-main-two-600 transition-2" data-aos="fade-up" data-aos-duration="400">
-                <span class="w-96 h-96 flex-center d-inline-flex bg-white text-main-600 text-40 rounded-circle box-shadow-md mb-24">
-                    <img src="{{ asset('assets/images/icons/category-icon2.png') }}" class="animate__flipInY" alt="" />
-                </span>
-                <h4 class="display-four mb-16 text-neutral-700">CONCOURS & EXAMENS</h4>
-                <p class="text-neutral-500 text-lg">
-                    Nous organisons régulièrement des concours d'entrée et des examens rigoureux pour sélectionner et évaluer les étudiants, garantissant un niveau académique élevé et l'excellence dans chaque programme.
-                </p>
-            </div>
-            <div class="category-item animation-item h-100 text-center px-16 py-32 rounded-12 bg-main-three-25 border border-neutral-30 hover-border-main-three-600 transition-2" data-aos="fade-up" data-aos-duration="600">
-                <span class="w-96 h-96 flex-center d-inline-flex bg-white text-main-three-600 text-40 rounded-circle box-shadow-md mb-24">
-                    <img src="{{ asset('assets/images/icons/category-icon3.png') }}" class="animate__flipInY" alt="" />
-                </span>
-                <h4 class="display-four mb-16 text-neutral-700">LEADERSHIP</h4>
-                <p class="text-neutral-500 text-lg">
-                    Nous formons des leaders engagés, aptes à répondre aux enjeux agricoles et environnementaux du monde actuel. Elle développe chez les étudiants des compétences en gestion agro-pastorale, en innovation rurale et en prise de décision stratégique pour un développement durable des territoires.
-                </p>
-            </div>
-            <div class="category-item animation-item h-100 text-center px-16 py-32 rounded-12 bg-main-two-25 border border-neutral-30 hover-border-main-two-600 transition-2" data-aos="fade-up" data-aos-duration="800">
-                <span class="w-96 h-96 flex-center d-inline-flex bg-white text-main-600 text-40 rounded-circle box-shadow-md mb-24">
-                    <img src="{{ asset('assets/images/icons/category-icon4.png') }}" class="animate__flipInY" alt="" />
-                </span>
-                <h4 class="display-four mb-16 text-neutral-700">INSCRIPTION EN LIGNE</h4>
-                <p class="text-neutral-500 text-lg">
-                    Nous offrons un processus d'inscription en ligne simple et rapide, permettant aux futurs étudiants de postuler à distance, en toute sécurité, via la plateforme dédiée. Vous pouvez soumettre vos documents et suivre l'évolution de votre dossier en quelques clics.
-                </p>
-            </div>
-        </div>
-        <div class="flex-align gap-16 mt-40 justify-content-center">
-            <button type="button" id="category-prev" class="slick-prev slick-arrow flex-center rounded-circle border border-gray-100 hover-border-main-600 text-xl hover-bg-main-600 hover-text-white transition-1 w-48 h-48">
-                <i class="ph ph-caret-left"></i>
-            </button>
-            <button type="button" id="category-next" class="slick-next slick-arrow flex-center rounded-circle border border-gray-100 hover-border-main-600 text-xl hover-bg-main-600 hover-text-white transition-1 w-48 h-48">
-                <i class="ph ph-caret-right"></i>
-            </button>
-        </div>
-    </div>
-</section>
-<!-- ============================ Category Section End ==================================== -->
+
 
 <!-- ================================== Free Trail Section Start ================================ -->
 <section class="free-trails py-120 position-relative z-1 bg-main-25 overflow-hidden">
     <div class="position-relative">
         <div class="container">
             <div class="row gy-xl-0 gy-5 flex-wrap-reverse align-items-center">
-                <div class="col-lg-6">
-                    <div class="position-relative wow bounceIn">
-                        <img src="https://istapa.com/wp-content/uploads/2025/06/457504865_122130726842331499_374861020851708552_n-1-768x576.jpg" alt="" data-tilt data-tilt-max="8" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-transition="1s" data-tilt-full-page-listening />
-                    </div>
-                </div>
+                
                 <div class="col-lg-6">
                     <div class="mb-40">
                         <div class="flex-align d-inline-flex gap-8 mb-16 wow bounceInDown">
@@ -303,6 +283,11 @@
                         </small>
                     </div>
                 </div>
+                <div class="col-lg-6">
+                    <div class="position-relative wow bounceIn">
+                        <img src="{{ asset('assets/images/thumbs/contact.jpg') }}" alt="" data-tilt data-tilt-max="8" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-transition="1s" data-tilt-full-page-listening />
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -323,11 +308,13 @@
                         <div class="testimonials-three-item bg-white p-24 rounded-12 box-shadow-md">
                             <div class="w-90 h-90 rounded-circle position-relative mb-4">
                                 @if($testimonial->author_photo)
-                                <img src="{{ asset('storage/' . $testimonial->author_photo) }}" alt="{{ $testimonial->author_name }}" class="cover-img rounded-circle" />
+                                    <img src="{{ asset('storage/' . $testimonial->author_photo) }}" alt="{{ $testimonial->author_name }}" class="cover-img rounded-circle" />
                                 @else
-                                <img src="{{ asset('assets/images/thumbs/testimonials-three-img1.png') }}" alt="Avatar" class="cover-img rounded-circle" />
+                                    <div class="cover-img rounded-circle bg-main-600 flex-center text-white" style="font-size: 32px; font-weight: 600;">
+                                        {{ strtoupper(substr($testimonial->author_name, 0, 2)) }}
+                                    </div>
                                 @endif
-                                <span class="w-40 h-40 bg-main-two-600 flex-center border border-white border-2 rounded-circle position-absolute inset-block-end-0 inset-inline-end-0 mt--5 me--5">
+                                <span class="w-40 h-40 bg-main-600 flex-center border border-white border-2 rounded-circle position-absolute inset-block-end-0 inset-inline-end-0 mt--5 me--5">
                                     <img src="{{ asset('assets/images/icons/quote-two-icon.png') }}" alt="" />
                                 </span>
                             </div>
@@ -335,11 +322,11 @@
                             <ul class="flex-align gap-8 mb-16">
                                 @for($i = 1; $i <= 5; $i++)
                                     @if($i <= $testimonial->rating)
-                                    <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
+                                        <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
                                     @elseif($i == round($testimonial->rating) && $testimonial->rating - floor($testimonial->rating) >= 0.5)
-                                    <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star-half"></i></li>
+                                        <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star-half"></i></li>
                                     @else
-                                    <li class="text-warning-600 text-xl d-flex"><i class="ph ph-star"></i></li>
+                                        <li class="text-warning-600 text-xl d-flex"><i class="ph ph-star"></i></li>
                                     @endif
                                 @endfor
                             </ul>
@@ -354,7 +341,7 @@
                     <div class="testimonials-three-item bg-white p-24 rounded-12 box-shadow-md">
                         <div class="w-90 h-90 rounded-circle position-relative mb-4">
                             <img src="assets/images/thumbs/testimonials-three-img2.png" alt="" class="cover-img rounded-circle">
-                            <span class="w-40 h-40 bg-main-two-600 flex-center border border-white border-2 rounded-circle position-absolute inset-block-end-0 inset-inline-end-0 mt--5 me--5">
+                            <span class="w-40 h-40 bg-main-600 flex-center border border-white border-2 rounded-circle position-absolute inset-block-end-0 inset-inline-end-0 mt--5 me--5">
                                 <img src="assets/images/icons/quote-two-icon.png" alt="">
                             </span>
                         </div>
@@ -474,8 +461,16 @@
             @foreach($latestBlogs as $blog)
                 <div class="scale-hover-item bg-white rounded-16 p-12 h-100" data-aos="fade-up" data-aos-duration="{{ $loop->iteration * 200 }}">
                     <div class="course-item__thumb rounded-12 overflow-hidden position-relative">
-                        <a href="{{ route('blog.details', $blog->slug) }}" class="w-100 h-100">
-                            <img src="{{ $blog->cover_image ? asset('storage/' . $blog->cover_image) : asset('assets/images/thumbs/blog-two-img1.png') }}" alt="{{ $blog->title }}" class="scale-hover-item__img rounded-12 cover-img transition-2" />
+                        <a href="{{ route('blog.details', $blog->id) }}" class="w-100 h-100">
+                            @if($blog->cover_image)
+                                <img src="{{ asset('storage/' . $blog->cover_image) }}" alt="{{ $blog->title }}" class="scale-hover-item__img rounded-12 cover-img transition-2" />
+                            @else
+                               <div class="bc-cover-placeholder">
+                                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                                    <!-- <span>Image à venir</span> -->
+                                </div>
+                            @endif
+                        
                         </a>
                         <div class="position-absolute inset-inline-end-0 inset-block-end-0 me-16 mb-16 py-12 px-24 rounded-8 bg-main-three-600 text-white fw-medium">
                             <h3 class="mb-0 text-white fw-medium">{{ $blog->published_at ? $blog->published_at->format('d') : '' }}</h3>
@@ -484,7 +479,7 @@
                     </div>
                     <div class="pt-32 pb-24 px-16 position-relative">
                         <h4 class="mb-28">
-                            <a href="{{ route('blog.details', $blog->slug) }}" class="link text-line-2">{{ $blog->title }}</a>
+                            <a href="{{ route('blog.details', $blog->id) }}" class="link text-line-2">{{ $blog->title }}</a>
                         </h4>
                         <div class="flex-align gap-14 flex-wrap my-20">
                             <div class="flex-align gap-8">
@@ -498,7 +493,7 @@
                             </div>
                         </div>
                         <div class="flex-between gap-8 pt-24 border-top border-neutral-50 mt-28 border-dashed border-0">
-                            <a href="{{ route('blog.details', $blog->slug) }}" class="flex-align gap-8 text-main-600 hover-text-decoration-underline transition-1 fw-semibold">
+                            <a href="{{ route('blog.details', $blog->id) }}" class="flex-align gap-8 text-main-600 hover-text-decoration-underline transition-1 fw-semibold">
                                 Lire la Suite
                                 <i class="ph ph-arrow-right"></i>
                             </a>
@@ -524,7 +519,7 @@
     <div class="container">
         <div class="rounded-20 py-120 px-8">
             <div class="container">
-                <div class="row gy-4 align-items-center">
+                <div class="row gy-4 align-items-center flex-wrap-reverse">
                     <div class="col-lg-6">
                         <div class="join-community__content">
                             <div class="mb-40">
@@ -564,7 +559,7 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="join-community__thumb text-end position-relative">
-                            <img src="https://istapa.com/wp-content/uploads/2025/06/457774318_122130731990331499_8404464423876650403_n-768x768.jpg" alt="" class="wow bounceIn" data-tilt data-tilt-max="12" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening />
+                            <img src="{{ asset('assets/images/thumbs/contact.jpg') }}" alt="" class="wow bounceIn" data-tilt data-tilt-max="12" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening />
                         </div>
                     </div>
                 </div>
@@ -582,10 +577,10 @@
             <div class="container">
                 <div class="brand-slider">
                     <div class="brand-slider__item px-24">
-                        <img src="https://istapa.com/wp-content/uploads/2025/07/act-3.png" alt="" />
+                        <img src="{{ asset('assets/images/thumbs/cefprepa.png') }}" alt="" />
                     </div>
                     <div class="brand-slider__item px-24">
-                        <img src="https://istapa.com/wp-content/uploads/2025/08/Sharda-University-Logo-Vector.svg--1024x322.png" alt="" />
+                        <img src="{{ asset('assets/images/thumbs/Sharda-University-Logo-Vector.png') }}" alt="" />
                     </div>
                 </div>
             </div>

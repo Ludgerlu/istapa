@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="{{ asset('assets/css/animate.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/dataTables.dataTables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+    <!-- DataTables CSS -->
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css" rel="stylesheet">
     @stack('styles')
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -208,49 +211,11 @@
             </a>
             <span class="w-100 bg-neutral-40 mb-24 mt-24 h-1 d-block"></span>
 
-            <div class="overflow-x-auto">
-                <div class="scrollbar min-w-max">
-                    <span class="text-neutral-500 fw-normal text-14 mb-8 d-block">
-                        Bonjour, {{ auth()->user()->display_name }} 👋
-                    </span>
-
-                    @php
-                        $navItems = [
-                            ['route' => 'admin.dashboard',  'icon' => 'ph-bold ph-house',          'label' => 'Tableau de bord'],
-                            ['route' => 'admin.users.index',   'icon' => 'ph ph-student',              'label' => 'Utilisateurs'],
-                            ['route' => 'admin.attendance.index',   'icon' => 'ph ph-chalkboard-teacher',   'label' => 'present'],
-                            ['route' => 'admin.classes.index',    'icon' => 'ph ph-books',                'label' => 'Classes'],
-                            ['route' => 'admin.subjects.index',   'icon' => 'ph ph-notepad',              'label' => 'Matières'],
-                            ['route' => 'admin.exams.index',      'icon' => 'ph ph-exam',                 'label' => 'Examens'],
-                            ['route' => 'admin.fees.index',       'icon' => 'ph ph-money',                'label' => 'Frais scolaires'],
-                            ['route' => 'admin.events.index',     'icon' => 'ph ph-calendar',             'label' => 'Événements'],
-                            ['route' => 'admin.blogs.index',      'icon' => 'ph ph-newspaper',            'label' => 'Blog'],
-                            ['route' => 'admin.contact-messages.index',   'icon' => 'ph ph-chat-dots',            'label' => 'Messages'],
-                            ['route' => 'admin.profile',    'icon' => 'ph ph-user-circle',          'label' => 'Mon profil'],
-                            ['route' => 'admin.gallery.index',    'icon' => 'ph ph-image',                'label' => 'Albums photo'],
-                            ['route' => 'admin.admissions.index',    'icon' => 'ph ph-user-plus',            'label' => 'Admissions'],
-                            ['route' => 'admin.leaves.index',    'icon' => 'ph ph-door-open',            'label' => 'Congés'],
-                        ];
-                    @endphp
-
-                    <ul>
-                        @foreach($navItems as $item)
-                            @if(Route::has($item['route']))
-                            <li class="mb-8">
-                                <a href="{{ route($item['route']) }}"
-                                   class="fw-medium d-flex align-items-center text-14 gap-8 text-neutral-500 hover-bg-main-600 px-24 py-10 hover-text-white rounded-12 item-hover flex-wrap
-                                          {{ request()->routeIs($item['route']) ? 'bg-main-600 text-white' : '' }}">
-                                    <span class="text-16 text-main-600 item-hover__text transition-03">
-                                        <i class="{{ $item['icon'] }}"></i>
-                                    </span>
-                                    {{ $item['label'] }}
-                                </a>
-                            </li>
-                            @endif
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
+            @if(auth()->user()->isGestionnaire())
+                @include('partials.gestionnaire-sidebar')
+            @else
+                @include('partials.admin-sidebar')
+            @endif
 
             <div class="position-absolute inset-block-end-0 inset-inline-start-0 pb-16 px-16 w-100">
                 <a href="{{ route('logout') }}"
@@ -370,9 +335,9 @@
 </div>
 
 <!-- Scripts -->
-<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script> 
 <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-<script src="{{ asset('assets/js/main.js') }}"></script>
+<!-- <script src="{{ asset('assets/js/main.js') }}"></script> -->
 <script src="{{ asset('assets/js/boostrap.bundle.min.js') }}"></script>
 <script src="{{ asset('assets/js/select2.min.js') }}"></script>
 <script src="{{ asset('assets/js/phosphor-icon.js') }}"></script>
@@ -382,12 +347,14 @@
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+
 @stack('scripts')
 </body>
 </html>

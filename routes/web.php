@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\BlogController as AdminBlogController;
@@ -19,6 +20,9 @@ use App\Http\Controllers\Admin\ExamSubjectController as AdminExamSubjectControll
 use App\Http\Controllers\Admin\MarkController as AdminMarkController;
 use App\Http\Controllers\Admin\AcademicYearController as AdminAcademicYearController;
 use App\Http\Controllers\Admin\ContactMessageController as AdminContactMessageController;
+use App\Http\Controllers\Gestionnaire\BlogController as GestionnaireBlogController;
+use App\Http\Controllers\Gestionnaire\EventController as GestionnaireEventController;
+use App\Http\Controllers\Gestionnaire\ContactMessageController as GestionnaireContactMessageController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\AuthController;
@@ -86,6 +90,13 @@ Route::middleware('guest')->group(function () {
 
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
+Route::get('/redirect', function () {
+    if (Auth::check()) {
+        return redirect()->to(getUserDashboardRoute(Auth::user()->role));
+    } else {
+        return redirect()->route('login');
+    }
+});
 
 // Routes protégées par authentification
 Route::middleware(['auth'])->group(function () {
@@ -144,18 +155,19 @@ Route::middleware(['auth'])->group(function () {
         });
 
          // ── Events ──────────────────────────────────────────────────────────
-        // Route::resource('events', AdminEventController::class);
+        Route::resource('events', AdminEventController::class);
         Route::post('events/{event}/images', [AdminEventController::class, 'storeImage'])->name('events.storeImage');
         Route::delete('events/images/{image}', [AdminEventController::class, 'destroyImage'])->name('events.destroyImage');
         Route::post('events/images/reorder', [AdminEventController::class, 'reorderImages'])->name('events.reorderImages');
 
         //  ── Gallery Albums ────────────────────────────────────────────────────────
         Route::resource('gallery', AdminGalleryImageController::class);
-        
-        // Gallery Images (nested under albums)
-        Route::post('gallery/{album}/images', [AdminGalleryImageController::class, 'store'])->name('gallery.images.store');
-        Route::delete('gallery/images/{image}', [AdminGalleryImageController::class, 'destroy'])->name('gallery.images.destroy');
-        Route::post('gallery/images/reorder', [AdminGalleryImageController::class, 'reorder'])->name('gallery.images.reorder');
+                                                                                 
+        // Image management
+        Route::post('gallery/{id}/upload', [AdminGalleryImageController::class, 'upload'])->name('gallery.upload');
+        Route::delete('gallery/image/{id}', [AdminGalleryImageController::class, 'deleteImage'])->name('gallery.image.delete');
+        Route::post('gallery/{albumId}/cover/{imageId}', [AdminGalleryImageController::class, 'setCover'])->name('gallery.set-cover');
+        Route::post('gallery/{albumId}/reorder', [AdminGalleryImageController::class, 'reorder'])->name('gallery.reorder');
 
         // ── Admission Requests ────────────────────────────────────────────────────────
         // Admission requests
@@ -187,6 +199,38 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('contact-messages/{message}/mark-read', [AdminContactMessageController::class, 'markAsRead'])->name('contact-messages.mark-read');
         Route::patch('contact-messages/{message}/mark-unread', [AdminContactMessageController::class, 'markAsUnread'])->name('contact-messages.mark-unread');
         Route::delete('contact-messages/{message}', [AdminContactMessageController::class, 'destroy'])->name('contact-messages.destroy');
+    });
+
+    //gestionnaire Routes
+    Route::middleware(['role:gestionnaire'])->prefix('gestionnaire')->name('gestionnaire.')->group(function () {
+        Route::get('/dashboard', [GestionnaireBlogController::class, 'dashboard'])->name('dashboard');
+        Route::get('/profile', [GestionnaireBlogController::class, 'profile'])->name('profile');
+
+        // ── Blog Management ────────────────────────────────────────────────────
+        Route::get('/blog',              [GestionnaireBlogController::class, 'index'])->name('blogs.index');
+        Route::get('/blog/create',       [GestionnaireBlogController::class, 'create'])->name('blogs.create');
+        Route::post('/blog',             [GestionnaireBlogController::class, 'store'])->name('blogs.store');
+        Route::get('/blog/{blog}',       [GestionnaireBlogController::class, 'show'])->name('blogs.show');
+        Route::get('/blog/{blog}/edit',  [GestionnaireBlogController::class, 'edit'])->name('blogs.edit');
+        Route::put('/blog/{blog}',       [GestionnaireBlogController::class, 'update'])->name('blogs.update');
+        Route::delete('/blog/{blog}',    [GestionnaireBlogController::class, 'destroy'])->name('blogs.destroy');
+        // Comment moderation
+        Route::patch('comments/{comment}/approve', [GestionnaireBlogController::class, 'approveComment'])->name('comments.approve');
+        Route::patch('comments/{comment}/disapprove', [GestionnaireBlogController::class, 'disapproveComment'])->name('comments.disapprove');
+        Route::delete('comments/{comment}', [GestionnaireBlogController::class, 'destroyComment'])->name('comments.destroy');
+
+        // ── Events Management ──────────────────────────────────────────────────
+        Route::resource('events', GestionnaireEventController::class);
+        Route::post('events/{event}/images', [GestionnaireEventController::class, 'storeImage'])->name('events.storeImage');
+        Route::delete('events/images/{image}', [GestionnaireEventController::class, 'destroyImage'])->name('events.destroyImage');
+        Route::post('events/images/reorder', [GestionnaireEventController::class, 'reorderImages'])->name('events.reorderImages');
+
+        // ── Contact Messages Management ────────────────────────────────────────
+        Route::get('contact-messages', [GestionnaireContactMessageController::class, 'index'])->name('contact-messages.index');
+        Route::get('contact-messages/{message}', [GestionnaireContactMessageController::class, 'show'])->name('contact-messages.show');
+        Route::patch('contact-messages/{message}/mark-read', [GestionnaireContactMessageController::class, 'markAsRead'])->name('contact-messages.mark-read');
+        Route::patch('contact-messages/{message}/mark-unread', [GestionnaireContactMessageController::class, 'markAsUnread'])->name('contact-messages.mark-unread');
+        Route::delete('contact-messages/{message}', [GestionnaireContactMessageController::class, 'destroy'])->name('contact-messages.destroy');
     });
 
     // Student Routes

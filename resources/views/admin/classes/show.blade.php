@@ -80,6 +80,7 @@
                 <div class="card-header bg-main-25">
                     <strong>{{ $exam->name }}</strong> ({{ ucfirst($exam->exam_type) }} – {{ ucfirst($exam->term) }})<br>
                     <small>Du {{ $exam->start_date ? $exam->start_date->format('d/m/Y') : '—' }} au {{ $exam->end_date ? $exam->end_date->format('d/m/Y') : '—' }}</small>
+                    <a href="{{ route('admin.exams.show', $exam) }}" class="btn btn-sm bg-main-600"><i class="ph ph-eye"></i></a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

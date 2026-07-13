@@ -51,11 +51,19 @@
                 <div class="scale-hover-item bg-main-25 rounded-16 p-12 h-100 border border-neutral-30">
                     <div class="course-item__thumb rounded-12 overflow-hidden position-relative">
                         <a href="{{ route('blog.details', $blog['id']) }}" class="w-100 h-100">
-                            <img src="{{ asset($blog['cover_image']) }}" alt="Course Image" class="scale-hover-item__img rounded-12 cover-img transition-2">
+                            <!-- <img src="{{ asset($blog['cover_image']) }}" alt="Course Image" class="scale-hover-item__img rounded-12 cover-img transition-2"> -->
+                            @if($blog->cover_image)
+                                <img src="{{ asset('storage/' . $blog->cover_image) }}" alt="{{ $blog->title }}" class="scale-hover-item__img rounded-12 cover-img transition-2" />
+                            @else
+                               <div class="bc-cover-placeholder">
+                                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                                    <!-- <span>Image à venir</span> -->
+                                </div>
+                            @endif
                         </a>
                         <div class="position-absolute inset-inline-end-0 inset-block-end-0 me-16 mb-16 py-12 px-24 rounded-8 bg-main-three-600 text-white fw-medium">
-                            <h3 class="mb-0 text-white fw-medium">{{ $blog['created_at'] }}</h3>
-                            {{ $blog['month'] }}
+                            <h3 class="mb-0 text-white fw-medium">{{ $blog->published_at ? $blog->published_at->format('d') : '' }}</h3>
+                            {{ $blog->published_at ? strtoupper($blog->published_at->translatedFormat('M')) : '' }}
                         </div>
                     </div>
                     <div class="pt-32 pb-24 px-16 position-relative">
@@ -92,11 +100,11 @@
 
         <ul class="pagination mt-40 flex-align gap-12 flex-wrap justify-content-center">
             {{ $blogs->links() }}
-            <li class="page-item"><a class="page-link text-neutral-700 fw-semibold w-40 h-40 bg-main-25 rounded-circle hover-bg-main-600 border-neutral-30 hover-border-main-600 hover-text-white flex-center p-0" href="#"><i class="ph-bold ph-caret-left"></i></a></li>
+            <!-- <li class="page-item"><a class="page-link text-neutral-700 fw-semibold w-40 h-40 bg-main-25 rounded-circle hover-bg-main-600 border-neutral-30 hover-border-main-600 hover-text-white flex-center p-0" href="#"><i class="ph-bold ph-caret-left"></i></a></li>
             <li class="page-item"><a class="page-link text-neutral-700 fw-semibold w-40 h-40 bg-main-25 rounded-circle hover-bg-main-600 border-neutral-30 hover-border-main-600 hover-text-white flex-center p-0" href="#">1</a></li>
             <li class="page-item"><a class="page-link text-neutral-700 fw-semibold w-40 h-40 bg-main-25 rounded-circle hover-bg-main-600 border-neutral-30 hover-border-main-600 hover-text-white flex-center p-0" href="#">2</a></li>
             <li class="page-item"><a class="page-link text-neutral-700 fw-semibold w-40 h-40 bg-main-25 rounded-circle hover-bg-main-600 border-neutral-30 hover-border-main-600 hover-text-white flex-center p-0" href="#">3</a></li>
-            <li class="page-item"><a class="page-link text-neutral-700 fw-semibold w-40 h-40 bg-main-25 rounded-circle hover-bg-main-600 border-neutral-30 hover-border-main-600 hover-text-white flex-center p-0" href="#"><i class="ph-bold ph-caret-right"></i></a></li>
+            <li class="page-item"><a class="page-link text-neutral-700 fw-semibold w-40 h-40 bg-main-25 rounded-circle hover-bg-main-600 border-neutral-30 hover-border-main-600 hover-text-white flex-center p-0" href="#"><i class="ph-bold ph-caret-right"></i></a></li> -->
         </ul>
     </div>
 </div>

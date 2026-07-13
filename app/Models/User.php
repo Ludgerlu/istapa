@@ -69,6 +69,11 @@ class User extends Authenticatable
         return $this->role === 'student';
     }
 
+    public function isGestionnaire(): bool
+    {
+        return $this->role === 'gestionnaire';
+    }
+
     // Relationships
     public function student()
     {
@@ -137,7 +142,13 @@ class User extends Authenticatable
 
     public function leaveRequestsReviewed()
     {
-        return $this->hasMany(LeaveRequest::class, 'reviewed_by');
+        return $this->hasMany(Leave::class, 'reviewed_by');
+    }
+    
+    // Access the extra fields stored in the students table
+    public function studentDetails()
+    {
+        return $this->hasOne(StudentDetail::class, 'user_id');
     }
 
     // ─── Common scopes ─────────────────────────────────────────────────────────

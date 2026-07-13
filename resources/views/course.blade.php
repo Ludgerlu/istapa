@@ -1,38 +1,38 @@
 @extends('layouts.app')
 
-@section('title', 'ISTAPA - Courses')
+@section('title', $title = app()->getLocale() === 'fr' ? 'Nos Programmes - ISTAPA' : 'Our Programs - ISTAPA')
 
 @section('content')
-    <!-- ==================== Breadcrumb Start Here ==================== -->
+<!-- ==================== Breadcrumb Start Here ==================== -->
 <section class="breadcrumb py-120 bg-main-25 position-relative z-1 overflow-hidden mb-0">
-    <img src="assets/images/shapes/shape1.png" alt="" class="shape one animation-rotation d-md-block d-none">
-    <img src="assets/images/shapes/shape2.png" alt="" class="shape two animation-scalation d-md-block d-none">
-    <img src="assets/images/shapes/shape3.png" alt="" class="shape eight animation-walking d-md-block d-none">
-    <img src="assets/images/shapes/shape5.png" alt="" class="shape six animation-walking d-md-block d-none">
-    <img src="assets/images/shapes/shape4.png" alt="" class="shape four animation-scalation">
-    <img src="assets/images/shapes/shape4.png" alt="" class="shape nine animation-scalation">
+    <img src="{{ asset('assets/images/shapes/shape1.png') }}" alt="" class="shape one animation-rotation d-md-block d-none">
+    <img src="{{ asset('assets/images/shapes/shape2.png') }}" alt="" class="shape two animation-scalation d-md-block d-none">
+    <img src="{{ asset('assets/images/shapes/shape3.png') }}" alt="" class="shape eight animation-walking d-md-block d-none">
+    <img src="{{ asset('assets/images/shapes/shape5.png') }}" alt="" class="shape six animation-walking d-md-block d-none">
+    <img src="{{ asset('assets/images/shapes/shape4.png') }}" alt="" class="shape four animation-scalation">
+    <img src="{{ asset('assets/images/shapes/shape4.png') }}" alt="" class="shape nine animation-scalation">
     
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="breadcrumb__wrapper">
-                    <h1 class="breadcrumb__title display-4 fw-semibold text-center"> Courses Grid View</h1>
+                    <h1 class="breadcrumb__title display-4 fw-semibold text-center">
+                        {{ app()->getLocale() === 'fr' ? 'Nos Programmes de Formation' : 'Our Training Programs' }}
+                    </h1>
                     <ul class="breadcrumb__list d-flex align-items-center justify-content-center gap-4">
                         <li class="breadcrumb__item">
-                            <a href="index.html" class="breadcrumb__link text-neutral-500 hover-text-main-600 fw-medium"> 
-                                <i class="text-lg d-inline-flex ph-bold ph-house"></i> Home</a>
-                         </li>
+                            <a href="{{ route('home') }}" class="breadcrumb__link text-neutral-500 hover-text-main-600 fw-medium"> 
+                                <i class="text-lg d-inline-flex ph-bold ph-house"></i> 
+                                {{ app()->getLocale() === 'fr' ? 'Accueil' : 'Home' }}
+                            </a>
+                        </li>
                         <li class="breadcrumb__item">
                             <i class="text-neutral-500 d-flex ph-bold ph-caret-right"></i>
                         </li>
                         <li class="breadcrumb__item">
-                            <a href="course.html" class="breadcrumb__link text-neutral-500 hover-text-main-600 fw-medium"> Courses</a> 
-                        </li>
-                        <li class="breadcrumb__item ">
-                            <i class="text-neutral-500 d-flex ph-bold ph-caret-right"></i>
-                        </li>
-                        <li class="breadcrumb__item"> 
-                            <span class="text-main-two-600"> Grid View </span> 
+                            <span class="text-main-two-600">
+                                {{ app()->getLocale() === 'fr' ? 'Programmes' : 'Programs' }}
+                            </span>
                         </li>
                     </ul>
                 </div>
@@ -42,148 +42,160 @@
 </section>
 <!-- ==================== Breadcrumb End Here ==================== -->
 
-    <!-- ============================== Course Grid View Section Start ============================== -->
-    <section class="course-grid-view py-120">
-        <div class="container">
-            <div class="flex-between gap-16 flex-wrap mb-40">
-                <span class="text-neutral-500">Showing 9 of 600 Results </span>
-                <div class="flex-align gap-8">
-                    <span class="text-neutral-500 flex-shrink-0">Sort By :</span>
-                    <select class="form-select ps-20 pe-28 py-8 fw-semibold rounded-pill bg-main-25 border border-neutral-30 text-neutral-700">
-                        <option value="1">Newest</option>
-                        <option value="1">Trending</option>
-                        <option value="1">Popular</option>
-                    </select>
-                </div>
-            </div>
-            <div class="row gy-4">
-                @foreach($courses as $class)
-                    <div class="col-lg-4 col-sm-6">
-                        <div class="course-item bg-main-25 rounded-16 p-12 h-100 border border-neutral-30">
-                            <div class="course-item__thumb rounded-12 overflow-hidden position-relative">
-                                <a href="{{ route('course.details', $class->id) }}" class="w-100 h-100">
-                                    {{-- You can use a placeholder image or a dynamic cover from program/class --}}
-                                    <img src="{{ asset('assets/images/thumbs/course-img1.png') }}" alt="Class Image" class="course-item__img rounded-12 cover-img transition-2">
-                                </a>
-                                {{-- Display capacity as "capacity seats" instead of duration --}}
-                                <div class="flex-align gap-8 bg-main-600 rounded-pill px-24 py-12 text-white position-absolute inset-block-start-0 inset-inline-start-0 mt-20 ms-20 z-1">
-                                    <span class="text-2xl d-flex"><i class="ph ph-users"></i></span>
-                                    <span class="text-lg fw-medium">{{ $class->capacity ?? '30' }} places</span>
+<!-- ==================== Programs Section Start Here ==================== -->
+<section class="programs py-120">
+    <div class="container">
+        <div class="text-center mb-60" data-aos="fade-up">
+            <h2 class="display-4 fw-semibold mb-16">
+                {{ app()->getLocale() === 'fr' ? 'Découvrez Nos Formations' : 'Discover Our Programs' }}
+            </h2>
+            <p class="text-neutral-500 max-w-600 mx-auto">
+                {{ app()->getLocale() === 'fr' 
+                    ? 'Des formations de qualité pour répondre aux besoins du secteur agricole et environnemental' 
+                    : 'Quality training programs to meet the needs of the agricultural and environmental sector' }}
+            </p>
+        </div>
+
+        <div class="row gy-4">
+            @forelse($programs as $program)
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-duration="300" data-aos-delay="{{ $loop->index * 100 }}">
+                    <div class="program-card bg-main-25 rounded-16 p-20 border border-neutral-30 hover-border-main-600 transition-2 h-100">
+                        <div class="program-card__thumb position-relative mb-24">
+                            @if($program->cover_image)
+                                <img src="{{ asset('storage/' . $program->cover_image) }}" alt="{{ $program->title }}" class="w-100 rounded-12 object-fit-cover" style="height: 220px;">
+                            @else
+                                <div class="bc-cover-placeholder">
+                                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                                    <!-- <span>Image à venir</span> -->
                                 </div>
-                                {{-- Wishlist button – unchanged functionality --}}
-                                <button type="button" class="wishlist-btn w-48 h-48 bg-white text-main-two-600 flex-center position-absolute inset-block-start-0 inset-inline-end-0 mt-20 me-20 z-1 text-2xl rounded-circle transition-2">
-                                    <i class="ph ph-heart"></i>
-                                </button>
+                            @endif
+                            <div class="program-badge position-absolute top-0 start-0 mt-16 ms-16 bg-main-600 text-white px-16 py-8 rounded-pill">
+                                <span class="text-sm fw-medium">
+                                    {{ $program->duration_months ?? 24 }} {{ app()->getLocale() === 'fr' ? 'mois' : 'months' }}
+                                </span>
                             </div>
-                            <div class="course-item__content">
-                                <div>
-                                    <h4 class="mb-28">
-                                        <a href="{{ route('course.details', $class->id) }}" class="link text-line-2">
-                                            {{ $class->name }} @if($class->section)({{ $class->section }})@endif
-                                        </a>
-                                    </h4>
-                                    {{-- Row with program and academic year instead of lessons/level --}}
-                                    <div class="flex-between gap-8 flex-wrap mb-16">
-                                        <div class="flex-align gap-8">
-                                            <span class="text-neutral-700 text-2xl d-flex"><i class="ph-bold ph-graduation-cap"></i></span>
-                                            <span class="text-neutral-700 text-lg fw-medium">
-                                                {{ optional($class->program)->title ?? 'Programme' }}
-                                            </span>
-                                        </div>
-                                        <div class="flex-align gap-8">
-                                            <span class="text-neutral-700 text-2xl d-flex"><i class="ph-bold ph-calendar"></i></span>
-                                            <span class="text-neutral-700 text-lg fw-medium">
-                                                {{ optional($class->academicYear)->label ?? 'Année' }}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    {{-- Row with head teacher and (optional) capacity percentage or any other info --}}
-                                    <div class="flex-between gap-8 flex-wrap">
-                                        <div class="flex-align gap-4">
-                                            {{-- Instead of star rating, show "head teacher" --}}
-                                            <span class="text-2xl d-flex"><i class="ph-bold ph-chalkboard-teacher"></i></span>
-                                            <span class="text-lg text-neutral-700">
-                                                {{ optional($class->headTeacher)->full_name ?? 'Enseignant' }}
-                                            </span>
-                                        </div>
-                                        <div class="flex-align gap-8">
-                                            <span class="text-neutral-700 text-2xl d-flex">
-                                                {{-- Placeholder avatar or dynamic teacher avatar --}}
-                                                <img src="{{ asset('assets/images/thumbs/user-img1.png') }}" alt="Teacher" class="w-32 h-32 object-fit-cover rounded-circle">
-                                            </span>
-                                            <span class="text-neutral-700 text-lg fw-medium">
-                                                {{ $class->headTeacher->first_name ?? 'Staff' }}
-                                            </span>
-                                        </div>
-                                    </div>
+                        </div>
+                        
+                        <div class="program-card__content">
+                            <h3 class="mb-16">
+                                <a href="{{ route('course.details', $program->id) }}" class="link hover-text-main-600">
+                                    {{ $program->title }}
+                                </a>
+                            </h3>
+                            <p class="text-neutral-500 mb-24 text-line-3">
+                                {{ $program->excerpt }}
+                            </p>
+                            
+                            <div class="flex-between gap-16 flex-wrap mb-24">
+                                <div class="flex-align gap-8">
+                                    <i class="ph-bold ph-graduation-cap text-main-600 text-xl"></i>
+                                    <span class="text-neutral-600">
+                                        {{ $program->classes->count() }} 
+                                        {{ app()->getLocale() === 'fr' ? 'classes' : 'classes' }}
+                                    </span>
                                 </div>
-                                {{-- Footer with any fee/price if related, otherwise show something else --}}
-                                <div class="flex-between gap-8 pt-24 border-top border-neutral-50 mt-28 border-dashed border-0">
-                                    {{-- You could display total students enrolled or a "view details" link --}}
-                                    <h4 class="mb-0 text-main-two-600">
-                                        @if($class->capacity)
-                                            {{ $class->classEnrollments()->count() ?? 0 }} / {{ $class->capacity }}
-                                        @else
-                                            Places disponibles
-                                        @endif
-                                    </h4>
-                                    <a href="{{ route('course.details', $class->id) }}" class="flex-align gap-8 text-main-600 hover-text-decoration-underline transition-1 fw-semibold">
-                                        Voir détails
-                                        <i class="ph ph-arrow-right"></i>
-                                    </a>
+                                <div class="flex-align gap-8">
+                                    <i class="ph-bold ph-users text-main-600 text-xl"></i>
+                                    <span class="text-neutral-600">
+                                        {{ $program->admissionRequests->where('status', 'accepted')->count() }}
+                                        {{ app()->getLocale() === 'fr' ? 'étudiants' : 'students' }}
+                                    </span>
                                 </div>
+                            </div>
+                            
+                            <div class="border-top border-neutral-30 pt-24">
+                                <a href="{{ route('course.details', $program->id) }}" class="btn bg-main-600 rounded-pill w-100 py-12 hover-bg-main-600 hover-text-white transition-2 text-center d-inline-block">
+                                    {{ app()->getLocale() === 'fr' ? 'En savoir plus' : 'Learn more' }}
+                                    <i class="ph-bold ph-arrow-right ms-8"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
-                @endforeach
-            </div>
-            <ul class="pagination mt-40 flex-align gap-12 flex-wrap justify-content-center">
-                <li class="page-item">
-                    <a class="page-link text-neutral-700 fw-semibold w-40 h-40 bg-main-25 rounded-circle hover-bg-main-600 border-neutral-30 hover-border-main-600 hover-text-white flex-center p-0" href="#"><i class="ph-bold ph-caret-left"></i></a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link text-neutral-700 fw-semibold w-40 h-40 bg-main-25 rounded-circle hover-bg-main-600 border-neutral-30 hover-border-main-600 hover-text-white flex-center p-0" href="#">1</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link text-neutral-700 fw-semibold w-40 h-40 bg-main-25 rounded-circle hover-bg-main-600 border-neutral-30 hover-border-main-600 hover-text-white flex-center p-0" href="#">2</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link text-neutral-700 fw-semibold w-40 h-40 bg-main-25 rounded-circle hover-bg-main-600 border-neutral-30 hover-border-main-600 hover-text-white flex-center p-0" href="#">3</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link text-neutral-700 fw-semibold w-40 h-40 bg-main-25 rounded-circle hover-bg-main-600 border-neutral-30 hover-border-main-600 hover-text-white flex-center p-0" href="#">...</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link text-neutral-700 fw-semibold w-40 h-40 bg-main-25 rounded-circle hover-bg-main-600 border-neutral-30 hover-border-main-600 hover-text-white flex-center p-0" href="#"><i class="ph-bold ph-caret-right"></i></a>
-                </li>
-            </ul>
+                </div>
+            @empty
+                <div class="col-12">
+                    <div class="text-center py-60">
+                        <i class="ph-bold ph-graduation-cap text-neutral-400" style="font-size: 64px;"></i>
+                        <h4 class="mt-24 text-neutral-500">
+                            {{ app()->getLocale() === 'fr' ? 'Aucun programme disponible pour le moment.' : 'No programs available at the moment.' }}
+                        </h4>
+                    </div>
+                </div>
+            @endforelse
         </div>
-    </section>
-    <!-- ============================== Course Grid View Section End ============================== -->
-    
-    <!-- ================================= Certificate Section Start ================================= -->
-<div class="certificate">
-    <div class="container container--lg">
-        <div class="certificate-box px-16 bg-main-600 rounded-16">
-            <div class="container">
-                <div class="position-relative py-80">
-                    <div class="row align-items-center">
-                        <div class="col-xl-6">
-                            <div class="certificate__content">
-                                <div class="flex-align gap-8 mb-16 wow bounceInDown">
-                                    <span class="w-8 h-8 bg-white rounded-circle"></span>
-                                    <h5 class="text-white mb-0">Get Certificate</h5>
+    </div>
+</section>
+<!-- ==================== Programs Section End Here ==================== -->
+
+
+<!-- ==================== Why Choose Us Section Start Here ==================== -->
+<section class="why-choose-us py-120">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0" data-aos="fade-right">
+                <div class="why-choose-us__thumb position-relative">
+                    <img src="{{ asset('assets/images/thumbs/why-choose-us.jpg') }}" alt="Why Choose ISTAPA" class="rounded-16 w-100">
+                    <div class="experience-card bg-main-600 text-white rounded-16 p-24 position-absolute bottom-0 end-0 mb-32 me-32 text-center">
+                        <span class="display-4 fw-bold">+10</span>
+                        <span class="d-block">{{ app()->getLocale() === 'fr' ? 'Années d\'excellence' : 'Years of excellence' }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6" data-aos="fade-left">
+                <div class="why-choose-us__content">
+                    <h5 class="text-main-600 mb-16">{{ app()->getLocale() === 'fr' ? 'Pourquoi nous choisir ?' : 'Why choose us?' }}</h5>
+                    <h2 class="display-5 fw-semibold mb-24">
+                        {{ app()->getLocale() === 'fr' ? 'Une formation d\'excellence pour votre avenir' : 'Excellent training for your future' }}
+                    </h2>
+                    <p class="text-neutral-500 mb-32">
+                        {{ app()->getLocale() === 'fr' 
+                            ? 'ISTAPA combine théorie et pratique pour former des techniciens supérieurs compétents, capables de répondre aux défis du secteur agricole et environnemental.' 
+                            : 'ISTAPA combines theory and practice to train competent higher technicians capable of meeting the challenges of the agricultural and environmental sector.' }}
+                    </p>
+                    
+                    <div class="row gy-4">
+                        <div class="col-sm-6">
+                            <div class="feature-item flex-align gap-16">
+                                <div class="feature-icon w-60 h-60 bg-main-25 rounded-circle flex-center">
+                                    <i class="ph-bold ph-chalkboard-teacher text-main-600 text-2xl"></i>
                                 </div>
-                                <h2 class="text-white mb-40 fw-medium wow bounceIn">Get Quality Skills Certificate From the EduAll</h2>
-                                <a href="#" class="btn btn-white rounded-pill flex-align d-inline-flex gap-8 hover-bg-main-800 wow bounceInUp">
-                                    Get Started Now
-                                    <i class="ph-bold ph-arrow-up-right d-flex text-lg"></i>
-                                </a>
+                                <div>
+                                    <h5 class="mb-4">{{ app()->getLocale() === 'fr' ? 'Experts pédagogues' : 'Expert educators' }}</h5>
+                                    <span class="text-neutral-500 text-sm">{{ app()->getLocale() === 'fr' ? 'Enseignants qualifiés' : 'Qualified teachers' }}</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-xl-6 d-xl-block d-none">
-                            <div class="certificate__thumb" data-aos="fade-up-left">    
-                                <img src="assets/images/thumbs/certificate-img.png" alt="" data-tilt data-tilt-max="8" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening>
+                        <div class="col-sm-6">
+                            <div class="feature-item flex-align gap-16">
+                                <div class="feature-icon w-60 h-60 bg-main-25 rounded-circle flex-center">
+                                    <i class="ph-bold ph-flask text-main-600 text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-4">{{ app()->getLocale() === 'fr' ? 'Approche pratique' : 'Practical approach' }}</h5>
+                                    <span class="text-neutral-500 text-sm">{{ app()->getLocale() === 'fr' ? 'Stages et travaux terrain' : 'Internships and fieldwork' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="feature-item flex-align gap-16">
+                                <div class="feature-icon w-60 h-60 bg-main-25 rounded-circle flex-center">
+                                    <i class="ph-bold ph-briefcase text-main-600 text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-4">{{ app()->getLocale() === 'fr' ? 'Insertion professionnelle' : 'Career placement' }}</h5>
+                                    <span class="text-neutral-500 text-sm">{{ app()->getLocale() === 'fr' ? 'Taux d\'insertion élevé' : 'High employment rate' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="feature-item flex-align gap-16">
+                                <div class="feature-icon w-60 h-60 bg-main-25 rounded-circle flex-center">
+                                    <i class="ph-bold ph-handshake text-main-600 text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-4">{{ app()->getLocale() === 'fr' ? 'Partenariats solides' : 'Strong partnerships' }}</h5>
+                                    <span class="text-neutral-500 text-sm">{{ app()->getLocale() === 'fr' ? 'Avec le secteur privé' : 'With the private sector' }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -191,6 +203,52 @@
             </div>
         </div>
     </div>
- </div>
-<!-- ================================= Certificate Section End ================================= -->
+</section>
+<!-- ==================== Why Choose Us Section End Here ==================== -->
+
+<!-- ==================== Call to Action Start Here ==================== -->
+<section class="cta py-80 bg-main-600 mt-80">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8" data-aos="zoom-in">
+                <h2 class="text-white mb-16">
+                    {{ app()->getLocale() === 'fr' ? 'Prêt à rejoindre l\'ISTAPA ?' : 'Ready to join ISTAPA?' }}
+                </h2>
+                <p class="text-white opacity-75 mb-32">
+                    {{ app()->getLocale() === 'fr' 
+                        ? 'Inscrivez-vous dès maintenant et commencez votre parcours vers une carrière réussie dans l\'agriculture et l\'environnement.' 
+                        : 'Register now and start your journey towards a successful career in agriculture and environment.' }}
+                </p>
+                <div class="flex-center gap-16 flex-wrap">
+                    <a href="{{ route('admission') }}" class="btn btn-white rounded-pill px-40 py-14 fw-semibold">
+                        {{ app()->getLocale() === 'fr' ? 'Postuler maintenant' : 'Apply now' }}
+                        <i class="ph-bold ph-arrow-right ms-8"></i>
+                    </a>
+                    <a href="{{ route('contact') }}" class="btn btn-outline-white rounded-pill px-40 py-14 fw-semibold">
+                        {{ app()->getLocale() === 'fr' ? 'Nous contacter' : 'Contact us' }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ==================== Call to Action End Here ==================== -->
 @endsection
+
+@push('styles')
+<style>
+    .program-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    .text-line-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .object-fit-cover {
+        object-fit: cover;
+    }
+</style>
+@endpush

@@ -178,13 +178,18 @@
                             <td class="py-16 px-20 shadow-none">
                                 <div class="d-flex align-items-center gap-12">
                                     <div class="w-32 h-32 bg-main-600 rounded-circle d-flex align-items-center justify-content-center text-white text-12 fw-bold flex-shrink-0">
-                                        {{ strtoupper(substr($student->display_name, 0, 2)) }}
+                                        {{ strtoupper(substr($student->last_name, 0, 2)) }}
                                     </div>
-                                    <span class="fw-medium text-14 text-neutral-500">{{ $student->display_name }}</span>
+                                    <span class="fw-medium text-14 text-neutral-500">{{ $student->last_name }}</span>
                                 </div>
                             </td>
+                            <td>
+                                <span class="text-14 fw-normal text-neutral-500">
+                                    {{ optional($student->class)->class_name ?? 'N/A' }}
+                                </span>
+                            </td>
                             <td class="text-14 fw-normal py-16 px-20 shadow-none text-neutral-500">
-                                {{ $student->created_at->format('d/m/Y') }}
+                                {{ $student->created_at }}
                             </td>
                         </tr>
                         @empty

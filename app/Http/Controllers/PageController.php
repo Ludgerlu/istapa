@@ -27,12 +27,11 @@ class PageController extends Controller
      */
     public function home()
     {
-         // Latest 3 blog posts
-        $latestBlogs = BlogPost::published()->latest()->limit(3)->get();
+         // Latest 5 blog posts
+        $latestBlogs = BlogPost::published()->latest()->limit(5)->get();
 
         // Upcoming events (start_date >= today, published) – limit 3
         $upcomingEvents = Event::where('is_published', true)
-            ->where('start_date', '>=', now()->toDateString())
             ->orderBy('start_date')
             ->limit(3)
             ->get();
@@ -68,7 +67,10 @@ class PageController extends Controller
     public function courses()
     {
         $courses = Classes::with(['program', 'academicYear', 'headTeacher', 'classEnrollments'])->latest()->get();
-        return view('course', compact('courses'));
+        $programs = Program::published()->with('classes')->get();
+        
+
+        return view('course', compact('courses', 'programs'));
     }
 
     /**
@@ -84,7 +86,28 @@ class PageController extends Controller
      */
     public function courseDetails($id)
     {
-        return view('course-details');
+
+        $program = Program::where('id', $id)
+            ->where('is_published', 1)
+            ->firstOrFail();
+        
+        // Get classes for this program with their levels and academic years
+        $classes = Classes::with(['program', 'academicYear', 'headTeacher'])
+            ->where('program_id', $program->id)
+            ->get();
+        
+        
+        // Get testimonials related to this program (optional - you may need to add program_id to testimonials table)
+        $testimonials = \App\Models\Testimonial::where('is_published', 1)
+            ->orderBy('sort_order')
+            ->take(3)
+            ->get();
+        
+        // Get admission requests count for this program (optional)
+        $activeStudentsCount = \App\Models\AdmissionRequest::where('program_id', $program->id)
+            ->where('status', 'accepted')
+            ->count();
+        return view('course-details', compact('program', 'testimonials', 'activeStudentsCount'));
     }
 
     /**

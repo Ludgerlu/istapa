@@ -23,13 +23,16 @@ class CheckUserType
         $user = Auth::user();
         
         foreach ($roles as $role) {
-            if ($role === 'admin') {
+            if ($role === 'admin' && $user->role === 'admin') {
                 return $next($request);
             }
-            if ($role === 'teacher' && $user->type === 'teacher') {
+            if ($role === 'teacher' && $user->role === 'teacher') {
                 return $next($request);
             }
-            if ($role === 'student' && $user->type === 'student') {
+            if ($role === 'student' && $user->role === 'student') {
+                return $next($request);
+            }
+            if ($role === 'gestionnaire' && $user->role === 'gestionnaire') {
                 return $next($request);
             }
         }

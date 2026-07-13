@@ -39,6 +39,8 @@ class AuthController extends Controller
                 return redirect()->route('teacher.dashboard');
             } elseif ($user->isStudent()) {
                 return redirect()->route('student.dashboard');
+            } elseif ($user->isGestionnaire()) {
+                return redirect()->route('gestionnaire.dashboard');
             }
 
             return redirect()->intended('/');
@@ -103,6 +105,7 @@ class AuthController extends Controller
             'admin' => route('admin.dashboard'),
             'teacher' => route('teacher.dashboard'),
             'student' => route('student.dashboard'),
+            'gestionnaire' => route('gestionnaire.dashboard'),
             default => '/',
         };
     }

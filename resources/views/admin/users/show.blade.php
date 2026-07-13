@@ -192,7 +192,7 @@
                 @php
                     $enrollments = $student->classEnrollments ?? collect();
                     $marks       = $student->marks ?? collect();
-                    $leaves      = $student->leaveRequests ?? collect();
+                    $leaves      = $student->leave ?? collect();
                     $payments    = $student->feePayments ?? collect();
                 @endphp
                 <div class="quick-stat-grid">
@@ -555,7 +555,7 @@
                     <span>Demandes de congé</span>
                 </div>
                 <div class="info-card__body p-0">
-                    @php $leaves = $student?->leaveRequests ?? collect(); @endphp
+                    @php $leaves = $student?->leave ?? collect(); @endphp
                     @if($leaves->isNotEmpty())
                     <table class="show-table w-100">
                         <thead>

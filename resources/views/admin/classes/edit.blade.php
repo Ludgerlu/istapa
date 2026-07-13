@@ -17,3 +17,4 @@
     <div class="d-flex justify-content-end gap-12 mt-24"><a href="{{ route('admin.classes.show', $class) }}" class="btn bg-danger-600 rounded-pill">Annuler</a><button type="submit" class="btn btn-main rounded-pill">Mettre à jour</button></div>
 </form>
 @endsection
+

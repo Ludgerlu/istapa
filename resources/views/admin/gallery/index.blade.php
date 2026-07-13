@@ -27,11 +27,11 @@
                     <p class="mb-2"><i class="ph ph-image"></i> {{ $album->images->count() }} image(s)</p>
                 </div>
                 <div class="card-footer bg-transparent border-0 d-flex gap-8 pb-16">
-                    <a href="{{ route('admin.gallery.show', $album) }}" class="btn btn-sm btn-outline-secondary rounded-pill"><i class="ph ph-eye"></i> Voir</a>
-                    <a href="{{ route('admin.gallery.edit', $album) }}" class="btn btn-sm btn-outline-secondary rounded-pill"><i class="ph ph-pencil"></i> Éditer</a>
+                    <a href="{{ route('admin.gallery.show', $album) }}" class="btn btn-sm bg-main-600 text-white rounded-pill"><i class="ph ph-eye"></i> Voir</a>
+                    <a href="{{ route('admin.gallery.edit', $album) }}" class="btn btn-sm bg-warning-600 text-white rounded-pill"><i class="ph ph-pencil"></i> Éditer</a>
                     <form action="{{ route('admin.gallery.destroy', $album) }}" method="POST" onsubmit="return confirm('Supprimer cet album ?')">
                         @csrf @method('DELETE')
-                        <button class="btn btn-sm btn-outline-danger rounded-circle"><i class="ph ph-trash"></i></button>
+                        <button class="btn btn-sm bg-danger-600 text-white rounded-circle"><i class="ph ph-trash"></i></button>
                     </form>
                 </div>
             </div>
