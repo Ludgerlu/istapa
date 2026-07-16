@@ -208,49 +208,11 @@
             </a>
             <span class="w-100 bg-neutral-40 mb-24 mt-24 h-1 d-block"></span>
 
-            <div class="overflow-x-auto">
-                <div class="scrollbar min-w-max">
-                    <span class="text-neutral-500 fw-normal text-14 mb-8 d-block">
-                        Bonjour, {{ auth()->user()->display_name }} 👋
-                    </span>
-
-                    @php
-                        $navItems = [
-                            ['route' => 'admin.dashboard',  'icon' => 'ph-bold ph-house',          'label' => 'Tableau de bord'],
-                            ['route' => 'admin.users.index',   'icon' => 'ph ph-student',              'label' => 'Utilisateurs'],
-                            ['route' => 'admin.attendance.index',   'icon' => 'ph ph-chalkboard-teacher',   'label' => 'present'],
-                            ['route' => 'admin.classes.index',    'icon' => 'ph ph-books',                'label' => 'Classes'],
-                            ['route' => 'admin.subjects.index',   'icon' => 'ph ph-notepad',              'label' => 'Matières'],
-                            ['route' => 'admin.exams.index',      'icon' => 'ph ph-exam',                 'label' => 'Examens'],
-                            ['route' => 'admin.fees.index',       'icon' => 'ph ph-money',                'label' => 'Frais scolaires'],
-                            ['route' => 'admin.events.index',     'icon' => 'ph ph-calendar',             'label' => 'Événements'],
-                            ['route' => 'admin.blogs.index',      'icon' => 'ph ph-newspaper',            'label' => 'Blog'],
-                            ['route' => 'admin.contact-messages.index',   'icon' => 'ph ph-chat-dots',            'label' => 'Messages'],
-                            ['route' => 'admin.profile',    'icon' => 'ph ph-user-circle',          'label' => 'Mon profil'],
-                            ['route' => 'admin.gallery.index',    'icon' => 'ph ph-image',                'label' => 'Albums photo'],
-                            ['route' => 'admin.admissions.index',    'icon' => 'ph ph-user-plus',            'label' => 'Admissions'],
-                            ['route' => 'admin.leaves.index',    'icon' => 'ph ph-door-open',            'label' => 'Congés'],
-                        ];
-                    @endphp
-
-                    <ul>
-                        @foreach($navItems as $item)
-                            @if(Route::has($item['route']))
-                            <li class="mb-8">
-                                <a href="{{ route($item['route']) }}"
-                                   class="fw-medium d-flex align-items-center text-14 gap-8 text-neutral-500 hover-bg-main-600 px-24 py-10 hover-text-white rounded-12 item-hover flex-wrap
-                                          {{ request()->routeIs($item['route']) ? 'bg-main-600 text-white' : '' }}">
-                                    <span class="text-16 text-main-600 item-hover__text transition-03">
-                                        <i class="{{ $item['icon'] }}"></i>
-                                    </span>
-                                    {{ $item['label'] }}
-                                </a>
-                            </li>
-                            @endif
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
+             @if(auth()->user()->role === 'admin')
+                @include('partials._sidebar_admin')
+            @elseif(auth()->user()->role === 'manager')
+                @include('partials._sidebar_manager')
+            @endif
 
             <div class="position-absolute inset-block-end-0 inset-inline-start-0 pb-16 px-16 w-100">
                 <a href="{{ route('logout') }}"

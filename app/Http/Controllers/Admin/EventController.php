@@ -28,12 +28,12 @@ class EventController extends Controller
         }
 
         $events = $query->latest('created_at')->paginate(15);
-        return view('admin.events.index', compact('events'));
+        return view($this->getRoutePrefix() . '.events.index', compact('events'));
     }
 
     public function create()
     {
-        return view('admin.events.create');
+        return view($this->getRoutePrefix() . '.events.create');
     }
 
     public function store(Request $request)
@@ -65,19 +65,19 @@ class EventController extends Controller
 
         $event = Event::create($validated);
 
-        return redirect()->route('admin.events.show', $event)
-                         ->with('success', 'Événement créé avec succès.');
+        return redirect()->route($this->getRoutePrefix() . '.events.show', $event)
+                     ->with('success', 'Événement créé avec succès.');
     }
 
     public function show(Event $event)
     {
         $event->load('images', 'creator');
-        return view('admin.events.show', compact('event'));
+        return view($this->getRoutePrefix() . '.events.show', compact('event'));
     }
 
     public function edit(Event $event)
     {
-        return view('admin.events.edit', compact('event'));
+        return view($this->getRoutePrefix() . '.events.edit', compact('event'));
     }
 
     public function update(Request $request, Event $event)
@@ -116,7 +116,7 @@ class EventController extends Controller
 
         $event->update($validated);
 
-        return redirect()->route('admin.events.show', $event)
+        return redirect()->route($this->getRoutePrefix() . '.events.show', $event)
                          ->with('success', 'Événement mis à jour.');
     }
 
@@ -131,7 +131,7 @@ class EventController extends Controller
         }
         $event->delete();
 
-        return redirect()->route('admin.events.index')
+        return redirect()->route($this->getRoutePrefix() . '.events.index')
                          ->with('success', 'Événement supprimé.');
     }
 
@@ -168,5 +168,10 @@ class EventController extends Controller
             EventImage::where('id', $id)->update(['sort_order' => $index + 1]);
         }
         return response()->json(['success' => true]);
+    }
+
+    protected function getRoutePrefix()
+    {
+        return auth()->user()->role === 'manager' ? 'manager' : 'admin';
     }
 }

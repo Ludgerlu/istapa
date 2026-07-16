@@ -40,7 +40,7 @@ class ContactMessageController extends Controller
             'archived' => ContactMessage::where('status', 'archived')->count(),
         ];
 
-        return view('admin.contact-messages.index', compact('messages', 'stats'));
+        return view($this->getRoutePrefix() . '.contact-messages.index', compact('messages', 'stats'));
     }
 
     /**
@@ -52,7 +52,7 @@ class ContactMessageController extends Controller
         if ($message->status === 'unread') {
             $message->update(['status' => 'read']);
         }
-        return view('admin.contact-messages.show', compact('message'));
+        return view($this->getRoutePrefix() . '.contact-messages.show', compact('message'));
     }
 
     /**
@@ -79,7 +79,12 @@ class ContactMessageController extends Controller
     public function destroy(ContactMessage $message)
     {
         $message->delete();
-        return redirect()->route('admin.contact-messages.index')
-                         ->with('success', 'Message supprimé.');
+        return redirect()->route($this->getRoutePrefix() . '.contact-messages.index')
+                     ->with('success', 'Message supprimé.');
+    }
+
+    protected function getRoutePrefix()
+    {
+        return auth()->user()->role === 'manager' ? 'manager' : 'admin';
     }
 }

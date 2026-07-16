@@ -14,27 +14,15 @@ class CheckUserType
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle($request, Closure $next, ...$roles): Response
+    public function handle($request, Closure $next, ...$roles)
     {
-        if (!Auth::check()) {
-            return redirect()->route('login');
+        if (!auth()->check()) {
+            abort(403);
         }
-
-        $user = Auth::user();
-        
-        foreach ($roles as $role) {
-            if ($role === 'admin') {
-                return $next($request);
-            }
-            if ($role === 'teacher' && $user->type === 'teacher') {
-                return $next($request);
-            }
-            if ($role === 'student' && $user->type === 'student') {
-                return $next($request);
-            }
+        if (!in_array(auth()->user()->role, $roles)) {
+            abort(403);
         }
-
-        abort(403, 'Accès non autorisé.');
+        return $next($request);
     }
     
 }

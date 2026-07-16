@@ -190,6 +190,58 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('contact-messages/{message}', [AdminContactMessageController::class, 'destroy'])->name('contact-messages.destroy');
     });
 
+
+    Route::middleware(['role:manager'])->prefix('manager')->name('manager.')->group(function () {
+
+        // Dashboard (optional – you can reuse AdminDashboardController or create a dedicated one)
+        Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard');
+
+        // ── Blog ──────────────────────────────────────────────────────
+        Route::get('/blog',              [AdminBlogController::class, 'index'])->name('blogs.index');
+        Route::get('/blog/create',       [AdminBlogController::class, 'create'])->name('blogs.create');
+        Route::post('/blog',             [AdminBlogController::class, 'store'])->name('blogs.store');
+        Route::get('/blog/{blog}',       [AdminBlogController::class, 'show'])->name('blogs.show');
+        Route::get('/blog/{blog}/edit',  [AdminBlogController::class, 'edit'])->name('blogs.edit');
+        Route::put('/blog/{blog}',       [AdminBlogController::class, 'update'])->name('blogs.update');
+        Route::delete('/blog/{blog}',    [AdminBlogController::class, 'destroy'])->name('blogs.destroy');
+        // Comment moderation
+        Route::patch('comments/{comment}/approve',   [AdminBlogController::class, 'approveComment'])->name('comments.approve');
+        Route::patch('comments/{comment}/disapprove',[AdminBlogController::class, 'disapproveComment'])->name('comments.disapprove');
+        Route::delete('comments/{comment}',          [AdminBlogController::class, 'destroyComment'])->name('comments.destroy');
+
+        // ── Events ────────────────────────────────────────────────────
+        Route::get('/events',             [AdminEventController::class, 'index'])->name('events.index');
+        Route::get('/events/create',      [AdminEventController::class, 'create'])->name('events.create');
+        Route::post('/events',            [AdminEventController::class, 'store'])->name('events.store');
+        Route::get('/events/{event}',     [AdminEventController::class, 'show'])->name('events.show');
+        Route::get('/events/{event}/edit',[AdminEventController::class, 'edit'])->name('events.edit');
+        Route::put('/events/{event}',     [AdminEventController::class, 'update'])->name('events.update');
+        Route::delete('/events/{event}',  [AdminEventController::class, 'destroy'])->name('events.destroy');
+        // Event images
+        Route::post('events/{event}/images',        [AdminEventController::class, 'storeImage'])->name('events.storeImage');
+        Route::delete('events/images/{image}',      [AdminEventController::class, 'destroyImage'])->name('events.destroyImage');
+        Route::post('events/images/reorder',        [AdminEventController::class, 'reorderImages'])->name('events.reorderImages');
+
+        // ── Gallery ──────────────────────────────────────────────────
+        // Using GalleryImageController (or GalleryController – choose one)
+        Route::resource('gallery', AdminGalleryImageController::class);
+        // Additional gallery routes
+        Route::post('gallery/{id}/upload', [AdminGalleryImageController::class, 'upload'])->name('gallery.upload');
+        Route::delete('gallery/image/{id}', [AdminGalleryImageController::class, 'deleteImage'])->name('gallery.image.delete');
+        Route::post('gallery/{albumId}/cover/{imageId}', [AdminGalleryImageController::class, 'setCover'])->name('gallery.set-cover');
+        Route::post('gallery/{albumId}/reorder', [AdminGalleryImageController::class, 'reorder'])->name('gallery.reorder');
+
+        // ── Contact Messages ────────────────────────────────────────
+        Route::get('contact-messages', [AdminContactMessageController::class, 'index'])->name('contact-messages.index');
+        Route::get('contact-messages/{message}', [AdminContactMessageController::class, 'show'])->name('contact-messages.show');
+        Route::patch('contact-messages/{message}/mark-read', [AdminContactMessageController::class, 'markAsRead'])->name('contact-messages.mark-read');
+        Route::patch('contact-messages/{message}/mark-unread', [AdminContactMessageController::class, 'markAsUnread'])->name('contact-messages.mark-unread');
+        Route::delete('contact-messages/{message}', [AdminContactMessageController::class, 'destroy'])->name('contact-messages.destroy');
+
+        // Profile (optional)
+        Route::get('/profile', [AdminDashboardController::class, 'profile'])->name('profile');
+    });
+
     // Student Routes
     Route::middleware(['role:student'])->prefix('student')->name('student.')->group(function () {
         Route::get('/dashboard', [StudentController::class, 'dashboard'])->name('dashboard');

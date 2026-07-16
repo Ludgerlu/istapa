@@ -322,6 +322,9 @@ class PageController extends Controller
             ->orderBy('start_date', 'asc')
             ->orderBy('start_time', 'asc')
             ->paginate(6); // 6 events per page
+    
+        $events->increment('view_count');
+
 
         return view('events', compact('events'));
     }

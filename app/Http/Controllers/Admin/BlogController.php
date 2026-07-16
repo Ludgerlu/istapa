@@ -24,7 +24,7 @@ class BlogController extends Controller
             ->latest()
             ->paginate(15);
 
-        return view('admin.blog.index', compact('blogs'));
+        return view($this->getRoutePrefix() . '.blog.index', compact('blogs'));
     }
 
     /**
@@ -33,7 +33,7 @@ class BlogController extends Controller
     public function create()
     {
         $categories = BlogCategory::all();
-        return view('admin.blog.create', compact('categories'));
+        return view($this->getRoutePrefix() . '.blog.create', compact('categories'));
     }
 
     /**
@@ -66,7 +66,7 @@ class BlogController extends Controller
 
         BlogPost::create($validated);
 
-        return redirect()->route('admin.blogs.index')
+        return redirect()->route($this->getRoutePrefix() . '.blogs.index')
                          ->with('success', 'Article créé avec succès.');
     }
 
@@ -82,13 +82,13 @@ class BlogController extends Controller
             ->latest()
             ->get();
 
-        return view('admin.blog.show', compact('blog', 'comments'));
+        return view($this->getRoutePrefix() . '.blog.show', compact('blog', 'comments'));
     }
 
     public function edit(BlogPost $blog)
     {
         $categories = BlogCategory::all();
-        return view('admin.blog.edit', compact('blog', 'categories'));
+        return view($this->getRoutePrefix() . '.blog.edit', compact('blog', 'categories'));
     }
 
     public function update(Request $request, BlogPost $blog)
@@ -118,7 +118,7 @@ class BlogController extends Controller
 
         $blog->update($data);
 
-        return redirect()->route('admin.blogs')->with('success', 'Article mis à jour.');
+        return redirect()->route($this->getRoutePrefix() . '.blogs.index')->with('success', 'Article mis à jour.');
     }
 
     public function destroy(Blog $blog)
@@ -128,7 +128,7 @@ class BlogController extends Controller
         }
         $blog->delete();
 
-        return redirect()->route('admin.blogs')->with('success', 'Article supprimé.');
+        return redirect()->route($this->getRoutePrefix() . '.blogs.index')->with('success', 'Article supprimé.');
     }
 
     // ----- Comment approval methods (used in Show view) -----
@@ -160,5 +160,10 @@ class BlogController extends Controller
         $comment->replies()->delete();
         $comment->delete();
         return back()->with('success', 'Commentaire supprimé.');
+    }
+
+    protected function getRoutePrefix()
+    {
+        return auth()->user()->role === 'manager' ? 'manager' : 'admin';
     }
 }

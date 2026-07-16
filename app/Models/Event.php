@@ -11,7 +11,7 @@ class Event extends Model
 
     protected $fillable = [
         'slug', 'title_en', 'title_fr', 'short_description_en', 'short_description_fr',
-        'content_en', 'content_fr', 'cover_image', 'video_url', 'location',
+        'content_en', 'content_fr', 'cover_image', 'video_url', 'location','view_count',
         'start_date', 'start_time', 'end_date', 'end_time', 'is_published', 'created_by'
     ];
 
