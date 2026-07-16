@@ -323,7 +323,6 @@ class PageController extends Controller
             ->orderBy('start_time', 'asc')
             ->paginate(6); // 6 events per page
     
-        $events->increment('view_count');
 
 
         return view('events', compact('events'));
@@ -336,7 +335,7 @@ class PageController extends Controller
     {
         
         $event = Event::with(['images'])->where('is_published', true)->findOrFail($id);
-        // $event->increment('views');
+        $event->increment('view_count'); // Increment view count
 
         return view('event-details', compact('event'));
     }
