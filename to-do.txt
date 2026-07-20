@@ -1,0 +1,3 @@
+-add the numbers of view of blog/event gg
+- image management in manager part
+- update database (add formation views,create the table ffor the views of articls with it's procedure,  ) gg

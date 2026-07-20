@@ -33,6 +33,7 @@
                 <span class="badge {{ $event->is_published ? 'bg-success-100 text-success-600' : 'bg-neutral-100 text-neutral-500' }}">
                     {{ $event->is_published ? 'Publié' : 'Brouillon' }}
                 </span>
+                <span class="text-13 text-neutral-400">Vues : {{ $event->view_count ?? 0 }}</span>
                 <span class="text-13 text-neutral-400">
                     <i class="ph ph-calendar"></i> 
                     {{ $event->start_date->format('d/m/Y') }}

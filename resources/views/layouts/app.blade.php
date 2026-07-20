@@ -379,7 +379,7 @@
                             <div class="footer-item__logo">
                                 <a href="{{ route('home') }}"> <img src="{{ asset('assets/images/logo/logo.png') }}" alt=""></a>
                             </div>
-                            <p class="my-32">EduAll exceeded all my expectations! The instructors were not only experts</p>
+                            <p class="my-32">ISTAPA a dépassé toutes mes attentes ! Les formateurs n'étaient pas seulement des experts</p>
                             <ul class="social-list flex-align gap-24">
                                 <li class="social-list__item">
                                     <a href="https://www.facebook.com/" class="text-main-600 text-2xl hover-text-main-two-600"><i class="ph-bold ph-facebook-logo"></i></a>

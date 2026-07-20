@@ -35,6 +35,7 @@
                     <span class="badge {{ $blog->status === 'published' ? 'bg-success-100 text-success-600' : ($blog->status === 'draft' ? 'bg-warning-100 text-warning-600' : 'bg-neutral-100 text-neutral-500') }}">
                         {{ ucfirst($blog->status) }}
                     </span>
+                    <span class="text-13 text-neutral-400">Vues : {{ $blog->view_count ?? 0 }}</span>
                     <span class="text-13 text-neutral-400">{{ $blog->published_at?->format('d/m/Y H:i') ?? 'Non publié' }}</span>
                     <span class="text-13 text-neutral-400">Auteur : {{ $blog->author->name ?? 'Inconnu' }}</span>
                 </div>

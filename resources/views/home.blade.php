@@ -109,8 +109,8 @@
                                 <img src="assets/images/icons/info-two-icon1.png" class="animate__heartBeat" alt="">
                             </span>
                             <div>
-                                <h4 class="mb-16">Scholarship Facility</h4>
-                                <p class="text-neutral-700">These facilities provide students with an inspiring </p>
+                                <h4 class="mb-16">Bourses d'études</h4>
+                                <p class="text-neutral-700">Ces équipements offrent aux étudiants un cadre inspirant et propice à la réussite</p>
                             </div>
                         </div>
                     </div>
@@ -120,8 +120,8 @@
                                 <img src="assets/images/icons/info-two-icon2.png" class="animate__heartBeat" alt="">
                             </span>
                             <div>
-                                <h4 class="mb-16">Esteemed Faculty</h4>
-                                <p class="text-neutral-700">Our university boasts a team of renowned faculty members</p>
+                                <h4 class="mb-16">Corps professoral d'exception</h4>
+                                <p class="text-neutral-700">Notre université s'appuie sur une équipe de professeurs renommés</p>
                             </div>
                         </div>
                     </div>
@@ -131,8 +131,8 @@
                                 <img src="assets/images/icons/info-two-icon3.png" class="animate__heartBeat" alt="">
                             </span>
                             <div>
-                                <h4 class="mb-16">Diverse Programs</h4>
-                                <p class="text-neutral-700">From undergraduate degrees to postgraduate research </p>
+                                <h4 class="mb-16">Programmes diversifiés</h4>
+                                <p class="text-neutral-700">Des licences aux programmes de recherche postuniversitaires</p>
                             </div>
                         </div>
                     </div>
@@ -247,7 +247,7 @@
                             <span class="text-main-600 text-2xl d-flex"><i class="ph-bold ph-book-open"></i></span>
                             <h5 class="text-main-600 mb-0">Prochaine Rentrée</h5>
                         </div>
-                        <h2 class="mb-24 wow bounceInRight">Rentrée prévue pour le 28 juillet 2026</h2>
+                        <h2 class="mb-24 wow bounceInRight">Rentrée prévue pour le 12 octobre 2026</h2>
                         <p class="text-neutral-500 text-line-2 wow bounceInUp">
                             Préparez-vous à vivre une expérience d'apprentissage personnalisée ! Les inscriptions sont ouvertes pour notre prochaine rentrée. Réservez dès aujourd'hui votre <strong>cours d'essai GRATUIT</strong> et découvrez comment nos tuteurs experts peuvent vous accompagner vers la réussite.
                         </p>
@@ -366,7 +366,7 @@
                 </div>
                 <h2 class="mb-24 wow bounceInRight">Ce que Dit Notre Communauté</h2>
                 <p class="text-neutral-500 text-line-4 wow bounceInUp">
-                    Bienvenue dans notre section témoignages, où les membres de notre communauté universitaire partagent leurs expériences et points de vue sur la vie à EduAll. Nous vous invitons à nous rejoindre et à faire partie de notre parcours inspirant d'apprentissage, de croissance et d'accomplissement.
+                    Bienvenue dans notre section témoignages, où les membres de notre communauté universitaire partagent leurs expériences et points de vue sur la vie à ISTAPA. Nous vous invitons à nous rejoindre et à faire partie de notre parcours inspirant d'apprentissage, de croissance et d'accomplissement.
                 </p>
                 <div class="flex-align gap-16 mt-40">
                     <button type="button" id="testimonials-three-prev" class="slick-prev slick-arrow flex-center rounded-circle border border-gray-100 hover-border-main-600 text-xl hover-bg-main-600 hover-text-white transition-1 w-48 h-48">

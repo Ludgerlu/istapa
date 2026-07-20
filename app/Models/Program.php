@@ -19,6 +19,7 @@ class Program extends Model
         'short_description_fr', 
         'content_en',
         'content_fr', 
+        'view_count',
         'is_published', 
         'sort_order'
     ];
@@ -26,6 +27,7 @@ class Program extends Model
     protected $casts = [
         'is_published' => 'boolean',
         'duration_months' => 'integer',
+        'view_count' => 'integer',
     ];
 
     public function translations()

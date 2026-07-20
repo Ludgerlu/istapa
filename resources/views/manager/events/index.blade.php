@@ -29,7 +29,7 @@
     <div class="overflow-x-auto">
         <table class="table">
             <thead>
-                <tr><th>Titre</th><th>Date</th><th>Lieu</th><th>Statut</th><th>Actions</th></tr>
+                <tr><th>Titre</th><th>Date</th><th>Lieu</th><th>Statut</th><th>Vues</th><th>Actions</th></tr>
             </thead>
             <tbody>
                 @forelse($events as $event)
@@ -49,6 +49,7 @@
                     <td>{{ $event->start_date->format('d/m/Y') }} @if($event->start_time) {{ $event->start_time }} @endif</td>
                     <td>{{ $event->location ?: '—' }}</td>
                     <td>@if($event->is_published) <span class="badge bg-success-100 text-success-600">Publié</span> @else <span class="badge bg-neutral-100 text-neutral-500">Brouillon</span> @endif</td>
+                    <td>{{ $event->view_count ?? 0 }}</td>
                     <td class="d-flex gap-8">
                         <a href="{{ route('manager.events.show', $event) }}" class="w-32 h-32 rounded-circle border border-neutral-40 d-flex align-items-center justify-content-center text-neutral-500 hover-bg-main-600 hover-text-white transition-03"><i class="ph ph-eye"></i></a>
                         <a href="{{ route('manager.events.edit', $event) }}" class="w-32 h-32 rounded-circle border border-neutral-40 d-flex align-items-center justify-content-center text-neutral-500 hover-bg-main-600 hover-text-white transition-03"><i class="ph ph-pencil"></i></a>

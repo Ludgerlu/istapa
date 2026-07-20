@@ -90,6 +90,7 @@ class PageController extends Controller
         $program = Program::where('id', $id)
             ->where('is_published', 1)
             ->firstOrFail();
+        $program->increment('view_count'); // Increment view count
         
         // Get classes for this program with their levels and academic years
         $classes = Classes::with(['program', 'academicYear', 'headTeacher'])

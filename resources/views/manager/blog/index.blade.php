@@ -40,6 +40,7 @@
                     <th class="text-12 fw-medium text-neutral-500 py-16 px-20">Auteur</th>
                     <th class="text-12 fw-medium text-neutral-500 py-16 px-20">Statut</th>
                     <th class="text-12 fw-medium text-neutral-500 py-16 px-20">Date</th>
+                    <th class="text-12 fw-medium text-neutral-500 py-16 px-20">Vus</th>
                     <th class="text-12 fw-medium text-neutral-500 py-16 px-20">Actions</th>
                 </tr>
             </thead>
@@ -81,6 +82,9 @@
                     </td>
                     <td class="py-16 px-20 shadow-none text-14 text-neutral-500">
                         {{ $blog->created_at }}
+                    </td>
+                    <td class="py-16 px-20 shadow-none text-14 text-neutral-500">
+                        {{ $blog->view_count ?? 0 }}
                     </td>
                     <td class="py-16 px-20 shadow-none">
                         <div class="d-flex align-items-center gap-8">
