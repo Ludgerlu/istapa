@@ -71,7 +71,7 @@
             </div>
 
             <div class="form-actions">
-                <button type="submit" class="btn-primary">
+                <button type="submit" class="btn btn-main rounded-pill">
                     <i class="fas fa-save"></i> Enregistrer les modifications
                 </button>
             </div>
@@ -438,6 +438,7 @@ textarea.form-control {
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<script src="{{ asset('assets/js/image-compression.js') }}"></script>
 <script>
 const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 const albumId = {{ $album->id }};
@@ -482,14 +483,47 @@ function handleFiles(files) {
         }
         return true;
     });
-    if (validFiles.length > 0) uploadFiles(validFiles);
+    if (validFiles.length > 0) compressAndUploadFiles(validFiles);
+}
+
+// Compress each photo client-side (bounding box 1600x1600, quality 0.82) before
+// sending it, so the admin upload doesn't push full-size camera photos to the server.
+// GIFs are passed through untouched since canvas compression would flatten animation.
+async function compressAndUploadFiles(files) {
+    uploadProgress.style.display = 'block';
+    progressFill.style.width = '0%';
+    progressText.textContent = `Compression de ${files.length} photo(s) en cours...`;
+
+    const processed = [];
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        try {
+            if (file.type === 'image/gif') {
+                processed.push(file);
+            } else {
+                const blob = await compressImage(file, 1600, 1600, 0.82);
+                const compressedFile = new File(
+                    [blob],
+                    file.name.replace(/\.[^.]+$/, '') + '.jpg',
+                    { type: 'image/jpeg', lastModified: Date.now() }
+                );
+                processed.push(compressedFile);
+            }
+        } catch (error) {
+            console.error(`Compression échouée pour ${file.name}, envoi du fichier original.`, error);
+            processed.push(file);
+        }
+        progressFill.style.width = `${Math.round(((i + 1) / files.length) * 50)}%`;
+        progressText.textContent = `Compression : ${i + 1}/${files.length} photo(s)...`;
+    }
+
+    uploadFiles(processed);
 }
 
 function uploadFiles(files) {
     const formData = new FormData();
     files.forEach(file => formData.append('images[]', file));
-    uploadProgress.style.display = 'block';
-    progressFill.style.width = '0%';
+    progressFill.style.width = '50%';
     progressText.textContent = `Upload de ${files.length} photo(s) en cours...`;
     
     fetch(`{{ route('manager.gallery.upload', $album->id) }}`, {
@@ -516,7 +550,7 @@ function uploadFiles(files) {
 
 function deletePhoto(photoId) {
     if (!confirm('Supprimer cette photo ?')) return;
-    fetch(`{{ url('admin/gallery/image') }}/${photoId}`, {
+    fetch(`{{ url('manager/gallery/image') }}/${photoId}`, {
         method: 'DELETE',
         headers: { 'X-CSRF-TOKEN': csrfToken, 'Content-Type': 'application/json' }
     })
@@ -529,7 +563,7 @@ function deletePhoto(photoId) {
 }
 
 function setCover(albumId, photoId) {
-    fetch(`{{ url('admin/gallery') }}/${albumId}/cover/${photoId}`, {
+    fetch(`{{ url('manager/gallery') }}/${albumId}/cover/${photoId}`, {
         method: 'POST',
         headers: { 'X-CSRF-TOKEN': csrfToken, 'Content-Type': 'application/json' }
     })

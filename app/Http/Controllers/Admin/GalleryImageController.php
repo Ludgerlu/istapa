@@ -20,7 +20,7 @@ class GalleryImageController extends Controller
     public function index()
     {
         $albums = GalleryAlbum::orderBy('created_at', 'desc')->paginate(12);
-        return view('admin.gallery.index', compact('albums'));
+        return view($this->getRoutePrefix() . '.gallery.index', compact('albums'));
     }
 
     /**
@@ -28,7 +28,7 @@ class GalleryImageController extends Controller
      */
     public function create()
     {
-        return view('admin.gallery.create');
+        return view($this->getRoutePrefix() . '.gallery.create');
     }
 
     /**
@@ -49,10 +49,23 @@ class GalleryImageController extends Controller
 
         $album = GalleryAlbum::create($validated);
 
-        return redirect()->route('admin.gallery.edit', $album->id)
+        return redirect()->route($this->getRoutePrefix() . '.gallery.edit', $album->id)
                          ->with('success', 'Album créé avec succès. Vous pouvez maintenant ajouter des photos.');
     }
 
+
+    /**
+     * Display a single album publicly (front office), with its images.
+     * Looks up by slug so public URLs don't leak database IDs.
+     */
+    public function show($slug)
+    {
+        $album = GalleryAlbum::with(['images' => function ($query) {
+            $query->orderBy('sort_order');
+        }])->where('slug', $slug)->firstOrFail();
+
+        return view($this->getRoutePrefix() . '.gallery.show', compact('album'));
+    }
 
     /**
      * Show form to edit an album with its images.
@@ -60,7 +73,7 @@ class GalleryImageController extends Controller
     public function edit($id)
     {
         $album = GalleryAlbum::with('images')->findOrFail($id);
-        return view('admin.gallery.edit', compact('album'));
+        return view($this->getRoutePrefix() . '.gallery.edit', compact('album'));
     }
 
     /**
@@ -79,7 +92,7 @@ class GalleryImageController extends Controller
 
         $album->update($validated);
 
-        return redirect()->route('admin.gallery.edit', $album->id)
+        return redirect()->route($this->getRoutePrefix() . '.gallery.edit', $album->id)
                          ->with('success', 'Album mis à jour avec succès.');
     }
 
@@ -104,7 +117,7 @@ class GalleryImageController extends Controller
 
         $album->delete();
 
-        return redirect()->route('admin.gallery.index')
+        return redirect()->route($this->getRoutePrefix() . '.gallery.index')
                          ->with('success', 'Album supprimé avec succès.');
     }
 
@@ -249,5 +262,10 @@ class GalleryImageController extends Controller
     public function getCoverUrl($imagePath)
     {
         return $imagePath ? asset('storage/' . $imagePath) : null;
+    }
+
+    protected function getRoutePrefix()
+    {
+        return auth()->user()->role === 'manager' ? 'manager' : 'admin';
     }
 }

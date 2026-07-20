@@ -5,8 +5,22 @@
     <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="description" content="@yield('description', 'ISTAPA propose des ateliers, des programmes éducatifs et un accompagnement personnalisé pour les élèves et leurs familles.')">
+    <meta name="keywords" content="@yield('keywords', 'ISTAPA, école, ateliers, formation, admission, éducation, établissement')">
+    <meta name="robots" content="@yield('robots', 'index, follow')">
+    <link rel="canonical" href="@yield('canonical', url()->current())">
+    <meta property="og:site_name" content="ISTAPA">
+    <meta property="og:title" content="@yield('og_title', 'ISTAPA')">
+    <meta property="og:description" content="@yield('og_description', 'ISTAPA propose des ateliers, des programmes éducatifs et un accompagnement personnalisé pour les élèves et leurs familles.')">
+    <meta property="og:type" content="@yield('og_type', 'website')">
+    <meta property="og:url" content="@yield('og_url', url()->current())">
+    <meta property="og:image" content="@yield('og_image', asset('assets/images/logo/logo.png'))">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@yield('twitter_title', 'ISTAPA')">
+    <meta name="twitter:description" content="@yield('twitter_description', 'ISTAPA propose des ateliers, des programmes éducatifs et un accompagnement personnalisé pour les élèves et leurs familles.')">
+    <meta name="twitter:image" content="@yield('twitter_image', asset('assets/images/logo/logo.png'))">
 
-    <title>@yield('title', 'ISTAPA')</title>
+    <title>@yield('title', 'ISTAPA | Éducation et formation')</title>
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ asset('assets/images/logo/favicon.png') }}" type="image/x-icon">
     <!-- Bootstrap -->

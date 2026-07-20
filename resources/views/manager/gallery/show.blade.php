@@ -1,128 +1,134 @@
-@extends('layouts.admin')
-
-@section('title', $album->title)
-
+@extends('layouts.app')
+@section('title', $album->title_fr)
 @section('content')
-<div class="d-flex justify-content-between mb-24">
-    <h4>{{ $album->title }}</h4>
-    <div>
-        <a href="{{ route('manager.gallery.edit', $album) }}" class="btn btn-main rounded-pill"><i class="ph ph-pencil"></i> Modifier</a>
-        <a href="{{ route('manager.gallery.index') }}" class="btn btn-outline-secondary rounded-pill">Retour</a>
-    </div>
-</div>
 
-<div class="bg-white rounded-10 p-24 mb-24">
-    <div class="row">
-        @if($album->cover_image)
-        <div class="col-md-3">
-            <img src="{{ asset('storage/'.$album->cover_image) }}" class="img-fluid rounded-10">
-        </div>
-        <div class="col-md-9">
-        @else
-        <div class="col-12">
-        @endif
-            <p><strong>Description (EN):</strong> {{ $album->description_en ?: '—' }}</p>
-            <p><strong>Description (FR):</strong> {{ $album->description_fr ?: '—' }}</p>
-            <p><strong>Ordre :</strong> {{ $album->sort_order ?? '—' }}</p>
-        </div>
-    </div>
-</div>
-
-<div class="bg-white rounded-10 p-24">
-    <div class="d-flex justify-content-between align-items-center mb-20">
-        <h5>Images de l'album ({{ $album->images->count() }})</h5>
-        <button type="button" class="btn btn-outline-main rounded-pill" data-bs-toggle="modal" data-bs-target="#uploadImageModal">
-            <i class="ph ph-plus-circle"></i> Ajouter des images
-        </button>
-    </div>
-
-    @if($album->images->count())
-    <div class="sortable-images" data-reorder-url="{{ route('manager.gallery.images.reorder') }}">
-        <div class="row g-3">
-            @foreach($album->images->sortBy('sort_order') as $image)
-            <div class="col-md-3 gallery-item" data-id="{{ $image->id }}">
-                <div class="card h-100 border-0 shadow-sm rounded-10 overflow-hidden">
-                    <img src="{{ asset('storage/'.$image->image_path) }}" class="card-img-top" style="height: 160px; object-fit: cover;">
-                    <div class="card-body p-12">
-                        <p class="small text-muted mb-2">{{ $image->caption ?: 'Sans légende' }}</p>
-                        <p class="small text-muted mb-2"><i class="ph ph-user"></i> {{ $image->uploader->name ?? '—' }}</p>
-                        <form action="{{ route('manager.gallery.images.destroy', $image) }}" method="POST" onsubmit="return confirm('Supprimer cette image ?')">
-                            @csrf @method('DELETE')
-                            <button class="btn btn-sm btn-danger w-100 rounded-pill"><i class="ph ph-trash"></i> Supprimer</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            @endforeach
-        </div>
-    </div>
-    <p class="mt-3 text-muted small"><i class="ph ph-drag"></i> Glissez-déposez les images pour les réorganiser</p>
-    @else
-    <div class="alert alert-light text-center py-40">
-        <i class="ph ph-image text-60 text-muted mb-8 d-block"></i>
-        Aucune image dans cet album. Ajoutez-en maintenant.
-    </div>
+<div class="gallery-album-header">
+    <h1>{{ $album->title_fr }}</h1>
+    @if($album->description_fr)
+        <p class="album-description">{{ $album->description_fr }}</p>
     @endif
 </div>
 
-{{-- Modal for uploading images --}}
-<div class="modal fade" id="uploadImageModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form action="{{ route('manager.gallery.images.store', $album) }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="modal-header bg-main-25">
-                    <h5 class="modal-title">Ajouter une image</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label>Fichier image *</label>
-                        <input type="file" name="image" class="form-control" accept="image/*" required>
-                    </div>
-                    <div class="mb-3">
-                        <label>Légende (optionnelle)</label>
-                        <input type="text" name="caption" class="form-control" placeholder="Description de l'image">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <button type="submit" class="btn btn-main">Ajouter</button>
-                </div>
-            </form>
-        </div>
+@if($album->images->count() > 0)
+    <div class="public-photos-grid">
+        @foreach($album->images as $index => $image)
+            <div class="public-photo-item" onclick="showImage({{ $index }})">
+                <img src="{{ asset('storage/' . $image->image_path) }}" alt="{{ $image->caption }}" loading="lazy">
+            </div>
+        @endforeach
     </div>
-</div>
-@endsection
+@else
+    <p class="text-muted">Aucune photo dans cet album pour le moment.</p>
+@endif
 
-@push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+    <span class="lightbox-prev" onclick="event.stopPropagation(); changeImage(-1)">&#10094;</span>
+    <img id="lightbox-img" class="lightbox-content" src="" alt="">
+    <span class="lightbox-next" onclick="event.stopPropagation(); changeImage(1)">&#10095;</span>
+    <div id="lightbox-caption" class="lightbox-caption"></div>
+</div>
+
+<style>
+.public-photos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+}
+.public-photo-item {
+    cursor: pointer;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.public-photo-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.25s ease;
+}
+.public-photo-item:hover img {
+    transform: scale(1.05);
+}
+.lightbox {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    text-align: center;
+}
+.lightbox.active { display: flex; align-items: center; justify-content: center; flex-direction: column; }
+.lightbox-content {
+    max-width: 90%;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 4px;
+}
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: #fff;
+    font-size: 40px;
+    cursor: pointer;
+}
+.lightbox-prev, .lightbox-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #fff;
+    font-size: 30px;
+    cursor: pointer;
+    padding: 10px 16px;
+    user-select: none;
+}
+.lightbox-prev { left: 10px; }
+.lightbox-next { right: 10px; }
+.lightbox-caption {
+    color: #ddd;
+    margin-top: 12px;
+    font-size: 14px;
+}
+</style>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const container = document.querySelector('.sortable-images .row');
-        if (container) {
-            new Sortable(container, {
-                animation: 150,
-                handle: '.gallery-item',
-                onEnd: function() {
-                    let order = [];
-                    document.querySelectorAll('.gallery-item').forEach((item, idx) => {
-                        order.push(item.dataset.id);
-                    });
-                    const reorderUrl = container.closest('.sortable-images').dataset.reorderUrl;
-                    fetch(reorderUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({ order: order })
-                    }).then(response => response.json()).then(data => {
-                        if (data.success) console.log('Reorder saved');
-                    });
-                }
-            });
-        }
-    });
+const galleryImages = @json($album->images->map(function ($img) {
+    return [
+        'src' => asset('storage/' . $img->image_path),
+        'caption' => $img->caption,
+    ];
+}));
+let currentImageIndex = 0;
+
+function showImage(index) {
+    currentImageIndex = index;
+    const lightbox = document.getElementById('lightbox');
+    const img = document.getElementById('lightbox-img');
+    const caption = document.getElementById('lightbox-caption');
+
+    img.src = galleryImages[index].src;
+    caption.textContent = galleryImages[index].caption || '';
+    lightbox.classList.add('active');
+}
+
+function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+}
+
+function changeImage(direction) {
+    currentImageIndex = (currentImageIndex + direction + galleryImages.length) % galleryImages.length;
+    showImage(currentImageIndex);
+}
+
+document.addEventListener('keydown', (e) => {
+    if (!document.getElementById('lightbox').classList.contains('active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') changeImage(-1);
+    if (e.key === 'ArrowRight') changeImage(1);
+});
 </script>
-@endpush
+
+@endsection
