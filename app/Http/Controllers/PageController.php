@@ -272,14 +272,14 @@ class PageController extends Controller
      */
     public function storeContact(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        
+        $validator = $request->validate([
             'full_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'nullable|string|max:20',
             'subject' => 'required|string|max:255',
             'message' => 'required|string',
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,

@@ -53,6 +53,19 @@
             <div class="text-center">
                 <div class="nav-tab-wrapper bg-white border border-neutral-40 p-16 mb-40 d-inline-block" data-aos="zoom-out">
                     <ul class="nav nav-pills common-tab gap-16" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link rounded-pill bg-main-25 text-md fw-medium text-neutral-500 flex-center w-100 gap-8"
+                                    id="pills-all-tab"
+                                    data-bs-toggle="pill"
+                                    data-bs-target="#pills-all"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="pills-all"
+                                    aria-selected="true">
+                                <i class="text-xl d-flex text-main-600 ph-bold ph-squares-four"></i>
+                                Tout
+                            </button>
+                        </li>
                         @foreach($albums as $index => $album)
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link rounded-pill bg-main-25 text-md fw-medium text-neutral-500 flex-center w-100 gap-8 @if($loop->first) active @endif"
