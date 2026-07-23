@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\EventImage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
