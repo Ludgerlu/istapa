@@ -7,6 +7,19 @@
     <h4 class="fw-semibold text-neutral-500 text-20 mb-0">Modifier l'article</h4>
 </div>
 
+
+@if ($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Veuillez corriger les erreurs suivantes :</strong>
+        <ul class="mb-0 mt-2">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+@endif
+
 <form action="{{ route('manager.blogs.update', $blog) }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
@@ -20,7 +33,7 @@
                     <option value="">-- Aucune --</option>
                     @foreach($categories as $cat)
                         <option value="{{ $cat->id }}" {{ old('blog_category_id', $blog->blog_category_id) == $cat->id ? 'selected' : '' }}>
-                            {{ $cat->name }}
+                            {{ $cat->slug }}
                         </option>
                     @endforeach
                 </select>

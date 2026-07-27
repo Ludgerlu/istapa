@@ -32,7 +32,7 @@ class PageController extends Controller
 
         // Upcoming events (start_date >= today, published) – limit 3
         $upcomingEvents = Event::where('is_published', true)
-            ->orderBy('start_date')
+            ->orderBy('created_at', 'desc')
             ->limit(3)
             ->get();
 
@@ -320,8 +320,7 @@ class PageController extends Controller
     {
         // Get published events, upcoming first (start_date >= today), order by start_date ASC
         $events = Event::where('is_published', true)
-            ->orderBy('start_date', 'asc')
-            ->orderBy('start_time', 'asc')
+            ->latest()
             ->paginate(6); // 6 events per page
     
 

@@ -94,16 +94,22 @@ class BlogController extends Controller
     public function update(Request $request, BlogPost $blog)
     {
         $data = $request->validate([
-            'title'       => 'required|string|max:255',
-            'slug'        => 'nullable|string|max:255|unique:posts,slug,' . $blog->id,
-            'excerpt'     => 'nullable|string',
-            'content'     => 'required|string',
-            'status'      => 'required|in:draft,published,archived',
-            'author_id'   => 'required|exists:users,id',
-            'cover_image' => 'nullable|image|max:2048',
-            'remove_cover'=> 'nullable|boolean',
+            'blog_category_id'     => 'nullable|exists:blog_categories,id',
+            'status'               => 'required|in:draft,published,archived',
+            'published_at'         => 'nullable|date',
+            'title_en'             => 'required|string|max:255',
+            'title_fr'             => 'required|string|max:255',
+            'excerpt_en'           => 'nullable|string',
+            'excerpt_fr'           => 'nullable|string',
+            'content_en'           => 'required|string',
+            'content_fr'           => 'required|string',
+            'meta_description_en'  => 'nullable|string',
+            'meta_description_fr'  => 'nullable|string',
+            'cover_image'          => 'nullable|image|max:2048',
+            'remove_cover'         => 'nullable|boolean',
         ]);
 
+        // Handle cover image removal / upload
         if ($request->boolean('remove_cover') && $blog->cover_image) {
             \Storage::disk('public')->delete($blog->cover_image);
             $data['cover_image'] = null;
@@ -113,12 +119,13 @@ class BlogController extends Controller
             if ($blog->cover_image) {
                 \Storage::disk('public')->delete($blog->cover_image);
             }
-            $data['cover_image'] = $request->file('cover_image')->store('blog', 'public');
+            $data['cover_image'] = $request->file('cover_image')->store('blog_covers', 'public');
         }
-
+        
         $blog->update($data);
 
-        return redirect()->route($this->getRoutePrefix() . '.blogs.index')->with('success', 'Article mis à jour.');
+        return redirect()->route($this->getRoutePrefix() . '.blogs.index')
+                        ->with('success', 'Article mis à jour.');
     }
 
     public function destroy(Blog $blog)

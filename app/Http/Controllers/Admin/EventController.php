@@ -94,9 +94,9 @@ class EventController extends Controller
             'video_url' => 'nullable|url',
             'location' => 'nullable|string',
             'start_date' => 'required|date',
-            'start_time' => 'nullable|date_format:H:i',
+            'start_time' => 'nullable',
             'end_date' => 'nullable|date|after_or_equal:start_date',
-            'end_time' => 'nullable|date_format:H:i',
+            'end_time' => 'nullable',
             'is_published' => 'boolean',
         ]);
 

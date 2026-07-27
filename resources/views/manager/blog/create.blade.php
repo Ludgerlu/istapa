@@ -19,7 +19,7 @@
                     <option value="">-- Aucune --</option>
                     @foreach($categories as $cat)
                         <option value="{{ $cat->id }}" {{ old('blog_category_id') == $cat->id ? 'selected' : '' }}>
-                            {{ $cat->name }}
+                            {{ $cat->slug }}
                         </option>
                     @endforeach
                 </select>
