@@ -45,10 +45,10 @@ class Program extends Model
         return $this->hasMany(AdmissionRequest::class, 'program_id');
     }
 
-    public function upcomingSessions()
-    {
-        return $this->hasMany(UpcomingSession::class, 'program_id');
-    }
+    // public function upcomingSessions()
+    // {
+    //     return $this->hasMany(UpcomingSession::class, 'program_id');
+    // }
 
     public function scopePublished($query)
     {

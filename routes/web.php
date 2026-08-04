@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\ExamSubjectController as AdminExamSubjectControll
 use App\Http\Controllers\Admin\MarkController as AdminMarkController;
 use App\Http\Controllers\Admin\AcademicYearController as AdminAcademicYearController;
 use App\Http\Controllers\Admin\ContactMessageController as AdminContactMessageController;
+use App\Http\Controllers\Admin\ProgramController as AdminProgramController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\AuthController;
@@ -172,6 +173,9 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('leaves/{leave}', [AdminLeaveController::class, 'destroy'])->name('leaves.destroy');
         Route::get('leaves/{leave}', [AdminLeaveController::class, 'show'])->name('leaves.show');
 
+        // ── Programs ──────────────────────────────────────────────────────²
+        Route::resource('programs', AdminProgramController::class)->names('programs');
+        
         // Exams
         Route::resource('exams', AdminExamController::class);
         
@@ -208,6 +212,9 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('comments/{comment}/approve',   [AdminBlogController::class, 'approveComment'])->name('comments.approve');
         Route::patch('comments/{comment}/disapprove',[AdminBlogController::class, 'disapproveComment'])->name('comments.disapprove');
         Route::delete('comments/{comment}',          [AdminBlogController::class, 'destroyComment'])->name('comments.destroy');
+
+        // ── Programs ──────────────────────────────────────────────────────²
+        Route::resource('programs', AdminProgramController::class)->names('programs');
 
         // ── Events ────────────────────────────────────────────────────
         Route::get('/events',             [AdminEventController::class, 'index'])->name('events.index');

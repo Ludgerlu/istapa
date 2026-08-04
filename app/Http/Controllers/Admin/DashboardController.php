@@ -10,6 +10,7 @@ use App\Models\FeesPayment;
 use App\Models\Event;
 use App\Models\Leave;
 use App\Models\BlogPost;
+use App\Models\Program;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -73,6 +74,7 @@ class DashboardController extends Controller
         // Blog stats
         $totalBlogs = BlogPost::where('status', 'published')->count();
         $totalEvents = Event::where('is_published', true)->count();
+        $totalPrograms = Program::where('is_published', true)->count();
 
         // Latest 5 blogs and events
         $latestBlogs = BlogPost::with('author')
@@ -84,6 +86,11 @@ class DashboardController extends Controller
         $latestEvents = Event::with('creator')
             ->where('is_published', true)
             ->latest('start_date')
+            ->take(5)
+            ->get();
+
+        $latestPrograms = Program::where('is_published', true)
+            ->latest('created_at')
             ->take(5)
             ->get();
 
@@ -99,13 +106,32 @@ class DashboardController extends Controller
             ->groupBy('month')
             ->pluck('total', 'month');
 
+        $monthlyProgramViews = Program::selectRaw('MONTH(created_at) as month, SUM(view_count) as total')
+            ->whereYear('created_at', $currentYear)
+            ->groupBy('month')
+            ->pluck('total', 'month');
+
         $chartData = [
             'blogs'  => collect(range(1, 12))->map(fn($m) => $monthlyBlogViews[$m] ?? 0)->values()->all(),
             'events' => collect(range(1, 12))->map(fn($m) => $monthlyEventViews[$m] ?? 0)->values()->all(),
+            'programs' => collect(range(1, 12))->map(fn($m) => $monthlyProgramViews[$m] ?? 0)->values()->all(),
         ];
 
+        // ─── Top viewed programs (bar chart) ───
+    $topPrograms = Program::where('is_published', true)
+        ->select('id', 'title_en', 'title_fr', 'view_count')
+        ->orderBy('view_count', 'desc')
+        ->limit(10)
+        ->get();
+
+    // For chart: labels (title_en) and data (view_count)
+    $programLabels = $topPrograms->pluck('title_en')->toArray();
+    $programViews = $topPrograms->pluck('view_count')->toArray();
+
         return view($this->getRoutePrefix() . '.dashboard', compact(
-            'totalBlogs', 'totalEvents', 'latestBlogs', 'latestEvents', 'chartData'
+            'totalBlogs', 'totalEvents', 'totalPrograms',
+            'latestBlogs', 'latestEvents', 'latestPrograms',
+            'chartData', 'programLabels', 'programViews'
         ));
     }
 

@@ -10,6 +10,7 @@
                     ['route' => 'manager.dashboard', 'icon' => 'ph-bold ph-house', 'label' => 'Tableau de bord'],
                     ['route' => 'manager.events.index', 'icon' => 'ph ph-calendar', 'label' => 'Événements'],
                     ['route' => 'manager.blogs.index', 'icon' => 'ph ph-newspaper', 'label' => 'Blog'],
+                    ['route' => 'manager.programs.index', 'icon' => 'ph ph-graduation-cap', 'label' => 'Programmes'],
                     ['route' => 'manager.contact-messages.index', 'icon' => 'ph ph-chat-dots', 'label' => 'Messages'],
                     ['route' => 'manager.gallery.index', 'icon' => 'ph ph-image', 'label' => 'Albums photo'],
                     ['route' => 'manager.profile', 'icon' => 'ph ph-user-circle', 'label' => 'Mon profil'],
