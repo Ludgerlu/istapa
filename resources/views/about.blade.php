@@ -58,7 +58,7 @@
                         </div>
                         <div class="row gy-4">
                             <div class="col-sm-6">
-                                <img src="https://istapa.com/wp-content/uploads/2025/06/475105121_122156457968331499_8259807869563249512_n1-1-768x962.jpg" alt="" class="rounded-12 w-100" data-tilt data-tilt-max="15" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening>
+                                <img src="{{ asset('assets/images/thumbs/fondateur.jpg') }}" alt="" class="rounded-12 w-100" data-tilt data-tilt-max="15" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening>
                             </div>
                             <div class="col-sm-6">
                                 <div class="flex-align gap-24 mb-24">
@@ -71,7 +71,7 @@
                                         <span class="text-white">Étudiants formés</span>
                                     </div>
                                 </div>
-                                <img src="https://istapa.com/wp-content/uploads/2025/07/WhatsApp-Image-2025-07-01-at-16.29.59_248a4706-768x1024.jpg" alt="" class="rounded-12 w-100" data-tilt data-tilt-max="20" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening>
+                                <img src="{{ asset('assets/images/thumbs/slide5.png') }}" alt="" class="rounded-12 w-100" data-tilt data-tilt-max="20" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening>
                             </div>
                         </div>
                     </div>
@@ -182,32 +182,23 @@
                         </div>
                     </div>
 
-                    <div class="banner-box one style-two px-24 py-12 rounded-12 bg-white fw-medium box-shadow-lg d-inline-block" data-aos="fade-left">
-                        <span class="text-main-600">36k+</span> Étudiants Inscrits
-                        <div class="enrolled-students mt-12">
-                            <img src="{{ asset('assets/images/thumbs/enroll-student-img1.png') }}" alt="" class="w-48 h-48 rounded-circle object-fit-cover">
-                            <img src="{{ asset('assets/images/thumbs/enroll-student-img2.png') }}" alt="" class="w-48 h-48 rounded-circle object-fit-cover">
-                            <img src="{{ asset('assets/images/thumbs/enroll-student-img3.png') }}" alt="" class="w-48 h-48 rounded-circle object-fit-cover">
-                            <img src="{{ asset('assets/images/thumbs/enroll-student-img4.png') }}" alt="" class="w-48 h-48 rounded-circle object-fit-cover">
-                            <img src="{{ asset('assets/images/thumbs/enroll-student-img5.png') }}" alt="" class="w-48 h-48 rounded-circle object-fit-cover">
-                            <img src="{{ asset('assets/images/thumbs/enroll-student-img6.png') }}" alt="" class="w-48 h-48 rounded-circle object-fit-cover">
-                        </div>
-                    </div>
-
                     <div class="text-end" data-aos="zoom-out">
                         <div class="d-sm-inline-block d-block position-relative">
-                            <img src="{{ asset('assets/images/thumbs/choose-us-img1.png') }}" alt="" class="choose-us__img rounded-12" data-tilt data-tilt-max="16" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening>
+                            <img src="{{ asset('assets/images/thumbs/choose-us-img2.jpg') }}" alt="" class="choose-us__img rounded-12" data-tilt data-tilt-max="16" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening>
                             <span class="shadow-main-two w-80 h-80 flex-center bg-main-two-600 rounded-circle position-absolute inset-block-start-0 inset-inline-start-0 mt-40 ms--40 animation-upDown">
                                 <img src="{{ asset('assets/images/icons/book.png') }}" alt="">
                             </span>
+                            <a href="https://www.youtube.com/watch?v=2tNKYy1ftb4" class="play-button w-48 h-48 flex-center bg-main-600 text-white rounded-circle text-xl position-absolute top-50 start-50 translate-middle">
+                                <i class="ph-fill ph-play"></i>
+                            </a>
                         </div>
                     </div>
-                    <div class="animation-video" data-aos="zoom-in">
-                        <img src="{{ asset('assets/images/thumbs/choose-us-img2.png') }}" alt="" class="border border-white rounded-circle border-3" data-tilt>
-                        <a href="https://www.youtube.com/watch?v=MFLVmAE4cqg" class="play-button w-48 h-48 flex-center bg-main-600 text-white rounded-circle text-xl position-absolute top-50 start-50 translate-middle">
+                    <!-- <div class="animation-video" data-aos="zoom-in">
+                        <img src="{{ asset('assets/images/thumbs/choose-us-img2.jpg') }}" alt="" class="border border-white rounded-circle border-3" data-tilt>
+                        <a href="https://www.youtube.com/watch?v=2tNKYy1ftb4" class="play-button w-48 h-48 flex-center bg-main-600 text-white rounded-circle text-xl position-absolute top-50 start-50 translate-middle">
                             <i class="ph-fill ph-play"></i>
                         </a>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -289,30 +280,27 @@
                     </div>
 
                     <div class="testimonials__slider">
-                        <div class="testimonials-item">
-                            <ul class="flex-align gap-8 mb-16" data-aos="fade-left" data-aos-duration="800">
-                                <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
-                                <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
-                                <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
-                                <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
-                                <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star-half"></i></li>
-                            </ul>
-                            <p class="text-neutral-700" data-aos="fade-left" data-aos-duration="1200">"S'inscrire aux cours d'ISTAPA a été l'une des meilleures décisions que j'ai prises pour ma carrière. La flexibilité de la plateforme d'apprentissage en ligne m'a permis d'étudier à mon propre rythme tout en équilibrant mon travail."</p>
-                            <h4 class="mt-48 mb-8" data-aos="fade-left">Kathryn Murphy</h4>
-                            <span class="text-neutral-700" data-aos="fade-left">Développeuse Logiciel</span>
-                        </div>
-                        <div class="testimonials-item">
-                            <ul class="flex-align gap-8 mb-16" data-aos="fade-left" data-aos-duration="800">
-                                <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
-                                <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
-                                <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
-                                <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
-                                <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star-half"></i></li>
-                            </ul>
-                            <p class="text-neutral-700" data-aos="fade-left" data-aos-duration="1200">"La formation pratique et l'accompagnement personnalisé m'ont permis d'acquérir des compétences directement applicables sur le terrain. Je recommande vivement ISTAPA à tous les passionnés d'agriculture."</p>
-                            <h4 class="mt-48 mb-8" data-aos="fade-left">John Doe</h4>
-                            <span class="text-neutral-700" data-aos="fade-left">Agronome</span>
-                        </div>
+                        @foreach($testimonials as $testimonial)
+
+                            <div class="testimonials-item">
+                                <ul class="flex-align gap-8 mb-16" data-aos="fade-left" data-aos-duration="800">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        @if($i <= $testimonial->rating)
+                                            <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
+                                        @elseif($i == round($testimonial->rating) && $testimonial->rating - floor($testimonial->rating) >= 0.5)
+                                            <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star-half"></i></li>
+                                        @else
+                                            <li class="text-warning-600 text-xl d-flex"><i class="ph ph-star"></i></li>
+                                        @endif
+                                    @endfor
+                                </ul>
+                                <p class="text-neutral-700" data-aos="fade-left" data-aos-duration="1200">
+                                    "{{ $testimonial->content }}"
+                                </p>
+                                <h4 class="mt-48 mb-8" data-aos="fade-left">{{ $testimonial->author_name }}</h4>
+                                <span class="text-neutral-700" data-aos="fade-left">{{ $testimonial->author_role ?? 'Étudiant' }}</span>
+                            </div>
+                        @endforeach
                     </div>
                     <div class="flex-align gap-16 mt-40">
                         <button type="button" id="testimonials-prev" class="slick-prev slick-arrow flex-center rounded-circle border border-gray-100 hover-border-main-600 text-xl hover-bg-main-600 hover-text-white transition-1 w-48 h-48">
@@ -337,22 +325,10 @@
             <div class="container">
                 <div class="brand-slider">
                     <div class="brand-slider__item px-24">
-                        <img src="{{ asset('assets/images/thumbs/brand-img1.png') }}" alt="">
+                        <img src="{{ asset('assets/images/thumbs/Sharda-University-Logo-Vector.png') }}" alt="" />
                     </div>
                     <div class="brand-slider__item px-24">
-                        <img src="{{ asset('assets/images/thumbs/brand-img2.png') }}" alt="">
-                    </div>
-                    <div class="brand-slider__item px-24">
-                        <img src="{{ asset('assets/images/thumbs/brand-img3.png') }}" alt="">
-                    </div>
-                    <div class="brand-slider__item px-24">
-                        <img src="{{ asset('assets/images/thumbs/brand-img4.png') }}" alt="">
-                    </div>
-                    <div class="brand-slider__item px-24">
-                        <img src="{{ asset('assets/images/thumbs/brand-img5.png') }}" alt="">
-                    </div>
-                    <div class="brand-slider__item px-24">
-                        <img src="{{ asset('assets/images/thumbs/brand-img6.png') }}" alt="">
+                        <img src="{{ asset('assets/images/thumbs/cefprepa.png') }}" alt="" />
                     </div>
                 </div>
             </div>

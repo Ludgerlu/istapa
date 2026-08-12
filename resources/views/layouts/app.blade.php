@@ -303,7 +303,7 @@
                             </ul>
                         </li>
                         <li class="nav-menu__item @if(request()->routeIs('courses')) activePage @endif">
-                            <a href="{{ route('courses') }}" class="nav-menu__link">Nos Ateliers</a>
+                            <a href="{{ route('courses') }}" class="nav-menu__link">Nos Filiere</a>
                         </li>
                         <!-- <li class="nav-menu__item has-submenu">
                             <a href="javascript:void(0)" class="nav-menu__link">Programme</a>
@@ -387,7 +387,7 @@
         
         <div class="py-120">
             <div class="container container-two">
-                <div class="row row-cols-xxl-5 row-cols-lg-3 row-cols-sm-2 row-cols-1 gy-5">
+                <div class="row row-cols-xxl-3 row-cols-lg-3 row-cols-sm-2 row-cols-1 gy-5">
                     <div class="col" data-aos="fade-up" data-aos-duration="300">
                         <div class="footer-item">
                             <div class="footer-item__logo">
@@ -429,55 +429,33 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="col" data-aos="fade-up" data-aos-duration="600">
-                        <div class="footer-item">
-                            <h4 class="footer-item__title mb-32">Category</h4>
-                            <ul class="footer-menu">
-                                <li class="mb-16">
-                                    <a href="{{ route('courses') }}" class="text-neutral-500 hover-text-main-600 hover-text-decoration-underline">UI/UX Design</a>
-                                </li>
-                                <li class="mb-16">
-                                    <a href="{{ route('courses') }}" class="text-neutral-500 hover-text-main-600 hover-text-decoration-underline">Web Development</a>
-                                </li>
-                                <li class="mb-16">
-                                    <a href="{{ route('courses') }}" class="text-neutral-500 hover-text-main-600 hover-text-decoration-underline">Python Development</a>
-                                </li>
-                                <li class="mb-16">
-                                    <a href="{{ route('courses') }}" class="text-neutral-500 hover-text-main-600 hover-text-decoration-underline">Digital Marketing</a>
-                                </li>
-                                <li class="mb-16">
-                                    <a href="{{ route('courses') }}" class="text-neutral-500 hover-text-main-600 hover-text-decoration-underline">Graphic Design</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                     <div class="col" data-aos="fade-up" data-aos-duration="800">
                         <div class="footer-item">
                             <h4 class="footer-item__title mb-32">Contact Us</h4>
                             <div class="flex-align gap-20 mb-24">
                                 <span class="icon d-flex text-32 text-main-600"><i class="ph ph-phone"></i></span>
                                 <div class="">
-                                    <a href="tel:(207)555-0119" class="text-neutral-500 d-block hover-text-main-600 mb-4">(207) 555-0119</a>
-                                    <a href="tel:(704)555-0127" class="text-neutral-500 d-block hover-text-main-600 mb-0">(704) 555-0127</a>
+                                    <a href="tel:(207)555-0119" class="text-neutral-500 d-block hover-text-main-600 mb-4">(+237) 695-533-333</a>
+                                    <a href="tel:(704)555-0127" class="text-neutral-500 d-block hover-text-main-600 mb-0">(+237) 693-400-000</a>
+                                    <a href="tel:(704)555-0127" class="text-neutral-500 d-block hover-text-main-600 mb-0">(+237) 677-444-071</a>
                                 </div>
                             </div>
                             <div class="flex-align gap-20 mb-24">
                                 <span class="icon d-flex text-32 text-main-600"><i class="ph ph-envelope-open"></i></span>
                                 <div class="">
-                                    <a href="mailto:dwallo@gmail.com" class="text-neutral-500 d-block hover-text-main-600 mb-4">dwallo@gmail.com</a>
-                                    <a href="mailto:eduAll@gmail.com" class="text-neutral-500 d-block hover-text-main-600 mb-0">eduAll@gmail.com</a>
+                                    <a href="mailto:istapa.sup@outlook.com" class="text-neutral-500 d-block hover-text-main-600 mb-4">istapa.sup@outlook.com</a>
+                                    <a href="mailto:eduAll@gmail.com" class="text-neutral-500 d-block hover-text-main-600 mb-0">istapa.sup@istapa.com</a>
                                 </div>
                             </div>
                             <div class="flex-align gap-20 mb-24">
                                 <span class="icon d-flex text-32 text-main-600"><i class="ph ph-map-trifold"></i></span>
                                 <div class="">
-                                    <span class="text-neutral-500 d-block mb-4">5488 srker Rd .</span>
-                                    <span class="text-neutral-500 d-block mb-0">8745 doer Dr.</span>
+                                    <span class="text-neutral-500 d-block mb-4">Cameroun - Yaounde - Soa - Ebogo I.</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col" data-aos="fade-up" data-aos-duration="1000">
+                    <!-- <div class="col" data-aos="fade-up" data-aos-duration="1000">
                         <div class="footer-item">
                             <h4 class="footer-item__title mb-32">Subscribe Here</h4>
                             <p class="text-neutral-500">Enter your email address to register to our newsletter subscription</p>
@@ -488,7 +466,7 @@
                                 </button>
                             </form>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

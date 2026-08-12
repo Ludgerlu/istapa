@@ -13,7 +13,7 @@
     </button>
 
     <div class="banner-three__slider">
-        <div class="banner-three__item background-img bg-img linear-overlay position-relative" data-background-image="{{ asset('assets/images/thumbs/slide3.png') }}">
+        <div class="banner-three__item background-img bg-img linear-overlay position-relative" data-background-image="{{ asset('assets/images/thumbs/slide1.jpg') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-xxl-6 col-xl-8 col-lg-10 z-1">
@@ -39,7 +39,7 @@
                 </div>
             </div>
         </div>
-        <div class="banner-three__item background-img bg-img linear-overlay position-relative" data-background-image="{{ asset('assets/images/thumbs/slide4.png') }}">
+        <div class="banner-three__item background-img bg-img linear-overlay position-relative" data-background-image="{{ asset('assets/images/thumbs/slide5.png') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-xxl-6 col-xl-8 col-lg-10 z-1">
@@ -66,7 +66,7 @@
                 </div>
             </div>
         </div>
-        <div class="banner-three__item background-img bg-img linear-overlay position-relative" data-background-image="{{ asset('assets/images/thumbs/slide3.png') }}">
+        <div class="banner-three__item background-img bg-img linear-overlay position-relative" data-background-image="{{ asset('assets/images/thumbs/slide6.png') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-xxl-6 col-xl-8 col-lg-10 z-1">
@@ -155,20 +155,16 @@
                         <img src="{{ asset('assets/images/shapes/shape7.png') }}" alt="" class="shape seven animation-scalation" />
                         <div class="row gy-4">
                             <div class="col-sm-6">
-                                <img src="{{ asset('assets/images/thumbs/about-5.jpg') }}" alt="" class="rounded-12 w-100" data-tilt data-tilt-max="15" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening />
+                                <img src="{{ asset('assets/images/thumbs/about-1.jpg') }}" alt="" class="rounded-12 w-100" data-tilt data-tilt-max="15" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening />
                             </div>
                             <div class="col-sm-6">
                                 <div class="flex-align gap-24 mb-24">
-                                    <div class="bg-main-600 rounded-12 text-center py-24 px-2 w-50-percent" data-aos="fade-right">
+                                    <div class="bg-main-600 rounded-12 text-center py-24 px-2 min-w-max" data-aos="fade-right">
                                         <h1 class="mb-0 text-white counter">16+</h1>
                                         <span class="text-white">Années d'expérience</span>
                                     </div>
-                                    <div class="bg-neutral-700 rounded-12 text-center py-24 px-2 w-50-percent" data-aos="fade-left">
-                                        <h1 class="mb-0 text-white counter">3.2k</h1>
-                                        <span class="text-white">Étudiants diplômés</span>
-                                    </div>
                                 </div>
-                                <img src="{{ asset('assets/images/thumbs/about-6.jpg') }}" alt="" class="rounded-12 w-100" data-tilt data-tilt-max="20" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening />
+                                <img src="{{ asset('assets/images/thumbs/about-2.jpg') }}" alt="" class="rounded-12 w-100" data-tilt data-tilt-max="20" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening />
                             </div>
                         </div>
                     </div>
@@ -285,7 +281,7 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="position-relative wow bounceIn">
-                        <img src="{{ asset('assets/images/thumbs/contact.jpg') }}" alt="" data-tilt data-tilt-max="8" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-transition="1s" data-tilt-full-page-listening />
+                        <img src="{{ asset('assets/images/thumbs/rentree.jpg') }}" alt="" data-tilt data-tilt-max="8" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-transition="1s" data-tilt-full-page-listening />
                     </div>
                 </div>
             </div>
@@ -559,7 +555,7 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="join-community__thumb text-end position-relative">
-                            <img src="{{ asset('assets/images/thumbs/contact.jpg') }}" alt="" class="wow bounceIn" data-tilt data-tilt-max="12" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening />
+                            <img src="{{ asset('assets/images/thumbs/contact1.jpg') }}" alt="" class="wow bounceIn" data-tilt data-tilt-max="12" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening />
                         </div>
                     </div>
                 </div>

@@ -54,7 +54,7 @@
                 <div class="nav-tab-wrapper bg-white border border-neutral-40 p-16 mb-40 d-inline-block" data-aos="zoom-out">
                     <ul class="nav nav-pills common-tab gap-16" id="pills-tab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link rounded-pill bg-main-25 text-md fw-medium text-neutral-500 flex-center w-100 gap-8"
+                            <button class="nav-link rounded-pill bg-main-25 text-md fw-medium text-neutral-500 flex-center w-100 gap-8 active"
                                     id="pills-all-tab"
                                     data-bs-toggle="pill"
                                     data-bs-target="#pills-all"
@@ -68,14 +68,14 @@
                         </li>
                         @foreach($albums as $index => $album)
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link rounded-pill bg-main-25 text-md fw-medium text-neutral-500 flex-center w-100 gap-8 @if($loop->first) active @endif"
+                                <button class="nav-link rounded-pill bg-main-25 text-md fw-medium text-neutral-500 flex-center w-100 gap-8"
                                         id="pills-{{ $album->slug }}-tab"
                                         data-bs-toggle="pill"
                                         data-bs-target="#pills-{{ $album->slug }}"
                                         type="button"
                                         role="tab"
                                         aria-controls="pills-{{ $album->slug }}"
-                                        aria-selected="{{ $loop->first ? 'true' : 'false' }}">
+                                        aria-selected="false">
                                     <i class="text-xl d-flex text-main-600 ph-bold ph-squares-four"></i>
                                     {{ app()->getLocale() == 'fr' ? ($album->title_fr ?: $album->title_en) : $album->title_en }}
                                 </button>
@@ -86,29 +86,54 @@
             </div>
 
             <div class="tab-content" id="pills-tabContent">
+                {{-- Panel for "All" – shows every image from every album --}}
+                <div class="tab-pane fade show active" id="pills-all" role="tabpanel" aria-labelledby="pills-all-tab" tabindex="0">
+                    @if($albums->flatMap->images->count())
+                        <div class="masonry">
+                            @foreach($albums as $album)
+                                @foreach($album->images as $image)
+                                    <div class="masonry__item position-relative rounded-12 overflow-hidden">
+                                        <img src="{{ asset('storage/' . $image->image_path) }}"
+                                            alt="{{ $image->caption ?? 'Gallery image' }}"
+                                            class="cover-img">
+                                        <a href="{{ asset('storage/' . $image->image_path) }}"
+                                        class="masonry__image position-absolute start-50 top-50 translate-middle z-1 text-white w-100 h-100 d-flex justify-content-center align-items-center rounded-12 hidden opacity-0"
+                                        data-fancybox="gallery-all">
+                                            <i class="ph ph-magnifying-glass-plus"></i>
+                                        </a>
+                                    </div>
+                                @endforeach
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="text-center py-5">
+                            <p class="text-neutral-500">No images available.</p>
+                        </div>
+                    @endif
+                </div>
+
+                {{-- Panels for each album --}}
                 @foreach($albums as $index => $album)
-                    <div class="tab-pane fade @if($loop->first) show active @endif"
-                         id="pills-{{ $album->slug }}"
-                         role="tabpanel"
-                         aria-labelledby="pills-{{ $album->slug }}-tab"
-                         tabindex="0">
+                    <div class="tab-pane fade @if($loop->first && !request()->has('album')) show active @endif"
+                        id="pills-{{ $album->slug }}"
+                        role="tabpanel"
+                        aria-labelledby="pills-{{ $album->slug }}-tab"
+                        tabindex="0">
                         @if($album->images->count())
-                            <!-- Masonry Start -->
                             <div class="masonry">
                                 @foreach($album->images as $image)
                                     <div class="masonry__item position-relative rounded-12 overflow-hidden">
                                         <img src="{{ asset('storage/' . $image->image_path) }}"
-                                             alt="{{ $image->caption ?? 'Gallery image' }}"
-                                             class="cover-img">
+                                            alt="{{ $image->caption ?? 'Gallery image' }}"
+                                            class="cover-img">
                                         <a href="{{ asset('storage/' . $image->image_path) }}"
-                                           class="masonry__image position-absolute start-50 top-50 translate-middle z-1 text-white w-100 h-100 d-flex justify-content-center align-items-center rounded-12 hidden opacity-0"
-                                           data-fancybox="gallery-{{ $album->slug }}">
+                                        class="masonry__image position-absolute start-50 top-50 translate-middle z-1 text-white w-100 h-100 d-flex justify-content-center align-items-center rounded-12 hidden opacity-0"
+                                        data-fancybox="gallery-{{ $album->slug }}">
                                             <i class="ph ph-magnifying-glass-plus"></i>
                                         </a>
                                     </div>
                                 @endforeach
                             </div>
-                            <!-- Masonry End -->
                         @else
                             <div class="text-center py-5">
                                 <p class="text-neutral-500">No images available in this album.</p>

@@ -130,7 +130,7 @@
             <div class="col-lg-3 col-md-6">
                 <div class="facility-item text-center p-32 bg-white rounded-12 border border-neutral-30">
                     <span class="w-80 h-80 bg-main-25 rounded-circle flex-center text-main-600 text-40 mb-24"><i class="ph-bold ph-book"></i></span>
-                    <h4 class="mb-16">Bibliothèque</h4>
+                    <h4 class="mb-16">Salle de qualité</h4>
                     <p class="text-neutral-500">Fonds documentaire riche en sciences agricoles</p>
                 </div>
             </div>

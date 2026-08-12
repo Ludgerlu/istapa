@@ -50,7 +50,9 @@ class PageController extends Controller
      */
     public function aboutFounder()
     {
-        return view('about');
+        $testimonials = Testimonial::published()->limit(5)->get();
+
+        return view('about', compact('testimonials'));
     }
 
     /**
