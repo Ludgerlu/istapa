@@ -215,6 +215,10 @@ Route::middleware(['auth'])->group(function () {
 
         // ── Programs ──────────────────────────────────────────────────────²
         Route::resource('programs', AdminProgramController::class)->names('programs');
+        // Gallery endpoints
+        Route::post('programs/{program}/images', [AdminProgramController::class, 'storeImage'])->name('programs.storeImage');
+        Route::delete('programs/images/{image}', [AdminProgramController::class, 'destroyImage'])->name('programs.destroyImage');
+        Route::post('programs/images/reorder', [AdminProgramController::class, 'reorderImages'])->name('programs.reorderImages');
 
         // ── Events ────────────────────────────────────────────────────
         Route::get('/events',             [AdminEventController::class, 'index'])->name('events.index');

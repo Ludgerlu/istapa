@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Program;
+use App\Models\ProgramImage;
+use App\Models\Certificate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -24,6 +26,7 @@ class ProgramController extends Controller
 
     public function store(Request $request)
     {
+        // Add validation for new fields
         $validated = $request->validate([
             'title_en' => 'required|string|max:255',
             'title_fr' => 'required|string|max:255',
@@ -32,15 +35,20 @@ class ProgramController extends Controller
             'content_en' => 'required|string',
             'content_fr' => 'required|string',
             'duration_months' => 'nullable|integer|min:0',
-            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120', // 5MB
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'is_published' => 'boolean',
             'sort_order' => 'nullable|integer',
+            // New fields
+            'degree_code' => 'nullable|string|max:30',
+            'degree_name_en' => 'nullable|string|max:120',
+            'degree_name_fr' => 'nullable|string|max:120',
+            'degree_description_en' => 'nullable|string',
+            'degree_description_fr' => 'nullable|string',
+            'certificates' => 'nullable|array', // array of certificate IDs
         ]);
 
-        // Generate slug from English title (fallback to French)
         $slug = Str::slug($validated['title_en']) ?: Str::slug($validated['title_fr']);
 
-        // Handle cover image upload
         $coverPath = null;
         if ($request->hasFile('cover_image')) {
             $coverPath = $request->file('cover_image')->store('programs', 'public');
@@ -58,7 +66,17 @@ class ProgramController extends Controller
             'content_fr' => $validated['content_fr'],
             'is_published' => $request->has('is_published'),
             'sort_order' => $validated['sort_order'] ?? 0,
+            'degree_code' => $validated['degree_code'] ?? null,
+            'degree_name_en' => $validated['degree_name_en'] ?? null,
+            'degree_name_fr' => $validated['degree_name_fr'] ?? null,
+            'degree_description_en' => $validated['degree_description_en'] ?? null,
+            'degree_description_fr' => $validated['degree_description_fr'] ?? null,
         ]);
+
+        // Attach certificates
+        if (!empty($validated['certificates'])) {
+            $program->certificates()->sync($validated['certificates']);
+        }
 
         if ($request->wantsJson()) {
             return response()->json([
@@ -96,15 +114,20 @@ class ProgramController extends Controller
             'is_published' => 'boolean',
             'sort_order' => 'nullable|integer',
             'remove_cover' => 'nullable|boolean',
+            // New fields
+            'degree_code' => 'nullable|string|max:30',
+            'degree_name_en' => 'nullable|string|max:120',
+            'degree_name_fr' => 'nullable|string|max:120',
+            'degree_description_en' => 'nullable|string',
+            'degree_description_fr' => 'nullable|string',
+            'certificates' => 'nullable|array',
         ]);
 
-        // Update slug if title changed
         if ($program->title_en !== $validated['title_en']) {
-            $slug = Str::slug($validated['title_en']) ?: Str::slug($validated['title_fr']);
-            $program->slug = $slug;
+            $program->slug = Str::slug($validated['title_en']) ?: Str::slug($validated['title_fr']);
         }
 
-        // Handle cover image removal
+        // Handle cover image removal/update
         if ($request->has('remove_cover') && $request->remove_cover == 1) {
             if ($program->cover_image) {
                 Storage::disk('public')->delete($program->cover_image);
@@ -112,9 +135,7 @@ class ProgramController extends Controller
             }
         }
 
-        // Handle new cover image
         if ($request->hasFile('cover_image')) {
-            // Delete old if exists
             if ($program->cover_image) {
                 Storage::disk('public')->delete($program->cover_image);
             }
@@ -131,7 +152,19 @@ class ProgramController extends Controller
             'content_fr' => $validated['content_fr'],
             'is_published' => $request->has('is_published'),
             'sort_order' => $validated['sort_order'] ?? 0,
+            'degree_code' => $validated['degree_code'] ?? null,
+            'degree_name_en' => $validated['degree_name_en'] ?? null,
+            'degree_name_fr' => $validated['degree_name_fr'] ?? null,
+            'degree_description_en' => $validated['degree_description_en'] ?? null,
+            'degree_description_fr' => $validated['degree_description_fr'] ?? null,
         ])->save();
+
+        // Sync certificates
+        if ($request->has('certificates')) {
+            $program->certificates()->sync($validated['certificates']);
+        } else {
+            $program->certificates()->detach();
+        }
 
         if ($request->wantsJson()) {
             return response()->json([
@@ -159,5 +192,60 @@ class ProgramController extends Controller
     protected function getRoutePrefix()
     {
         return auth()->user()->role === 'manager' ? 'manager' : 'admin';
+    }
+
+    // ----- Gallery management methods -----
+
+    public function storeImage(Request $request, Program $program)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'alt_en' => 'nullable|string|max:150',
+            'alt_fr' => 'nullable|string|max:150',
+            'is_cover' => 'nullable|boolean',
+        ]);
+
+        // If this image is marked as cover, unset other cover images
+        if ($request->boolean('is_cover')) {
+            $program->images()->update(['is_cover' => false]);
+        }
+
+        $path = $request->file('image')->store('programs/gallery', 'public');
+
+        $image = $program->images()->create([
+            'image_path' => $path,
+            'alt_en' => $request->alt_en,
+            'alt_fr' => $request->alt_fr,
+            'is_cover' => $request->boolean('is_cover'),
+            'sort_order' => $program->images()->max('sort_order') + 1,
+        ]);
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Image ajoutée.', 'image' => $image]);
+        }
+
+        return back()->with('success', 'Image ajoutée.');
+    }
+
+    public function destroyImage(ProgramImage $image)
+    {
+        Storage::disk('public')->delete($image->image_path);
+        $image->delete();
+
+        return back()->with('success', 'Image supprimée.');
+    }
+
+    public function reorderImages(Request $request)
+    {
+        $request->validate([
+            'order' => 'required|array',
+            'order.*' => 'integer|exists:program_images,id',
+        ]);
+
+        foreach ($request->order as $index => $id) {
+            ProgramImage::where('id', $id)->update(['sort_order' => $index]);
+        }
+
+        return response()->json(['success' => true]);
     }
 }

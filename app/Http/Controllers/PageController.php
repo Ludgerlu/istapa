@@ -89,7 +89,8 @@ class PageController extends Controller
     public function courseDetails($id)
     {
 
-        $program = Program::where('id', $id)
+        $program = Program::with(['images', 'certificates'])
+            ->where('id', $id)
             ->where('is_published', 1)
             ->firstOrFail();
         $program->increment('view_count'); // Increment view count

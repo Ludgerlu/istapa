@@ -5,9 +5,9 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-24">
     <h4 class="fw-semibold text-neutral-500 text-20 mb-0">Programmes</h4>
-    <!-- <a href="{{ route('manager.programs.create') }}" class="btn bg-main-600 text-white rounded-pill">
+    <a href="{{ route('manager.programs.create') }}" class="btn bg-main-600 text-white rounded-pill">
         <i class="fas fa-plus"></i> Nouveau programme
-    </a> -->
+    </a>
 </div>
 
 <div class="bg-white rounded-10 p-24">
@@ -54,12 +54,12 @@
                     <td>{{ $program->view_count ?? '—' }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="{{ route('course.details', $program) }}" 
+                            <a href="{{ route('manager.programs.show', $program) }}" 
                                 class="w-32 h-32 rounded-circle border border-neutral-40 d-flex align-items-center justify-content-center text-neutral-500 hover-bg-main-600 hover-text-white transition-03"
                                title="Voir">
                                 <i class="ph ph-eye text-14"></i>
                             </a>
-                            <!-- <a href="{{ route('manager.programs.edit', $program) }}" 
+                            <a href="{{ route('manager.programs.edit', $program) }}" 
                                 class="w-32 h-32 rounded-circle border border-neutral-40 d-flex align-items-center justify-content-center text-neutral-500 hover-bg-main-600 hover-text-white transition-03"
                                 title="Modifier">
                                     <i class="ph ph-pencil text-14"></i>
@@ -71,7 +71,7 @@
                                         title="Supprimer">
                                     <i class="ph ph-trash text-14"></i>
                                 </button>
-                            </form> -->
+                            </form>
                         </div>
                     </td>
                 </tr>

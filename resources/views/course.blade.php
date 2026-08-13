@@ -66,7 +66,6 @@
                             @else
                                 <div class="bc-cover-placeholder">
                                     <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                                    <!-- <span>Image à venir</span> -->
                                 </div>
                             @endif
                             <div class="program-badge position-absolute top-0 start-0 mt-16 ms-16 bg-main-600 text-white px-16 py-8 rounded-pill">
@@ -82,10 +81,17 @@
                                     {{ $program->title }}
                                 </a>
                             </h3>
+                            {{-- Optional: show degree badge --}}
+                            @if($program->degree_name)
+                                <div class="mb-8">
+                                    <span class="badge bg-main-600 text-white">{{ $program->degree_name }}</span>
+                                </div>
+                            @endif
                             <p class="text-neutral-500 mb-24 text-line-3">
                                 {{ $program->excerpt }}
                             </p>
                             
+                            {{-- Updated info: show view count instead of student count --}}
                             <div class="flex-between gap-16 flex-wrap mb-24">
                                 <div class="flex-align gap-8">
                                     <i class="ph-bold ph-graduation-cap text-main-600 text-xl"></i>
@@ -95,10 +101,10 @@
                                     </span>
                                 </div>
                                 <div class="flex-align gap-8">
-                                    <i class="ph-bold ph-users text-main-600 text-xl"></i>
+                                    <i class="ph-bold ph-eye text-main-600 text-xl"></i>
                                     <span class="text-neutral-600">
-                                        {{ $program->admissionRequests->where('status', 'accepted')->count() }}
-                                        {{ app()->getLocale() === 'fr' ? 'étudiants' : 'students' }}
+                                        {{ $program->view_count ?? 0 }}
+                                        {{ app()->getLocale() === 'fr' ? 'vues' : 'views' }}
                                     </span>
                                 </div>
                             </div>

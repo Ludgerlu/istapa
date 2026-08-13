@@ -1,3 +1,4 @@
+{{-- resources/views/course-details.blade.php --}}
 @extends('layouts.app')
 
 @section('title', $program->title . ' - ISTAPA')
@@ -54,11 +55,40 @@
                     <img src="{{ asset('storage/' . $program->cover_image) }}" alt="{{ $program->title }}" class="w-100 rounded-16">
                 </div>
                 @endif
+
+                {{-- Degree description (if available) --}}
+                @if($program->degree_description)
+                <div class="degree-info mb-40">
+                    <div class="p-24 bg-main-25 rounded-16">
+                        <h4 class="mb-8">{{ app()->getLocale() === 'fr' ? 'À propos du diplôme' : 'About the degree' }}</h4>
+                        <p>{{ $program->degree_description }}</p>
+                    </div>
+                </div>
+                @endif
                 
                 <!-- Program Content -->
                 <div class="program-content">
                     {!! $program->content !!}
                 </div>
+
+                {{-- Program Gallery (images from program_images table) --}}
+                @if($program->images->count())
+                <div class="program-gallery mt-40">
+                    <h3 class="mb-24">{{ app()->getLocale() === 'fr' ? 'Galerie d\'images' : 'Image Gallery' }}</h3>
+                    <div class="row g-3">
+                        @foreach($program->images as $image)
+                        <div class="col-md-4 col-sm-6">
+                            <a href="{{ asset('storage/' . $image->image_path) }}" data-fancybox="program-gallery" class="d-block position-relative overflow-hidden rounded-12">
+                                <img src="{{ asset('storage/' . $image->image_path) }}" alt="{{ $image->alt ?? $program->title }}" class="w-100" style="height: 200px; object-fit: cover; transition: transform 0.3s;">
+                                <div class="position-absolute top-50 start-50 translate-middle text-white opacity-0 hover-opacity-100 transition-2" style="font-size: 32px;">
+                                    <i class="ph ph-magnifying-glass-plus"></i>
+                                </div>
+                            </a>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
             </div>
             
             <!-- Sidebar -->
@@ -76,8 +106,16 @@
                             </div>
                             <div class="info-item flex-between mb-20">
                                 <span class="text-neutral-500">{{ app()->getLocale() === 'fr' ? 'Diplôme' : 'Degree' }}</span>
-                                <span class="fw-semibold">BTS / HND</span>
+                                <span class="fw-semibold">{{ $program->degree_name ?? 'BTS / HND' }}</span>
                             </div>
+                            @if($program->certificates->count())
+                            <div class="info-item flex-between mb-20">
+                                <span class="text-neutral-500">{{ app()->getLocale() === 'fr' ? 'Certificats requis' : 'Required certificates' }}</span>
+                                <span class="fw-semibold text-end">
+                                    {{ $program->certificates->pluck('name')->implode(', ') }}
+                                </span>
+                            </div>
+                            @endif
                             <div class="info-item flex-between mb-20">
                                 <span class="text-neutral-500">{{ app()->getLocale() === 'fr' ? 'Rythme' : 'Pace' }}</span>
                                 <span class="fw-semibold">{{ app()->getLocale() === 'fr' ? 'Temps plein' : 'Full-time' }}</span>
@@ -87,8 +125,8 @@
                                 <span class="fw-semibold">{{ app()->getLocale() === 'fr' ? 'Français / Anglais' : 'French / English' }}</span>
                             </div>
                             <div class="info-item flex-between">
-                                <span class="text-neutral-500">{{ app()->getLocale() === 'fr' ? 'Étudiants actifs' : 'Active students' }}</span>
-                                <span class="fw-semibold">{{ $activeStudentsCount ?? 0 }}+</span>
+                                <span class="text-neutral-500">{{ app()->getLocale() === 'fr' ? 'Vues' : 'Views' }}</span>
+                                <span class="fw-semibold">{{ $program->view_count ?? 0 }}</span>
                             </div>
                         </div>
                     </div>
@@ -108,7 +146,6 @@
                         </a>
                     </div>
             
-                    
                     <!-- Contact Card -->
                     <div class="sidebar-card bg-main-25 rounded-16 p-24">
                         <h4 class="mb-24 pb-16 border-bottom border-neutral-30">
@@ -136,6 +173,8 @@
 </section>
 <!-- ==================== Program Details End Here ==================== -->
 
+{{-- (the rest - Testimonials, Related Programs, CTA - unchanged, but we keep them) --}}
+
 <!-- ==================== Testimonials Section Start Here ==================== -->
 @if($testimonials->count() > 0)
 <section class="testimonials py-120 bg-main-25">
@@ -156,7 +195,6 @@
             <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-duration="300" data-aos-delay="{{ $loop->index * 100 }}">
                 <div class="testimonial-card bg-white rounded-16 p-24 h-100">
                     <div class="d-flex align-items-center gap-16 mb-16">
-                         
                         @if($testimonial->author_photo)
                             <img src="{{ asset('storage/' . $testimonial->author_photo) }}" alt="{{ $testimonial->author_name }}" class="cover-img rounded-circle" />
                         @else
@@ -206,14 +244,14 @@
             <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-duration="300">
                 <div class="program-card bg-main-25 rounded-16 p-20 border border-neutral-30 h-100">
                     <h4 class="mb-16">
-                        <a href="{{ route('course.details', $relatedProgram->slug) }}" class="link hover-text-main-600">
+                        <a href="{{ route('course.details', $relatedProgram->id) }}" class="link hover-text-main-600">
                             {{ $relatedProgram->title }}
                         </a>
                     </h4>
                     <p class="text-neutral-500 mb-24 text-line-2">
                         {{ $relatedProgram->excerpt }}
                     </p>
-                    <a href="{{ route('course.details', $relatedProgram->slug) }}" class="flex-align gap-8 text-main-600 hover-text-decoration-underline">
+                    <a href="{{ route('course.details', $relatedProgram->id) }}" class="flex-align gap-8 text-main-600 hover-text-decoration-underline">
                         {{ app()->getLocale() === 'fr' ? 'Découvrir' : 'Discover' }}
                         <i class="ph-bold ph-arrow-right"></i>
                     </a>
@@ -278,13 +316,6 @@
         margin-bottom: 1rem;
         line-height: 1.6;
     }
-    .accordion-button:not(.collapsed) {
-        background-color: var(--main-600);
-        color: white;
-    }
-    .accordion-button:not(.collapsed) i {
-        color: white;
-    }
     .text-line-2 {
         display: -webkit-box;
         -webkit-line-clamp: 2;
@@ -293,6 +324,12 @@
     }
     .object-fit-cover {
         object-fit: cover;
+    }
+    .hover-opacity-100:hover {
+        opacity: 1 !important;
+    }
+    .transition-2 {
+        transition: all 0.3s ease;
     }
 </style>
 @endpush

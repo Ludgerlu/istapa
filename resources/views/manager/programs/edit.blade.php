@@ -1,3 +1,4 @@
+{{-- resources/views/manager/programs/edit.blade.php --}}
 @extends('layouts.admin')
 
 @section('title', 'Modifier le programme')
@@ -33,7 +34,7 @@
                 <textarea name="short_description_fr" rows="3" class="form-control">{{ old('short_description_fr', $program->short_description_fr) }}</textarea>
             </div>
 
-            {{-- Full content with Summernote --}}
+            {{-- Full content --}}
             <div class="col-md-12">
                 <label class="form-label text-14 fw-medium">Contenu (EN) <span class="text-danger">*</span></label>
                 <textarea name="content_en" id="content_en" class="form-control summernote" required>{{ old('content_en', $program->content_en) }}</textarea>
@@ -43,14 +44,21 @@
                 <textarea name="content_fr" id="content_fr" class="form-control summernote" required>{{ old('content_fr', $program->content_fr) }}</textarea>
             </div>
 
-            {{-- Duration & sort order --}}
-            <div class="col-md-6">
-                <label class="form-label text-14 fw-medium">Durée (en mois)</label>
+            {{-- Duration & order --}}
+            <div class="col-md-4">
+                <label class="form-label text-14 fw-medium">Durée (mois)</label>
                 <input type="number" name="duration_months" class="form-control" value="{{ old('duration_months', $program->duration_months) }}" min="0">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label class="form-label text-14 fw-medium">Ordre d'affichage</label>
                 <input type="number" name="sort_order" class="form-control" value="{{ old('sort_order', $program->sort_order) }}">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label text-14 fw-medium">Statut</label>
+                <div class="form-check mt-2">
+                    <input type="checkbox" name="is_published" value="1" class="form-check-input" id="is_published" {{ old('is_published', $program->is_published) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="is_published">Publié</label>
+                </div>
             </div>
 
             {{-- Cover image --}}
@@ -58,24 +66,56 @@
                 <label class="form-label text-14 fw-medium">Image de couverture</label>
                 @if($program->cover_image)
                     <div class="mb-8">
-                        <img src="{{ asset('storage/' . $program->cover_image) }}" alt="Cover" class="rounded-8" style="height: 80px; object-fit: cover">
+                        <img src="{{ asset('storage/' . $program->cover_image) }}" alt="Cover" style="height: 80px; object-fit: cover;" class="rounded-8">
                         <div class="form-check mt-4">
                             <input class="form-check-input" type="checkbox" name="remove_cover" id="remove_cover" value="1">
-                            <label class="form-check-label text-12 text-neutral-500" for="remove_cover">
-                                Supprimer l'image actuelle
-                            </label>
+                            <label class="form-check-label text-12 text-neutral-500" for="remove_cover">Supprimer l'image actuelle</label>
                         </div>
                     </div>
                 @endif
                 <input type="file" name="cover_image" id="cover_image" class="form-control" accept="image/*">
-                <small class="text-neutral-400 text-12">Laissez vide pour conserver l'image actuelle. Si vous en sélectionnez une nouvelle, elle sera compressée.</small>
+                <small class="text-neutral-400 text-12">Compression automatique.</small>
             </div>
 
-            {{-- Published status --}}
+            {{-- Degree fields --}}
             <div class="col-md-12">
-                <div class="form-check">
-                    <input type="checkbox" name="is_published" value="1" class="form-check-input" id="is_published" {{ old('is_published', $program->is_published) ? 'checked' : '' }}>
-                    <label class="form-check-label text-14" for="is_published">Publié (visible sur le site)</label>
+                <hr>
+                <h5 class="text-16 fw-semibold mb-16">Diplôme délivré</h5>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label text-14 fw-medium">Code diplôme</label>
+                <input type="text" name="degree_code" class="form-control" value="{{ old('degree_code', $program->degree_code) }}" placeholder="BTS_HND, LICENCE_MASTER...">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label text-14 fw-medium">Nom (EN)</label>
+                <input type="text" name="degree_name_en" class="form-control" value="{{ old('degree_name_en', $program->degree_name_en) }}">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label text-14 fw-medium">Nom (FR)</label>
+                <input type="text" name="degree_name_fr" class="form-control" value="{{ old('degree_name_fr', $program->degree_name_fr) }}">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label text-14 fw-medium">Description (EN)</label>
+                <textarea name="degree_description_en" rows="3" class="form-control summernote">{{ old('degree_description_en', $program->degree_description_en) }}</textarea>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label text-14 fw-medium">Description (FR)</label>
+                <textarea name="degree_description_fr" rows="3" class="form-control summernote">{{ old('degree_description_fr', $program->degree_description_fr) }}</textarea>
+            </div>
+
+            {{-- Certificates --}}
+            <div class="col-md-12">
+                <hr>
+                <h5 class="text-16 fw-semibold mb-16">Certificats requis pour l'admission</h5>
+                <div class="row">
+                    @foreach(\App\Models\Certificate::all() as $cert)
+                    <div class="col-md-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="certificates[]" value="{{ $cert->id }}" id="cert_{{ $cert->id }}" {{ $program->certificates->contains($cert->id) ? 'checked' : '' }}>
+                            <label class="form-check-label" for="cert_{{ $cert->id }}">{{ $cert->name }}</label>
+                        </div>
+                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -87,29 +127,152 @@
     </div>
 </form>
 
-{{-- Summernote assets --}}
+
+@endsection()
+
+@push('styles')
+<style>
+    /* Fix Summernote toolbar buttons AND dropdowns */
+    .note-toolbar {
+        position: relative;
+        z-index: 1050;
+    }
+    .note-toolbar .note-btn {
+        background-color: #f8f9fa !important;
+        color: #212529 !important;
+        border: 1px solid #ced4da !important;
+        border-radius: 4px !important;
+        padding: 4px 8px !important;
+    }
+    .note-toolbar .note-btn:hover {
+        background-color: #e9ecef !important;
+        border-color: #b6b8ba !important;
+    }
+    .note-toolbar .note-btn-group .note-btn {
+        background-color: #f8f9fa !important;
+        color: #212529 !important;
+        border-color: #ced4da !important;
+    }
+    .note-toolbar .note-btn-group .note-btn.active,
+    .note-toolbar .note-btn-group .note-btn:active {
+        background-color: #e2e6ea !important;
+        border-color: #a8aeb3 !important;
+    }
+
+    /* Fix dropdowns inside Summernote toolbar */
+    .note-toolbar .dropdown-menu {
+        display: none;
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        z-index: 9999 !important;
+        min-width: 160px !important;
+        padding: 5px 0 !important;
+        margin: 2px 0 0 !important;
+        background-color: #fff !important;
+        border: 1px solid #ced4da !important;
+        border-radius: 4px !important;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.175) !important;
+        background-clip: padding-box !important;
+    }
+    .note-toolbar .dropdown-menu.show {
+        display: block !important;
+    }
+    .note-toolbar .dropdown-menu .dropdown-item {
+        display: block !important;
+        padding: 3px 20px !important;
+        clear: both !important;
+        font-weight: 400 !important;
+        line-height: 1.42857143 !important;
+        color: #333 !important;
+        white-space: nowrap !important;
+        background-color: transparent !important;
+    }
+    .note-toolbar .dropdown-menu .dropdown-item:hover {
+        background-color: #f8f9fa !important;
+        color: #262626 !important;
+    }
+    .note-toolbar .note-color-btn {
+        border: 1px solid #ced4da !important;
+    }
+
+    /* Fix editor container */
+    .note-editor {
+        position: relative;
+        overflow: visible !important;
+    }
+    .note-editor .note-editing-area {
+        overflow: visible !important;
+    }
+    .note-editor .note-toolbar {
+        overflow: visible !important;
+    }
+    .note-editor .note-toolbar .note-btn-group {
+        position: relative !important;
+        overflow: visible !important;
+    }
+
+    /* Fix dropdown toggle icons */
+    .note-toolbar .note-btn .note-icon-caret {
+        font-size: 10px !important;
+        margin-left: 4px !important;
+    }
+</style>
+@endpush
+
+@push('scripts')
+
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
+{{-- With these (Bootstrap 5 compatible) --}}
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.9.8/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.9.8/dist/summernote-lite.min.js"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize Summernote on both content fields
     $('.summernote').summernote({
-        height: 250,
+        height: 300,
+        minHeight: 200,
+        maxHeight: 500,
+        focus: false,
         toolbar: [
-            ['style', ['bold', 'italic', 'underline', 'clear']],
-            ['font', ['strikethrough', 'superscript', 'subscript']],
+            ['style', ['style']],
+            ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+            ['fontname', ['fontname']],
             ['fontsize', ['fontsize']],
             ['color', ['color']],
             ['para', ['ul', 'ol', 'paragraph']],
             ['height', ['height']],
             ['table', ['table']],
-            ['insert', ['link', 'picture', 'video']],
-            ['view', ['fullscreen', 'codeview', 'help']]
-        ]
+            ['insert', ['link', 'picture', 'video', 'hr']],
+            ['view', ['fullscreen', 'codeview']],
+            ['help', ['help']]
+        ],
+        callbacks: {
+            onInit: function() {
+                // Force dropdowns to work with Bootstrap 5
+                $('.note-toolbar .dropdown-toggle').on('click', function(e) {
+                    e.stopPropagation();
+                    var $menu = $(this).next('.dropdown-menu');
+                    if ($menu.hasClass('show')) {
+                        $menu.removeClass('show');
+                    } else {
+                        $('.note-toolbar .dropdown-menu').removeClass('show');
+                        $menu.addClass('show');
+                    }
+                });
+                // Close dropdowns when clicking outside
+                $(document).on('click', function(e) {
+                    if (!$(e.target).closest('.note-toolbar .dropdown').length) {
+                        $('.note-toolbar .dropdown-menu').removeClass('show');
+                    }
+                });
+            }
+        }
     });
 
-    // ---- Image compression and form submission (same as before) ----
+    // Same image compression logic as create, plus handling of remove_cover
     const form = document.getElementById('programForm');
     const submitBtn = document.getElementById('submitBtn');
     const fileInput = document.getElementById('cover_image');
@@ -118,7 +281,6 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
 
-        // Sync Summernote content to textareas
         $('.summernote').each(function() {
             $(this).summernote('code');
         });
@@ -135,7 +297,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const file = fileInput.files[0];
         if (!file.type.match(/^image\/(jpeg|jpg|png|gif|webp)$/)) {
-            showToast('Format d\'image non supporté.', 'error');
+            showToast('Format non supporté.', 'error');
             return;
         }
 
@@ -168,11 +330,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
 
             if (response.ok && data.success) {
-                showToast(data.message || 'Programme mis à jour avec succès !', 'success');
+                showToast(data.message || 'Programme mis à jour !', 'success');
                 setTimeout(() => window.location.href = data.redirect || '{{ route('manager.programs.show', $program) }}', 1500);
             } else {
-                const errorMsg = data.message || 'Une erreur est survenue.';
-                showToast(errorMsg, 'error');
+                showToast(data.message || 'Erreur.', 'error');
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = 'Mettre à jour';
             }
@@ -185,4 +346,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-@endsection
+@endpush
+
