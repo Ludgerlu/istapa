@@ -83,42 +83,25 @@
                                 <span class="w-8 h-8 bg-main-600 rounded-circle"></span>
                                 <h5 class="text-main-600 mb-0">Le Mot du Fondateur</h5>
                             </div>
-                            <h2 class="mb-24 wow bounceIn">Bâtir un Avenir Durable pour l'Agriculture Africaine</h2>
-                            <p class="text-neutral-500 wow bounceInUp">C'est avec une grande fierté et un profond engagement que je vous accueille à l'Institut Supérieur des Techniques Agro-Pastorales (ISTAPA). Fondé sur la conviction que l'agriculture est le pilier du développement de notre continent, notre institut se donne pour mission de former la prochaine génération de leaders et d'innovateurs du secteur agro-pastoral.</p>
+                            <h2 class="mb-24 wow bounceIn">Renforcer les Capacités pour un Développement Durable</h2>
+                            <p class="text-neutral-500 wow bounceInUp">Les secteurs agropastoraux et de la protection de l'environnement sont des piliers très importants dans le processus de développement économique durable des pays d'Afrique subsaharienne. C'est pourquoi ces secteurs occupent une place de choix dans les politiques et stratégies de développement des pays.</p>
+                            <p class="text-neutral-500 wow bounceInUp">D'une part, la participation active des producteurs agropastoraux aux initiatives de développement initiées par les Etats, les partenaires au développement ou le secteur privé, se heurte à un certain nombre de contraintes, notamment : l'inadéquation des formations et l'insuffisance des structures de formation. La formation en nombre et en qualité de ressources humaines capables de stimuler la croissance du secteur agro-pastoral grâce notamment à l'exploitation des énergies renouvelables disponibles en abondance, nécessite notamment la disponibilité de structures de formation modernes, innovantes et performantes.</p>
+                            <p class="text-neutral-500 wow bounceInUp">D'autre part, compte tenu de l'impact du changement climatique, il est crucial de mettre en place des stratégies d'adaptation et de résilience qui incluent la promotion des pratiques intelligentes face au climat, notamment à travers la formation des ressources humaines sur les métiers de l'environnement, de la gestion efficace de l'eau et des énergies renouvelables.</p>
+                            <p class="text-neutral-500 wow bounceInUp">C'est dans le but de soutenir les gouvernements africains dans leurs actions pour le développement durable que l'ISTAPA contribue, à travers son système de formation innovant, au renforcement des capacités techniques des acteurs travaillant dans ces secteurs.</p>
                         </div>
-    
-                        <div class="flex-align align-items-start gap-28 mb-32" data-aos="fade-left" data-aos-duration="200">
-                            <span class="w-80 h-80 bg-main-25 border border-neutral-30 flex-center rounded-circle flex-shrink-0">
-                                <img src="{{ asset('assets/images/icons/about-img1.png') }}" alt="">
-                            </span>
+                    </div>
+                    <div class="flex-align flex-wrap gap-32 pt-40 border-top border-neutral-50 mt-40 border-dashed border-0" data-aos="fade-left" data-aos-duration="600">
+                        <a href="{{ route('courses') }}" class="btn btn-main rounded-pill flex-align gap-8">
+                            Découvrir nos Programmes
+                            <i class="ph-bold ph-arrow-up-right d-flex text-lg"></i>
+                        </a>
+                        <div class="flex-align gap-20">
+                            <!--  <img src="{{ asset('assets/images/thumbs/ceo-img.png') }}" alt="" class="w-52 h-52 rounded-circle object-fit-cover flex-shrink-0"> -->
                             <div class="flex-grow-1">
-                                <h4 class="text-neutral-500 mb-12">Notre Engagement</h4>
-                                <p class="text-neutral-500">Chez ISTAPA, nous croyons que l'excellence académique doit s'accompagner d'une formation pratique sur le terrain. Nos programmes sont conçus pour répondre aux défis réels du monde rural.</p>
-                            </div>
-                        </div>
-                        <div class="flex-align align-items-start gap-28 mb-0" data-aos="fade-left" data-aos-duration="400">
-                            <span class="w-80 h-80 bg-main-25 border border-neutral-30 flex-center rounded-circle flex-shrink-0">
-                                <img src="{{ asset('assets/images/icons/about-img2.png') }}" alt="">
-                            </span>
-                            <div class="flex-grow-1">
-                                <h4 class="text-neutral-500 mb-12">Un Appel à la Jeunesse</h4>
-                                <p class="text-neutral-500">Aux jeunes qui rêvent de contribuer au développement de leur pays, je dis : l'agriculture est l'avenir. Rejoignez-nous pour faire de ce secteur un levier de prospérité pour l'Afrique.</p>
-                            </div>
-                        </div>
-    
-                        <div class="flex-align flex-wrap gap-32 pt-40 border-top border-neutral-50 mt-40 border-dashed border-0" data-aos="fade-left" data-aos-duration="600">
-                            <a href="{{ route('courses') }}" class="btn btn-main rounded-pill flex-align gap-8">
-                                Découvrir nos Programmes
-                                <i class="ph-bold ph-arrow-up-right d-flex text-lg"></i>
-                            </a>
-                            <div class="flex-align gap-20">
-                                <img src="{{ asset('assets/images/thumbs/ceo-img.png') }}" alt="" class="w-52 h-52 rounded-circle object-fit-cover flex-shrink-0">
-                                <div class="flex-grow-1">
-                                    <span class="mb-4">
-                                        <img src="{{ asset('assets/images/thumbs/signature.png') }}" alt="">
-                                    </span>
-                                    <span class="text-sm d-block">Fondateur d'ISTAPA</span>
-                                </div>
+                                <span class="mb-4">
+                                    <img src="{{ asset('assets/images/thumbs/signature.png') }}" alt="">
+                                </span>
+                                <span class="text-sm d-block">Fondateur d'ISTAPA</span>
                             </div>
                         </div>
                     </div>
@@ -161,6 +144,26 @@
                             <span class="flex-grow-1 text-neutral-500">Environnement Convivial & Enseignants Experts</span>
                         </li>
                     </ul>
+
+                    
+                    <div class="flex-align align-items-start gap-28 mb-32" data-aos="fade-left" data-aos-duration="200">
+                        <span class="w-80 h-80 bg-main-25 border border-neutral-30 flex-center rounded-circle flex-shrink-0">
+                            <img src="{{ asset('assets/images/icons/about-img1.png') }}" alt="">
+                        </span>
+                        <div class="flex-grow-1">
+                            <h4 class="text-neutral-500 mb-12">Former des Entrepreneurs</h4>
+                            <p class="text-neutral-500">En formant les apprenants aux techniques innovantes de production agropastorale et aux bonnes pratiques de protection de l'environnement, ISTAPA vise à préparer ses étudiants à devenir des entrepreneurs prospères à la fin de leur formation et à contribuer au développement durable de l'Afrique.</p>
+                        </div>
+                    </div>
+                    <div class="flex-align align-items-start gap-28 mb-0" data-aos="fade-left" data-aos-duration="400">
+                        <span class="w-80 h-80 bg-main-25 border border-neutral-30 flex-center rounded-circle flex-shrink-0">
+                            <img src="{{ asset('assets/images/icons/about-img2.png') }}" alt="">
+                        </span>
+                        <div class="flex-grow-1">
+                            <h4 class="text-neutral-500 mb-12">Un Appel à la Jeunesse</h4>
+                            <p class="text-neutral-500">Les étudiants de ISTAPA se forment dans un environnement académique et professionnel innovant, ce qui les incite à comprendre que leur vocation est de créer leur propre emploi à la fin de la formation et d'employer d'autres jeunes.</p>
+                        </div>
+                    </div>
 
                     <div class="pt-24 border-top border-neutral-50 mt-28 border-dashed border-0">
                         <a href="{{ route('about.establishment') }}" class="btn btn-main rounded-pill flex-align d-inline-flex gap-8">
