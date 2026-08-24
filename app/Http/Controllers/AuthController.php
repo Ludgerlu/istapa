@@ -43,7 +43,9 @@ class AuthController extends Controller
                 return redirect()->route('manager.dashboard');
             }
 
-            return redirect()->intended('/');
+            // If there was an intended URL (e.g. trying to access a protected page),
+            // redirect there; otherwise send the user to their dashboard based on role.
+            return redirect()->intended($this->getUserDashboardRoute($user->role));
         }
 
         return back()->withErrors([

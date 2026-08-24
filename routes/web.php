@@ -93,6 +93,7 @@ Route::middleware(['auth'])->group(function () {
     // Admin Routes
     Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard');
+        Route::post('/stats/recalculate-monthly-views', [AdminDashboardController::class, 'recalculateMonthlyViews'])->name('stats.recalculate');
         Route::get('/profile', [AdminDashboardController::class, 'profile'])->name('profile');
 
         // ── Blog CRUD ──────────────────────────────────────────────────────────
@@ -192,6 +193,8 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('contact-messages/{message}/mark-read', [AdminContactMessageController::class, 'markAsRead'])->name('contact-messages.mark-read');
         Route::patch('contact-messages/{message}/mark-unread', [AdminContactMessageController::class, 'markAsUnread'])->name('contact-messages.mark-unread');
         Route::delete('contact-messages/{message}', [AdminContactMessageController::class, 'destroy'])->name('contact-messages.destroy');
+
+        Route::get('api/monthly-views-stats', [MonthlyViewsStatsController::class, 'data'])->name('stats.monthly-views');
     });
 
 

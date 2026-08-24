@@ -21,6 +21,22 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
+                $user = Auth::user();
+                if ($user) {
+                    if (method_exists($user, 'isAdmin') && $user->isAdmin()) {
+                        return redirect()->route('admin.dashboard');
+                    }
+                    if (method_exists($user, 'isManager') && $user->isManager()) {
+                        return redirect()->route('manager.dashboard');
+                    }
+                    if (method_exists($user, 'isTeacher') && $user->isTeacher()) {
+                        return redirect()->route('teacher.dashboard');
+                    }
+                    if (method_exists($user, 'isStudent') && $user->isStudent()) {
+                        return redirect()->route('student.dashboard');
+                    }
+                }
+
                 return redirect(RouteServiceProvider::HOME);
             }
         }

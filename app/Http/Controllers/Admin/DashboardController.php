@@ -118,15 +118,15 @@ class DashboardController extends Controller
         ];
 
         // ─── Top viewed programs (bar chart) ───
-    $topPrograms = Program::where('is_published', true)
-        ->select('id', 'title_en', 'title_fr', 'view_count')
-        ->orderBy('view_count', 'desc')
-        ->limit(10)
-        ->get();
+        $topPrograms = Program::where('is_published', true)
+            ->select('id', 'title_en', 'title_fr', 'view_count')
+            ->orderBy('view_count', 'desc')
+            ->limit(10)
+            ->get();
 
-    // For chart: labels (title_en) and data (view_count)
-    $programLabels = $topPrograms->pluck('title_en')->toArray();
-    $programViews = $topPrograms->pluck('view_count')->toArray();
+        // For chart: labels (title_en) and data (view_count)
+        $programLabels = $topPrograms->pluck('title_en')->toArray();
+        $programViews = $topPrograms->pluck('view_count')->toArray();
 
         return view($this->getRoutePrefix() . '.dashboard', compact(
             'totalBlogs', 'totalEvents', 'totalPrograms',
@@ -141,5 +141,17 @@ class DashboardController extends Controller
     public function profile()
     {
         return view($this->getRoutePrefix() . '.profile', ['user' => auth()->user()]);
+    }
+
+    /**
+     * Déclenchement manuel de la capture mensuelle des vues (blog_posts + programs).
+     * Utile pour tester sans attendre le 1er du mois, ou pour forcer un recalcul
+     * après une correction manuelle de view_count.
+     */
+    public function recalculateMonthlyViews()
+    {
+        Artisan::call('stats:record-monthly-views');
+
+        return back()->with('success', 'Statistiques de vues mensuelles recalculées avec succès.');
     }
 }

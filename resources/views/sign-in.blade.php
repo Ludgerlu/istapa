@@ -4,7 +4,7 @@
 
 @section('content')
 <!-- ==================== Breadcrumb Start Here ==================== -->
-<section class="breadcrumb py-120 bg-main-25 position-relative z-1 overflow-hidden mb-0">
+<!-- <section class="breadcrumb py-120 bg-main-25 position-relative z-1 overflow-hidden mb-0">
     <img src="{{ asset('assets/images/shapes/shape1.png') }}" alt="" class="shape one animation-rotation d-md-block d-none">
     <img src="{{ asset('assets/images/shapes/shape2.png') }}" alt="" class="shape two animation-scalation d-md-block d-none">
     <img src="{{ asset('assets/images/shapes/shape3.png') }}" alt="" class="shape eight animation-walking d-md-block d-none">
@@ -34,7 +34,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 <!-- ==================== Breadcrumb End Here ==================== -->
 
 <!-- ============================== Sign In Section Start ============================== -->
@@ -54,14 +54,32 @@
                     
                     <form action="{{ route('login') }}" method="POST" id="signinForm">
                         @csrf
+
+                        @if(session('error'))
+                            <div class="alert alert-danger mb-24">{{ session('error') }}</div>
+                        @endif
+
+                        @if($errors->any())
+                            <div class="alert alert-danger mb-24">
+                                <ul class="mb-0">
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                         <div class="mb-24">
                             <label for="email" class="fw-medium text-lg text-neutral-500 mb-16">Adresse Email</label>
                             <div class="position-relative">
                                 <span class="position-absolute top-50 translate-middle-y ms-16 text-neutral-400">
                                     <i class="ph-bold ph-envelope"></i>
                                 </span>
-                                <input type="email" class="common-input rounded-pill ps-48" id="email" name="email" placeholder="exemple@email.com" required>
+                                <input type="email" class="common-input rounded-pill ps-48" id="email" name="email" value="{{ old('email') }}" placeholder="exemple@email.com" required>
                             </div>
+                            @error('email')
+                                <div class="text-danger small mt-8">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="mb-16">
                             <label for="password" class="fw-medium text-lg text-neutral-500 mb-16">Mot de passe</label>
@@ -72,6 +90,9 @@
                                 <input type="password" class="common-input rounded-pill ps-48 pe-44" id="password" name="password" placeholder="••••••••" required>
                                 <span class="toggle-password position-absolute top-50 inset-inline-end-0 me-16 translate-middle-y ph-bold ph-eye-closed" style="cursor: pointer;" id="togglePassword"></span>
                             </div>
+                            @error('password')
+                                <div class="text-danger small mt-8">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="flex-between flex-wrap gap-16 mb-16">
                             <div class="form-check common-check mb-0">
@@ -88,13 +109,13 @@
                         </div>
                     </form>
 
-                    <div class="position-relative my-32">
+                    <!-- <div class="position-relative my-32">
                         <hr class="border-neutral-30">
                         <span class="position-absolute top-50 start-50 translate-middle bg-white px-16 text-neutral-500">ou</span>
-                    </div>
+                    </div> -->
 
                     <!-- Social Login Buttons -->
-                    <div class="d-grid gap-16">
+                    <!-- <div class="d-grid gap-16">
                         <button type="button" class="btn btn-outline-main rounded-pill flex-center gap-8 py-12">
                             <i class="ph-bold ph-google-logo text-xl"></i>
                             Continuer avec Google
@@ -109,7 +130,7 @@
                         <p class="text-neutral-500">Pas encore de compte ? 
                             <a href="{{ route('signup') }}" class="fw-semibold text-main-600 hover-text-decoration-underline">Créer un compte</a> 
                         </p>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="col-lg-6 d-lg-block d-none">
