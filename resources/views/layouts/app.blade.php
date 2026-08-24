@@ -325,7 +325,7 @@
                         <div class="selected-language" id="selectedLang">
                             <span>
                                 <span class="flag-icon fi fi-{{ $availableLangs[$currentLang]['flag'] }}" id="selectedFlag"></span>
-                                <span id="selectedText">{{ $availableLangs[$currentLang]['text'] }}</span>
+                                <!-- <span id="selectedText">{{ $availableLangs[$currentLang]['text'] }}</span> -->
                             </span>
                             <span class="arrow">▼</span>
                         </div>
@@ -333,7 +333,7 @@
                             @foreach ($availableLangs as $code => $lang)
                                 <div class="language-option @if($code === $currentLang) active @endif" data-lang="{{ $code }}" data-flag="{{ $lang['flag'] }}" data-text="{{ $lang['text'] }}">
                                     <span class="flag-icon fi fi-{{ $lang['flag'] }}"></span>
-                                    <span>{{ $lang['text'] }}</span>
+                                    <!-- <span>{{ $lang['text'] }}</span> -->
                                 </div>
                             @endforeach
                         </div>

@@ -13,7 +13,7 @@
     </button>
 
     <div class="banner-three__slider">
-        <div class="banner-three__item background-img bg-img linear-overlay position-relative" data-background-image="{{ asset('assets/images/thumbs/slide6.jpg') }}">
+        <div class="banner-three__item background-img bg-img linear-overlay position-relative" data-background-image="{{ asset('assets/images/thumbs/slide6.png') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-xxl-6 col-xl-8 col-lg-10 z-1">
@@ -66,7 +66,7 @@
                 </div>
             </div>
         </div>
-        <div class="banner-three__item background-img bg-img linear-overlay position-relative" data-background-image="{{ asset('assets/images/thumbs/slide1.png') }}">
+        <div class="banner-three__item background-img bg-img linear-overlay position-relative" data-background-image="{{ asset('assets/images/thumbs/slide1.jpg') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-xxl-6 col-xl-8 col-lg-10 z-1">
@@ -158,7 +158,7 @@
                                 <img src="{{ asset('assets/images/thumbs/about-1.jpg') }}" alt="" class="rounded-12 w-100" data-tilt data-tilt-max="15" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening />
                             </div>
                             <div class="col-sm-6">
-                                <div class="flex-align gap-24 mb-24">
+                                <div class="mb-24">
                                     <div class="bg-main-600 rounded-12 text-center py-24 px-2 min-w-max" data-aos="fade-right">
                                         <h1 class="mb-0 text-white counter">16+</h1>
                                         <span class="text-white">Années d'expérience</span>
