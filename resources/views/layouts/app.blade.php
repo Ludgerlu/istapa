@@ -1,7 +1,20 @@
+@php
+    // Langue actuellement active : on se base sur le paramètre ?lang= s'il est présent,
+    // sinon sur la locale de l'application (utile pour garder le menu synchronisé après un rechargement)
+    $currentLang = request('lang', app()->getLocale());
+    $availableLangs = [
+        'fr' => ['flag' => 'fr', 'text' => 'Français'],
+        'en' => ['flag' => 'gb', 'text' => 'English'],
+    ];
+    $currentLang = array_key_exists($currentLang, $availableLangs) ? $currentLang : 'fr';
+@endphp
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="{{ $currentLang }}">
 <head>
     <meta charset="UTF-8">
+    <!-- flag-icons : icônes de drapeaux en SVG, s'affichent correctement sur toutes les plateformes
+         (contrairement aux emojis 🇫🇷/🇬🇧 qui ne s'affichent pas sous Windows) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.3.2/css/flag-icons.min.css" />
     <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -76,6 +89,16 @@
             font-size: 24px;
         }
 
+        /* Drapeaux flag-icons (span.fi) : on force une taille fixe et un rendu rond/carré propre */
+        .flag-icon.fi {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            display: inline-block;
+        }
+
         .arrow {
             transition: transform 0.3s ease;
             color: #666;
@@ -126,10 +149,6 @@
         .language-option.active {
             background: #667eea;
             color: white;
-        }
-
-        .language-option.active .flag-icon {
-            filter: brightness(0) invert(1);
         }
 
         /* Current Language Display */
@@ -223,33 +242,8 @@
                     </ul>
                 </li>
                 <li class="nav-menu__item">
-                    <a href="{{ route('courses') }}" class="nav-menu__link">Nos Ateliers</a>
+                    <a href="{{ route('courses') }}" class="nav-menu__link">Nos Filieres</a>
                 </li>
-                <!-- <li class="nav-menu__item has-submenu">
-                    <a href="javascript:void(0)" class="nav-menu__link">Programme</a>
-                    <ul class="nav-submenu scroll-sm">
-                        <li class="nav-submenu__item">
-                            <a href="{{ route('courses') }}" class="nav-submenu__link hover-bg-neutral-30">
-                                Nos Ateliers
-                            </a>
-                        </li>
-                        <li class="nav-submenu__item">
-                            <a href="{{ route('courses') }}" class="nav-submenu__link hover-bg-neutral-30">
-                                Vue Liste des Cours
-                            </a>
-                        </li>
-                        <li class="nav-submenu__item">
-                            <a href="{{ route('course.details', 1) }}" class="nav-submenu__link hover-bg-neutral-30">
-                                Détails du Cours
-                            </a>
-                        </li>
-                        <li class="nav-submenu__item">
-                            <a href="{{ route('lesson.details', 1) }}" class="nav-submenu__link hover-bg-neutral-30">
-                                Détails de la Leçon
-                            </a>
-                        </li>
-                    </ul>
-                </li> -->
                 <li class="nav-menu__item">
                     <a href="{{ route('blog') }}" class="nav-menu__link">Blog</a>
                 </li>
@@ -303,25 +297,8 @@
                             </ul>
                         </li>
                         <li class="nav-menu__item @if(request()->routeIs('courses')) activePage @endif">
-                            <a href="{{ route('courses') }}" class="nav-menu__link">Nos Filiere</a>
+                            <a href="{{ route('courses') }}" class="nav-menu__link">Nos Filières</a>
                         </li>
-                        <!-- <li class="nav-menu__item has-submenu">
-                            <a href="javascript:void(0)" class="nav-menu__link">Programme</a>
-                            <ul class="nav-submenu scroll-sm">
-                                <li class="nav-submenu__item">
-                                    <a href="{{ route('courses') }}" class="nav-submenu__link hover-bg-neutral-30">Nos Ateliers</a>
-                                </li>
-                                <li class="nav-submenu__item">
-                                    <a href="{{ route('courses.list') }}" class="nav-submenu__link hover-bg-neutral-30">Vue Liste des Cours</a>
-                                </li>
-                                <li class="nav-submenu__item">
-                                    <a href="{{ route('course.details', 1) }}" class="nav-submenu__link hover-bg-neutral-30">Détails du Cours</a>
-                                </li>
-                                <li class="nav-submenu__item">
-                                    <a href="{{ route('lesson.details', 1) }}" class="nav-submenu__link hover-bg-neutral-30">Détails de la Leçon</a>
-                                </li>
-                            </ul>
-                        </li> -->
                         <li class="nav-menu__item @if(request()->routeIs('blog*')) activePage @endif">
                             <a href="{{ route('blog') }}" class="nav-menu__link">Blog</a>
                         </li>
@@ -347,20 +324,18 @@
                     <div class="language-selector" id="languageSelector">
                         <div class="selected-language" id="selectedLang">
                             <span>
-                                <span class="flag-icon" id="selectedFlag">🇫🇷</span>
-                                <span id="selectedText">Français</span>
+                                <span class="flag-icon fi fi-{{ $availableLangs[$currentLang]['flag'] }}" id="selectedFlag"></span>
+                                <span id="selectedText">{{ $availableLangs[$currentLang]['text'] }}</span>
                             </span>
                             <span class="arrow">▼</span>
                         </div>
                         <div class="language-dropdown">
-                            <div class="language-option" data-lang="fr" data-flag="🇫🇷" data-text="Français">
-                                <span class="flag-icon">🇫🇷</span>
-                                <span>Français</span>
-                            </div>
-                            <div class="language-option" data-lang="en" data-flag="🇬🇧" data-text="English">
-                                <span class="flag-icon">🇬🇧</span>
-                                <span>English</span>
-                            </div>
+                            @foreach ($availableLangs as $code => $lang)
+                                <div class="language-option @if($code === $currentLang) active @endif" data-lang="{{ $code }}" data-flag="{{ $lang['flag'] }}" data-text="{{ $lang['text'] }}">
+                                    <span class="flag-icon fi fi-{{ $lang['flag'] }}"></span>
+                                    <span>{{ $lang['text'] }}</span>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -490,14 +465,6 @@
 
 
 <script>
-    document.getElementById('fld-lang').addEventListener('change', function() {
-        var lang = this.value;
-        var url = new URL(window.location.href);
-        url.searchParams.set('lang', lang);
-        window.location.href = url.href;
-    });
-</script>
-<script>
         // Get elements
         const languageSelector = document.getElementById('languageSelector');
         const selectedLangDiv = document.getElementById('selectedLang');
@@ -518,12 +485,19 @@
             option.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const lang = option.dataset.lang;
-                // const flag = option.dataset.flag;
-                // const text = option.dataset.text;
-                // var lang = this.value;
                 var url = new URL(window.location.href);
                 url.searchParams.set('lang', lang);
-                window.location.href = url.href;
+
+                // Si l'URL ne change pas (ex: on reclique sur la langue déjà active,
+                // ou le paramètre "lang" n'était pas encore présent mais correspond à la langue
+                // déjà chargée), window.location.href = url.href ne provoque AUCUN rechargement
+                // dans la plupart des navigateurs : la page semble "ne pas se mettre à jour".
+                // On force donc explicitement un rechargement complet dans ce cas.
+                if (url.href === window.location.href) {
+                    window.location.reload();
+                } else {
+                    window.location.assign(url.href);
+                }
                 languageSelector.classList.remove('active');
             });
         });

@@ -13,7 +13,7 @@
     </button>
 
     <div class="banner-three__slider">
-        <div class="banner-three__item background-img bg-img linear-overlay position-relative" data-background-image="{{ asset('assets/images/thumbs/slide1.jpg') }}">
+        <div class="banner-three__item background-img bg-img linear-overlay position-relative" data-background-image="{{ asset('assets/images/thumbs/slide6.jpg') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-xxl-6 col-xl-8 col-lg-10 z-1">
@@ -66,7 +66,7 @@
                 </div>
             </div>
         </div>
-        <div class="banner-three__item background-img bg-img linear-overlay position-relative" data-background-image="{{ asset('assets/images/thumbs/slide6.png') }}">
+        <div class="banner-three__item background-img bg-img linear-overlay position-relative" data-background-image="{{ asset('assets/images/thumbs/slide1.png') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-xxl-6 col-xl-8 col-lg-10 z-1">
