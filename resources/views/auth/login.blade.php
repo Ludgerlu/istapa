@@ -4,7 +4,7 @@
 
 @section('content')
 <!-- ==================== Breadcrumb Start Here ==================== -->
-<section class="breadcrumb py-120 bg-main-25 position-relative z-1 overflow-hidden mb-0">
+<!-- <section class="breadcrumb py-120 bg-main-25 position-relative z-1 overflow-hidden mb-0">
     <img src="{{ asset('assets/images/shapes/shape1.png') }}" alt="" class="shape one animation-rotation d-md-block d-none">
     <img src="{{ asset('assets/images/shapes/shape2.png') }}" alt="" class="shape two animation-scalation d-md-block d-none">
     <img src="{{ asset('assets/images/shapes/shape3.png') }}" alt="" class="shape eight animation-walking d-md-block d-none">
@@ -34,7 +34,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 <!-- ==================== Breadcrumb End Here ==================== -->
 
 <!-- ============================== Sign In Section Start ============================== -->
@@ -88,13 +88,13 @@
                         </div>
                     </form>
 
-                    <div class="position-relative my-32">
+                    <!-- <div class="position-relative my-32">
                         <hr class="border-neutral-30">
                         <span class="position-absolute top-50 start-50 translate-middle bg-white px-16 text-neutral-500">ou</span>
-                    </div>
+                    </div> -->
 
                     <!-- Social Login Buttons -->
-                    <div class="d-grid gap-16">
+                    <!-- <div class="d-grid gap-16">
                         <button type="button" class="btn btn-outline-main rounded-pill flex-center gap-8 py-12">
                             <i class="ph-bold ph-google-logo text-xl"></i>
                             Continuer avec Google
@@ -103,13 +103,13 @@
                             <i class="ph-bold ph-facebook-logo text-xl"></i>
                             Continuer avec Facebook
                         </button>
-                    </div>
+                    </div> -->
 
-                    <div class="mt-32 text-center">
+                    <!-- <div class="mt-32 text-center">
                         <p class="text-neutral-500">Pas encore de compte ? 
                             <a href="{{ route('signup') }}" class="fw-semibold text-main-600 hover-text-decoration-underline">Créer un compte</a> 
                         </p>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="col-lg-6 d-lg-block d-none">

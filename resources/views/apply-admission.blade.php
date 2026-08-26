@@ -50,8 +50,14 @@
         </div>
 
         <div class="border border-neutral-30 rounded-12 bg-main-25 p-24">
-            <form action="{{ route('admission.store') }}" method="POST" id="admissionForm" enctype="multipart/form-data">
+            <form action="{{ route('admission.store') }}" method="POST" id="admissionForm" enctype="multipart/form-data" novalidate>
                 @csrf
+
+                <!-- Honeypot field (security) -->
+                <div style="display:none;">
+                    <input type="text" name="honeypot" id="honeypot" value="">
+                </div>
+
                 <h3 class="mb-24">Formulaire de Candidature</h3>
 
                 <!-- Personal information Start -->
@@ -62,22 +68,27 @@
                         <div class="col-sm-6">
                             <label for="first_name" class="text-neutral-700 text-lg fw-medium mb-12">Prénom <span class="text-danger-600">*</span></label>
                             <input type="text" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="first_name" name="first_name" value="{{ old('first_name') }}" required>
+                            <div class="invalid-feedback text-danger-600 text-sm mt-8 ps-16" data-error-for="first_name"></div>
                         </div>
                         <div class="col-sm-6">
                             <label for="last_name" class="text-neutral-700 text-lg fw-medium mb-12">Nom <span class="text-danger-600">*</span></label>
                             <input type="text" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="last_name" name="last_name" value="{{ old('last_name') }}" required>
+                            <div class="invalid-feedback text-danger-600 text-sm mt-8 ps-16" data-error-for="last_name"></div>
                         </div>
                         <div class="col-sm-6">
                             <label for="email" class="text-neutral-700 text-lg fw-medium mb-12">Email <span class="text-danger-600">*</span></label>
                             <input type="email" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="email" name="email" value="{{ old('email') }}" required>
+                            <div class="invalid-feedback text-danger-600 text-sm mt-8 ps-16" data-error-for="email"></div>
                         </div>
                         <div class="col-sm-6">
                             <label for="phone" class="text-neutral-700 text-lg fw-medium mb-12">Téléphone <span class="text-danger-600">*</span></label>
                             <input type="tel" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="phone" name="phone" value="{{ old('phone') }}" required>
+                            <div class="invalid-feedback text-danger-600 text-sm mt-8 ps-16" data-error-for="phone"></div>
                         </div>
                         <div class="col-sm-6">
                             <label for="birth_date" class="text-neutral-700 text-lg fw-medium mb-12">Date de naissance <span class="text-danger-600">*</span></label>
                             <input type="date" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="birth_date" name="birth_date" value="{{ old('birth_date') }}" required>
+                            <div class="invalid-feedback text-danger-600 text-sm mt-8 ps-16" data-error-for="birth_date"></div>
                         </div>
                         <div class="col-sm-12">
                             <label class="text-neutral-700 text-lg fw-medium mb-12">Genre <span class="text-danger-600">*</span></label>
@@ -91,6 +102,7 @@
                                     <label class="form-check-label fw-normal flex-grow-1" for="Female">Féminin</label>
                                 </div>
                             </div>
+                            <div class="invalid-feedback text-danger-600 text-sm mt-8" data-error-for="gender"></div>
                         </div>
                         <div class="col-sm-6">
                             <label for="country" class="text-neutral-700 text-lg fw-medium mb-12">Pays <span class="text-danger-600">*</span></label>
@@ -105,14 +117,17 @@
                                 <option value="Congo" {{ old('country') == 'Congo' ? 'selected' : '' }}>Congo</option>
                                 <option value="RDC" {{ old('country') == 'RDC' ? 'selected' : '' }}>RDC</option>
                             </select>
+                            <div class="invalid-feedback text-danger-600 text-sm mt-8 ps-16" data-error-for="country"></div>
                         </div>
                         <div class="col-sm-6">
                             <label for="city" class="text-neutral-700 text-lg fw-medium mb-12">Ville <span class="text-danger-600">*</span></label>
                             <input type="text" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="city" name="city" value="{{ old('city') }}" required>
+                            <div class="invalid-feedback text-danger-600 text-sm mt-8 ps-16" data-error-for="city"></div>
                         </div>
                         <div class="col-sm-12">
                             <label for="address" class="text-neutral-700 text-lg fw-medium mb-12">Adresse complète</label>
                             <textarea class="common-input bg-main-25 rounded-24 border-transparent focus-border-main-600" id="address" name="address" rows="3">{{ old('address') }}</textarea>
+                            <div class="invalid-feedback text-danger-600 text-sm mt-8 ps-16" data-error-for="address"></div>
                         </div>
                     </div>
                 </div>
@@ -127,9 +142,10 @@
                             <select class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600 form-select py-14" id="program_id" name="program_id" required>
                                 <option value="">Sélectionnez votre programme</option>
                                 @foreach($programs as $program)
-                                    <option value="{{ $program->id }}" {{ old('program_id') == $program->id ? 'selected' : '' }}>{{ $program->title_en }}</option>
+                                    <option value="{{ $program->id }}" {{ old('program_id') == $program->id ? 'selected' : '' }}>{{ $program->title }}-{{$program->degree_code}}</option>
                                 @endforeach
                             </select>
+                            <div class="invalid-feedback text-danger-600 text-sm mt-8 ps-16" data-error-for="program_id"></div>
                         </div>
                     </div>
                 </div>
@@ -142,10 +158,12 @@
                         <div class="col-sm-6">
                             <label for="previous_school" class="text-neutral-700 text-lg fw-medium mb-12">Dernier établissement fréquenté</label>
                             <input type="text" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="previous_school" name="previous_school" value="{{ old('previous_school') }}">
+                            <div class="invalid-feedback text-danger-600 text-sm mt-8 ps-16" data-error-for="previous_school"></div>
                         </div>
                         <div class="col-sm-6">
                             <label for="previous_diploma" class="text-neutral-700 text-lg fw-medium mb-12">Diplôme obtenu</label>
                             <input type="text" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="previous_diploma" name="previous_diploma" value="{{ old('previous_diploma') }}">
+                            <div class="invalid-feedback text-danger-600 text-sm mt-8 ps-16" data-error-for="previous_diploma"></div>
                         </div>
                     </div>
                 </div>
@@ -159,21 +177,25 @@
                             <label for="doc_cv" class="text-neutral-700 text-lg fw-medium mb-12">CV / Curriculum Vitae</label>
                             <input type="file" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="doc_cv" name="documents[cv]">
                             <small class="text-neutral-500">Format: PDF, DOC (Max 5MB)</small>
+                            <div class="invalid-feedback text-danger-600 text-sm mt-8 ps-16" data-error-for="documents.cv"></div>
                         </div>
                         <div class="col-sm-6">
                             <label for="doc_diploma" class="text-neutral-700 text-lg fw-medium mb-12">Copie du diplôme</label>
                             <input type="file" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="doc_diploma" name="documents[diploma]">
                             <small class="text-neutral-500">Format: PDF, JPG (Max 5MB)</small>
+                            <div class="invalid-feedback text-danger-600 text-sm mt-8 ps-16" data-error-for="documents.diploma"></div>
                         </div>
                         <div class="col-sm-6">
                             <label for="doc_id" class="text-neutral-700 text-lg fw-medium mb-12">Pièce d'identité</label>
                             <input type="file" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="doc_id" name="documents[id]">
                             <small class="text-neutral-500">Format: PDF, JPG (Max 5MB)</small>
+                            <div class="invalid-feedback text-danger-600 text-sm mt-8 ps-16" data-error-for="documents.id"></div>
                         </div>
                         <div class="col-sm-6">
                             <label for="doc_photo" class="text-neutral-700 text-lg fw-medium mb-12">Photo d'identité</label>
                             <input type="file" class="common-input bg-main-25 rounded-pill border-transparent focus-border-main-600" id="doc_photo" name="documents[photo]">
                             <small class="text-neutral-500">Format: JPG, PNG (Max 2MB)</small>
+                            <div class="invalid-feedback text-danger-600 text-sm mt-8 ps-16" data-error-for="documents.photo"></div>
                         </div>
                     </div>
                 </div>
@@ -193,12 +215,15 @@
                                 <label class="form-check-label fw-normal" for="terms">
                                     J'accepte les <a href="#" class="text-main-600">conditions générales</a> et confirme que les informations fournies sont exactes.
                                 </label>
+                                <div class="invalid-feedback text-danger-600 text-sm mt-8" data-error-for="terms"></div>
                             </div>
                         </div>
                         <div class="col-sm-12">
-                            <button type="submit" class="btn btn-main rounded-pill flex-center gap-8 mt-16">
-                                Soumettre ma candidature
-                                <i class="ph-bold ph-arrow-up-right d-flex text-lg"></i>
+                            <button type="submit" class="btn btn-main rounded-pill flex-center gap-8 mt-16" id="admissionSubmitBtn">
+                                <span class="admission-btn-label flex-center gap-8">
+                                    Soumettre ma candidature
+                                    <i class="ph-bold ph-arrow-up-right d-flex text-lg"></i>
+                                </span>
                             </button>
                         </div>
                     </div>
@@ -241,4 +266,161 @@
     </div>
 </div>
 <!-- ================================= Certificate Section End ================================= -->
+
+<!-- ================================ Admission Status Modal ============================= -->
+<div class="modal fade" id="admissionStatusModal" tabindex="-1" aria-labelledby="admissionStatusModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-16 border-0 text-center p-24">
+            <div class="modal-body py-32">
+                <span id="admissionStatusIcon" class="w-80 h-80 rounded-circle flex-center text-4xl mx-auto mb-24"></span>
+                <h4 id="admissionStatusTitle" class="mb-16"></h4>
+                <p id="admissionStatusMessage" class="text-neutral-500 mb-0"></p>
+                <div id="admissionReferenceCode" class="mt-16 fw-bold text-main-600" style="display:none;"></div>
+            </div>
+            <div class="modal-footer border-0 justify-content-center pt-0">
+                <button type="button" class="btn btn-main rounded-pill" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ================================ Admission Status Modal End ============================= -->
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('admissionForm');
+    const submitBtn = document.getElementById('admissionSubmitBtn');
+    const btnLabel = submitBtn.querySelector('.admission-btn-label');
+    const originalLabel = btnLabel.innerHTML;
+    const modal = new bootstrap.Modal(document.getElementById('admissionStatusModal'));
+
+    // Helper to display field errors
+    function displayErrors(errors) {
+        // Clear previous errors
+        document.querySelectorAll('.invalid-feedback[data-error-for]').forEach(el => el.textContent = '');
+        document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+
+        for (let field in errors) {
+            let errorMessages = errors[field];
+            // Find the error container with data-error-for matching field name
+            let errorContainer = document.querySelector(`.invalid-feedback[data-error-for="${field}"]`);
+            if (!errorContainer) {
+                // Try to find by dot-notation (e.g., documents.cv)
+                errorContainer = document.querySelector(`.invalid-feedback[data-error-for="${field.replace(/\./g, '\\.')}"]`);
+            }
+            if (errorContainer) {
+                errorContainer.textContent = errorMessages[0];
+                // Find corresponding input and mark invalid
+                let input = document.querySelector(`[name="${field}"]`);
+                if (!input && field.includes('.')) {
+                    // For nested fields like documents.cv
+                    let parts = field.split('.');
+                    input = document.querySelector(`[name="${parts[0]}[${parts[1]}]"]`);
+                }
+                if (input) {
+                    input.classList.add('is-invalid');
+                }
+            }
+        }
+    }
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Reset errors
+        document.querySelectorAll('.invalid-feedback[data-error-for]').forEach(el => el.textContent = '');
+        document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+
+        // Check honeypot (should be empty)
+        const honeypot = document.getElementById('honeypot');
+        if (honeypot.value !== '') {
+            // Likely bot, silently ignore
+            return;
+        }
+
+        // Check terms checkbox
+        const terms = document.getElementById('terms');
+        if (!terms.checked) {
+            const termsError = document.querySelector('[data-error-for="terms"]');
+            if (termsError) {
+                termsError.textContent = 'Vous devez accepter les conditions générales.';
+                terms.classList.add('is-invalid');
+            }
+            return;
+        }
+
+        // Disable button and show spinner
+        submitBtn.disabled = true;
+        btnLabel.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Envoi en cours...';
+
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+            },
+            body: formData
+        })
+        .then(response => {
+            return response.json().then(data => ({ status: response.status, data }));
+        })
+        .then(({ status, data }) => {
+            const icon = document.getElementById('admissionStatusIcon');
+            const title = document.getElementById('admissionStatusTitle');
+            const message = document.getElementById('admissionStatusMessage');
+            const refCode = document.getElementById('admissionReferenceCode');
+
+            if (data.success) {
+                icon.className = 'w-80 h-80 rounded-circle flex-center text-4xl mx-auto mb-24 bg-success-50 text-success-600';
+                icon.innerHTML = '<i class="ph-bold ph-check-circle"></i>';
+                title.textContent = 'Candidature soumise !';
+                message.textContent = data.message;
+                if (data.reference_code) {
+                    refCode.textContent = 'Votre référence : ' + data.reference_code;
+                    refCode.style.display = 'block';
+                } else {
+                    refCode.style.display = 'none';
+                }
+                form.reset();
+                // Optionally redirect after a delay? The modal stays.
+            } else {
+                icon.className = 'w-80 h-80 rounded-circle flex-center text-4xl mx-auto mb-24 bg-danger-50 text-danger-600';
+                icon.innerHTML = '<i class="ph-bold ph-x-circle"></i>';
+                title.textContent = 'Erreur';
+                message.textContent = data.message || 'Une erreur est survenue. Veuillez vérifier vos informations.';
+                refCode.style.display = 'none';
+
+                if (data.errors) {
+                    displayErrors(data.errors);
+                }
+            }
+
+            modal.show();
+        })
+        .catch(error => {
+            const icon = document.getElementById('admissionStatusIcon');
+            const title = document.getElementById('admissionStatusTitle');
+            const message = document.getElementById('admissionStatusMessage');
+            const refCode = document.getElementById('admissionReferenceCode');
+
+            icon.className = 'w-80 h-80 rounded-circle flex-center text-4xl mx-auto mb-24 bg-danger-50 text-danger-600';
+            icon.innerHTML = '<i class="ph-bold ph-wifi-slash"></i>';
+            title.textContent = 'Erreur réseau';
+            message.textContent = 'Impossible de contacter le serveur. Vérifiez votre connexion.';
+            refCode.style.display = 'none';
+
+            modal.show();
+        })
+        .finally(() => {
+            submitBtn.disabled = false;
+            btnLabel.innerHTML = originalLabel;
+        });
+    });
+
+    // When modal is closed, optionally clear error highlights? Not necessary.
+});
+</script>
+@endpush

@@ -14,9 +14,11 @@ use App\Models\BlogCategory;
 use App\Models\UpcomingSession;
 use App\Models\AdmissionRequest;
 use App\Models\AdmissionDocument;
+use App\Models\ContactMessage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 
 
@@ -188,10 +190,10 @@ class PageController extends Controller
 
     public function storeAdmission(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:100',
             'last_name'  => 'required|string|max:100',
-            'email'      => 'required|email|max:150|unique:admission_requests,email',
+            'email'      => 'required|email|max:150',
             'phone'      => 'required|string|max:30',
             'birth_date' => 'required|date',
             'gender'     => 'required|in:M,F',
@@ -203,19 +205,28 @@ class PageController extends Controller
             'previous_diploma'  => 'nullable|string|max:200',
             'motivation'        => 'nullable|string',
             'documents'   => 'nullable|array',
-            'documents.cv'   => 'nullable|file|mimes:pdf,doc,docx|max:5120',
+            'documents.cv'      => 'nullable|file|mimes:pdf,doc,docx|max:5120',
             'documents.diploma' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
             'documents.id'      => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
             'documents.photo'   => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // Generate unique reference code
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors(),
+                'message' => 'Veuillez corriger les erreurs ci-dessous.'
+            ], 422);
+        }
+
+        $validated = $validator->validated();
+
+        // Générer un code de référence unique
         $referenceCode = 'ISTAPA-' . strtoupper(Str::random(10));
         while (AdmissionRequest::where('reference_code', $referenceCode)->exists()) {
             $referenceCode = 'ISTAPA-' . strtoupper(Str::random(10));
         }
 
-        // Create admission request
         $admission = AdmissionRequest::create([
             'reference_code'    => $referenceCode,
             'first_name'        => $validated['first_name'],
@@ -231,10 +242,9 @@ class PageController extends Controller
             'previous_school'   => $validated['previous_school'] ?? null,
             'previous_diploma'  => $validated['previous_diploma'] ?? null,
             'motivation'        => $validated['motivation'] ?? null,
-            'status'            => 'pending',  // default status
+            'status'            => 'pending',
         ]);
 
-        // Handle document uploads
         if ($request->hasFile('documents')) {
             foreach ($request->file('documents') as $type => $file) {
                 $path = $file->store('admission_documents/' . $admission->id, 'public');
@@ -245,9 +255,13 @@ class PageController extends Controller
                     'original_name'        => $file->getClientOriginalName(),
                 ]);
             }
-        };
+        }
 
-        return back()->with('success', 'success', 'Votre candidature a été enregistrée avec succès. Votre référence : ' . $referenceCode);
+        return response()->json([
+            'success' => true,
+            'message' => 'Votre candidature a été enregistrée avec succès. Votre référence : ' . $referenceCode,
+            'reference_code' => $referenceCode,
+        ]);
     }
 
     /**
@@ -283,13 +297,7 @@ class PageController extends Controller
             'subject' => 'required|string|max:255',
             'message' => 'required|string',
         ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors(),
-                'message' => 'Veuillez corriger les erreurs ci-dessous.'
-            ], 422);
-        }
+        
 
         ContactMessage::create([
             'full_name' => $request->full_name,
@@ -297,7 +305,7 @@ class PageController extends Controller
             'phone' => $request->phone,
             'subject' => $request->subject,
             'message' => $request->message,
-            'status' => 'unread',
+            'status' => 'new',
             'ip_address' => $request->ip(),
             'created_at' => now(),
         ]);

@@ -525,29 +525,37 @@
                                 </p>
                             </div>
 
-                            <form action="#">
+                            <form action="{{ route('contact.store') }}" method="POST" id="joinCommunityForm" novalidate>
+                                @csrf
+                                <input type="hidden" name="subject" value="Rejoindre la communauté - Leçon d'essai gratuite">
+
                                 <div class="mb-24 position-relative" data-aos="fade-up-left" data-aos-duration="400">
-                                    <input type="text" class="bg-white text-black border border-transparent focus-border-main-600 h-48 rounded-pill px-16 ps-60 outline-0 w-100" placeholder="Entrez votre nom..." />
+                                    <input type="text" name="full_name" id="join_full_name" class="bg-white text-black border border-transparent focus-border-main-600 h-48 rounded-pill px-16 ps-60 outline-0 w-100" placeholder="Entrez votre nom..." required />
                                     <span class="bg-main-600 text-white text-2xl flex-center w-48 h-48 rounded-circle border border-main-25 border-4 position-absolute inset-inline-start-0 top-50 translate-middle-y">
                                         <i class="ph-bold ph-user-circle"></i>
                                     </span>
+                                    <div class="invalid-feedback full_name-error text-danger-600 text-sm mt-8 ps-16"></div>
                                 </div>
                                 <div class="mb-24 position-relative" data-aos="fade-up-left" data-aos-duration="600">
-                                    <input type="email" class="bg-white text-black border border-transparent focus-border-main-600 h-48 rounded-pill px-16 ps-60 outline-0 w-100" placeholder="Entrez votre email" />
+                                    <input type="email" name="email" id="join_email" class="bg-white text-black border border-transparent focus-border-main-600 h-48 rounded-pill px-16 ps-60 outline-0 w-100" placeholder="Entrez votre email" required />
                                     <span class="bg-main-600 text-white text-2xl flex-center w-48 h-48 rounded-circle border border-main-25 border-4 position-absolute inset-inline-start-0 top-50 translate-middle-y">
                                         <i class="ph-bold ph-envelope-open"></i>
                                     </span>
+                                    <div class="invalid-feedback email-error text-danger-600 text-sm mt-8 ps-16"></div>
                                 </div>
                                 <div class="mb-24 position-relative" data-aos="fade-up-left" data-aos-duration="800">
-                                    <textarea id="desc" class="bg-white text-black border border-transparent focus-border-main-600 h-48 rounded-pill px-16 ps-60 outline-0 w-100 text-neutral-300" placeholder="Entrez votre message..."></textarea>
+                                    <textarea name="message" id="join_message" class="bg-white text-black border border-transparent focus-border-main-600 h-48 rounded-pill px-16 ps-60 outline-0 w-100 text-neutral-300" placeholder="Entrez votre message..." required></textarea>
                                     <span class="bg-main-600 text-white text-2xl flex-center w-48 h-48 rounded-circle border border-main-25 border-4 position-absolute inset-inline-start-0 top-50 translate-middle-y">
                                         <i class="ph-bold ph-book"></i>
                                     </span>
+                                    <div class="invalid-feedback message-error text-danger-600 text-sm mt-8 ps-16"></div>
                                 </div>
                                 <div class="mt-40 position-relative" data-aos="fade-up-left" data-aos-duration="1000">
-                                    <button type="submit" class="btn btn-main rounded-pill flex-align d-inline-flex gap-8">
-                                        Rejoindre
-                                        <i class="ph-bold ph-arrow-up-right d-flex text-lg"></i>
+                                    <button type="submit" id="joinSubmitBtn" class="btn btn-main rounded-pill flex-align d-inline-flex gap-8">
+                                        <span class="join-btn-label flex-align d-inline-flex gap-8">
+                                            Rejoindre
+                                            <i class="ph-bold ph-arrow-up-right d-flex text-lg"></i>
+                                        </span>
                                     </button>
                                 </div>
                             </form>
@@ -584,5 +592,97 @@
     </div>
 </div>
 <!-- ========================== Brand Section End =========================== -->
+<!-- ================================ Join Community - Status Modal ============================= -->
+<div class="modal fade" id="joinStatusModal" tabindex="-1" aria-labelledby="joinStatusModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-16 border-0 text-center p-24">
+            <div class="modal-body py-32">
+                <span id="joinStatusIcon" class="w-80 h-80 rounded-circle flex-center text-4xl mx-auto mb-24"></span>
+                <h4 id="joinStatusTitle" class="mb-16"></h4>
+                <p id="joinStatusMessage" class="text-neutral-500 mb-0"></p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center pt-0">
+                <button type="button" class="btn btn-main rounded-pill" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ================================ Join Community - Status Modal End ============================= -->
 @endsection
 
+@push('scripts')
+<script>
+document.getElementById('joinCommunityForm')?.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const form = this;
+    const submitBtn = document.getElementById('joinSubmitBtn');
+    const btnLabel = submitBtn.querySelector('.join-btn-label');
+    const originalLabel = btnLabel.innerHTML;
+
+    // Réinitialiser les erreurs précédentes
+    form.querySelectorAll('.invalid-feedback').forEach(el => el.textContent = '');
+
+    // État "envoi en cours"
+    submitBtn.disabled = true;
+    btnLabel.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Envoi en cours...';
+
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
+        },
+        body: formData
+    })
+    .then(response => response.json().then(data => ({ status: response.status, data })))
+    .then(({ status, data }) => {
+        const icon = document.getElementById('joinStatusIcon');
+        const title = document.getElementById('joinStatusTitle');
+        const message = document.getElementById('joinStatusMessage');
+
+        if (data.success) {
+            icon.className = 'w-80 h-80 rounded-circle flex-center text-4xl mx-auto mb-24 bg-success-50 text-success-600';
+            icon.innerHTML = '<i class="ph-bold ph-check-circle"></i>';
+            title.textContent = 'Message envoyé !';
+            message.textContent = data.message;
+            form.reset();
+        } else {
+            icon.className = 'w-80 h-80 rounded-circle flex-center text-4xl mx-auto mb-24 bg-danger-50 text-danger-600';
+            icon.innerHTML = '<i class="ph-bold ph-x-circle"></i>';
+            title.textContent = 'Erreur';
+            message.textContent = data.message || 'Une erreur est survenue. Veuillez réessayer.';
+
+            if (data.errors) {
+                for (let field in data.errors) {
+                    const errorDiv = form.querySelector(`.${field}-error`);
+                    if (errorDiv) errorDiv.textContent = data.errors[field][0];
+                }
+            }
+        }
+
+        const modal = new bootstrap.Modal(document.getElementById('joinStatusModal'));
+        modal.show();
+    })
+    .catch(() => {
+        const icon = document.getElementById('joinStatusIcon');
+        const title = document.getElementById('joinStatusTitle');
+        const message = document.getElementById('joinStatusMessage');
+
+        icon.className = 'w-80 h-80 rounded-circle flex-center text-4xl mx-auto mb-24 bg-danger-50 text-danger-600';
+        icon.innerHTML = '<i class="ph-bold ph-wifi-slash"></i>';
+        title.textContent = 'Erreur réseau';
+        message.textContent = 'Impossible de contacter le serveur. Vérifiez votre connexion.';
+
+        const modal = new bootstrap.Modal(document.getElementById('joinStatusModal'));
+        modal.show();
+    })
+    .finally(() => {
+        submitBtn.disabled = false;
+        btnLabel.innerHTML = originalLabel;
+    });
+});
+</script>
+@endpush
