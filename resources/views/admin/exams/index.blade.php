@@ -8,10 +8,21 @@
 
 <div class="bg-white rounded-10 p-20 mb-24">
     <form method="GET" class="row g-3">
-        <div class="col-md-3"><label>Classe</label><select name="class_id" class="form-select"><option value="">Toutes</option>@foreach($classes as $c)<option value="{{ $c->id }}" {{ request('class_id')==$c->id ? 'selected' : '' }}>{{ $c->name }}</option>@endforeach</select></div>
+        <div class="col-md-3">
+            <label>Classe</label>
+            <select name="class_id" class="form-select">
+                <option value="">Toutes</option>
+                @foreach($classes as $c)
+                    <option value="{{ $c->id }}" {{ request('class_id')==$c->id ? 'selected' : '' }}>{{ $c->name }}</option>
+                @endforeach
+            </select>
+        </div>
         <div class="col-md-3"><label>Année scolaire</label><select name="academic_year_id" class="form-select"><option value="">Toutes</option>@foreach($academicYears as $y)<option value="{{ $y->id }}" {{ request('academic_year_id')==$y->id ? 'selected' : '' }}>{{ $y->label }}</option>@endforeach</select></div>
-        <div class="col-md-3"><label>Période</label><select name="term" class="form-select"><option value="">Toutes</option><option value="first" {{ request('term')=='first' ? 'selected' : '' }}>Premier semestre</option><option value="second" {{ request('term')=='second' ? 'selected' : '' }}>Deuxième semestre</option><option value="third" {{ request('term')=='third' ? 'selected' : '' }}>Troisième semestre</option><option value="final" {{ request('term')=='final' ? 'selected' : '' }}>Final</option></select></div>
-        <div class="col-md-3 d-flex align-items-end"><button type="submit" class="btn btn-main w-100">Filtrer</button></div>
+        <div class="col-md-3"><label>Période</label><select name="term" class="form-select"><option value="">Toutes</option><option value="term_1" {{ request('term')=='term_1' ? 'selected' : '' }}>Premier semestre</option><option value="term_2" {{ request('term')=='term_2' ? 'selected' : '' }}>Deuxième semestre</option><option value="term_3" {{ request('term')=='term_3' ? 'selected' : '' }}>Troisième semestre</option><option value="final" {{ request('term')=='final' ? 'selected' : '' }}>Final</option></select></div>
+        <div class="col-md-3 d-flex align-items-end">
+            <button type="submit" class="btn btn-main w-100">Filtrer</button> 
+            <a href="{{ route('admin.exams.index') }}" class="btn btn-outline-main w-100 ms-2">Réinitialiser</a>
+        </div>
     </form>
 </div>
 

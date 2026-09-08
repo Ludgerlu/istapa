@@ -53,7 +53,7 @@
             <h5 class="mb-20">Cursus & motivation</h5>
             <div class="row mb-16">
                 <div class="col-md-4 fw-semibold">Programme demandé</div>
-                <div class="col-md-8">{{ $admission->program->name ?? 'Non spécifié' }}</div>
+                <div class="col-md-8">{{ $admission->program->title ?? 'Non spécifié' }}</div>
             </div>
             <div class="row mb-16">
                 <div class="col-md-4 fw-semibold">Établissement précédent</div>

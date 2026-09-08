@@ -23,7 +23,7 @@
             @forelse($fees as $fee)
             <tr>
                 <td>{{ $fee->class->name ?? '—' }}</td>
-                <td>{{ $fee->academicYear->name ?? '—' }}</td>
+                <td>{{ $fee->academicyear->label ?? '—' }}</td>
                 <td>{{ $fee->category->name ?? '—' }}</td>
                 <td>{{ number_format($fee->amount, 2) }} FCFA</td>
                 <td>{{ $fee->due_date?->format('d/m/Y') ?? '—' }}</td>

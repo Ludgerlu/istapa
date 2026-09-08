@@ -16,7 +16,7 @@
             </div>
             <div class="col-md-4">
                 <label>Classe *</label>
-                <select name="class_id" class="form-select" required>
+                <select name="class_id" class="form-select" required disabled>
                     @foreach($classes as $c)
                         <option value="{{ $c->id }}" {{ old('class_id', $subject->class_id)==$c->id ? 'selected' : '' }}>{{ $c->name }}</option>
                     @endforeach
@@ -46,7 +46,7 @@
         </div>
     </div>
     <div class="d-flex justify-content-end gap-12 mt-24">
-        <a href="{{ route('admin.subjects.show', $subject) }}" class="btn bg-danger-600 rounded-pill">Annuler</a>
+        <a href="{{ route('admin.classes.show', $subject->class_id) }}" class="btn bg-danger-600 rounded-pill">Annuler</a>
         <button type="submit" class="btn btn-main rounded-pill">Mettre à jour</button>
     </div>
 </form>

@@ -3,7 +3,7 @@
 @section('content')
 <div class="d-flex justify-content-between mb-24">
     <h4>{{ $exam->name }}</h4>
-    <div><a href="{{ route('admin.exams.edit', $exam) }}" class="btn btn-main">Modifier</a> <a href="{{ route('admin.exams.index') }}" class="btn bg-danger-600">Retour</a></div>
+    <div><a href="{{ route('admin.exams.edit', $exam) }}" class="btn btn-main">Modifier</a> <a href="{{ route('admin.classes.show', $exam->class->id) }}" class="btn bg-danger-600">Retour</a></div>
 </div>
 
 <div class="bg-white rounded-10 p-24 mb-24">

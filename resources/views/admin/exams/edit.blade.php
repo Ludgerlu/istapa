@@ -101,7 +101,7 @@
     </div>
 
     <div class="d-flex gap-12 justify-content-end">
-        <a href="{{ route('admin.exams.show', $exam) }}" class="btn btn-outline-secondary rounded-pill px-24">Annuler</a>
+        <a href="{{ route('admin.exams.show', $exam) }}" class="btn btn-danger-600 rounded-pill px-24">Annuler</a>
         <button type="submit" class="btn bg-main-600 text-white rounded-pill px-24">Mettre à jour</button>
     </div>
 </form>

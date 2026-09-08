@@ -46,7 +46,8 @@ class SubjectController extends Controller
     {
         
         $classes = Classes::all();
-        $classId = $request->query('class_id') ?? null;
+        $classId = $request->input('class_id') ?? null;
+        // dd($classId);
         $teachers = TeacherDetail::with('user')->get();
         return view('admin.subjects.create', compact('classes', 'teachers', 'classId'));
     }

@@ -17,10 +17,10 @@
             </div>
             <div class="col-md-4">
                 <label>Classe *</label>
-                <select name="class_id" class="form-select" required>
+                <select name="class_id" class="form-select" required disabled>
                     <option value="">-- Sélectionner --</option>
                     @foreach($classes as $c)
-                        <option value="{{ $c->id }}" {{ old(('class_id')==$c->id || $classId==$c->id )? 'selected' : '' }}>{{ $c->name }}</option>
+                        <option value="{{ $c->id }}" {{ old(('class_id')==$c->id) || $classId==$c->id  ? 'selected' : '' }}>{{ $c->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -48,7 +48,7 @@
         </div>
     </div>
     <div class="d-flex justify-content-end gap-12 mt-24">
-        <a href="{{ route('admin.subjects.index') }}" class="btn bg-danger-600 rounded-pill">Annuler</a>
+        <a href="{{ route('admin.classes.show', $classId) }}" class="btn bg-danger-600 rounded-pill">Annuler</a>
         <button type="submit" class="btn btn-main rounded-pill">Créer</button>
     </div>
 </form>
