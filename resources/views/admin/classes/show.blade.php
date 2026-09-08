@@ -14,7 +14,7 @@
 {{-- Basic Info Card --}}
 <div class="bg-white rounded-10 p-24 mb-24">
     <div class="row">
-        <div class="col-md-3"><strong>Programme :</strong><br>{{ $class->program->name ?? '—' }}</div>
+        <div class="col-md-3"><strong>Programme :</strong><br>{{ $class->program->slug ?? '—' }}</div>
         <div class="col-md-3"><strong>Année scolaire :</strong><br>{{ $class->academicYear->label ?? '—' }}</div>
         <div class="col-md-3"><strong>Capacité :</strong><br>{{ $class->capacity ?? 'Illimitée' }}</div>
         <div class="col-md-3"><strong>Professeur principal :</strong><br>{{ $class->headTeacher->user->full_name ?? 'Non assigné' }}</div>
@@ -49,7 +49,7 @@
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <thead class="bg-main-25">
-                        <tr><th>Code</th><th>Nom</th><th>Coefficient</th><th>Heures/semaine</th><th>Enseignant</th></tr>
+                        <tr><th>Code</th><th>Nom</th><th>Coefficient</th><th>Heures/semaine</th><th>Enseignant</th><th>Actions</th></tr>
                     </thead>
                     <tbody>
                         @foreach($subjects as $subject)
@@ -58,7 +58,14 @@
                             <td>{{ $subject->name }}</td>
                             <td>{{ $subject->coefficient }}</td>
                             <td>{{ $subject->hours_per_week ?? '—' }}</td>
-                            <td>{{ $subject->teacher->user->full_name ?? 'Non assigné' }}</td>
+                            <td>{{ $subject->teacher->user->first_name ?? 'Non assigné' }} {{ $subject->teacher->user->last_name ?? '' }}</td>
+                            <td class="d-flex gap-8">
+                                <a href="{{ route('admin.subjects.edit', $subject->id) }}" class="btn btn-sm bg-warning-600"><i class="ph ph-pencil"></i></a>
+                                <form action="{{ route('admin.subjects.destroy', $subject->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette matière ?')">
+                                    @csrf @method('DELETE')
+                                    <button class="btn btn-sm bg-danger-600"><i class="ph ph-trash"></i></button>
+                                </form>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -73,13 +80,25 @@
     {{-- Exams Tab --}}
     <div class="tab-pane fade" id="exams">
         <div class="bg-white rounded-10 p-24">
-            <h5>Examens planifiés ({{ $exams->count() }})</h5>
+            
+            <div class="d-flex justify-content-between mb-16">
+                <h5>Examens planifiés ({{ $exams->count() }})</h5>
+                <a href="{{ route('admin.exams.create', ['class_id' => $class->id]) }}" class="btn btn-sm btn-outline-main rounded-pill"><i class="ph ph-plus"></i> Ajouter</a>
+            </div>
             @if($exams->count())
             @foreach($exams as $exam)
             <div class="card mb-20 border">
                 <div class="card-header bg-main-25">
-                    <strong>{{ $exam->name }}</strong> ({{ ucfirst($exam->exam_type) }} – {{ ucfirst($exam->term) }})<br>
-                    <small>Du {{ $exam->start_date ? $exam->start_date->format('d/m/Y') : '—' }} au {{ $exam->end_date ? $exam->end_date->format('d/m/Y') : '—' }}</small>
+                    <strong>
+                        {{ $exam->name }} 
+                        <small>
+                            Du {{ $exam->start_date ? $exam->start_date->format('d/m/Y') : '—' }}
+                            au {{ $exam->end_date ? $exam->end_date->format('d/m/Y') : '—' }}
+                        </small> 
+                    </strong>
+                    <a href="{{ route('admin.exams.show', $exam->id) }}" class="btn btn-sm bg-main-600">
+                        <i class="ph ph-eye"></i>
+                    </a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -129,7 +148,7 @@
                     <tbody>
                         @foreach($students as $enrollment)
                         @php $student = $enrollment->student; @endphp
-                        <tr>
+                        <tr onclick="window.location='{{ route('admin.users.show', $student->user->id) }}'" style="cursor: pointer;">
                             <td>{{ $student->matricule ?? '—' }}</td>
                             <td>{{ $student->user->first_name ?? '' }} {{ $student->user->last_name ?? '' }}</td>
                             <td>{{ $student->user->email ?? '—' }}</td>

@@ -19,7 +19,7 @@
             <select name="program_id" class="form-select">
                 <option value="">Tous</option>
                 @foreach($programs as $p)
-                    <option value="{{ $p->id }}" {{ request('program_id')==$p->id ? 'selected' : '' }}>{{ $p->name }}</option>
+                    <option value="{{ $p->id }}" {{ request('program_id')==$p->id ? 'selected' : '' }}>{{ $p->slug }}</option>
                 @endforeach
             </select>
         </div>
@@ -28,19 +28,20 @@
             <select name="academic_year_id" class="form-select">
                 <option value="">Toutes</option>
                 @foreach($academicYears as $y)
-                    <option value="{{ $y->id }}" {{ request('academic_year_id')==$y->id ? 'selected' : '' }}>{{ $y->label }}</option>
+                    <option value="{{ $y->id }}" {{ $year_id==$y->id ? 'selected' : '' }}>{{ $y->label }}</option>
                 @endforeach
             </select>
         </div>
         <div class="col-md-3 d-flex align-items-end">
             <button type="submit" class="btn btn-main w-100">Filtrer</button>
+            <a href="{{ route('admin.classes.index') }}" class="btn btn-outline-main w-100 ms-2">Réinitialiser</a>
         </div>
     </form>
 </div>
 
 <div class="bg-white rounded-10 p-24">
     <div class="overflow-x-auto">
-        <table class="table table-bordered">
+        <table class="table table-bordered" id="classes-table">
             <thead class="bg-main-25">
                 <tr>
                     <th>Nom</th>
@@ -57,7 +58,7 @@
                 <tr>
                     <td>{{ $class->name }}</td>
                     <td>{{ $class->section ?? '—' }}</td>
-                    <td>{{ $class->program->name ?? '—' }}</td>
+                    <td>{{ $class->program->slug ?? '—' }}</td>
                     <td>{{ $class->academicYear->label ?? '—' }}</td>
                     <td>{{ $class->capacity ?? '∞' }}</td>
                     <td>{{ $class->headTeacher->user->full_name ?? '—' }}</td>
@@ -76,8 +77,54 @@
             </tbody>
         </table>
     </div>
-    <div class="mt-24 d-flex justify-content-end">
-        {{ $classes->withQueryString()->links() }}
-    </div>
 </div>
 @endsection
+
+
+@push('scripts')
+<script>
+$(document).ready(function() {
+    // ---------- Select2 ----------
+    $('#program_id').select2({
+        placeholder: 'Choisir...',
+        allowClear: true,
+        width: '100%'
+    });
+
+    // ---------- DataTable ----------
+    var table = $('#classes-table').DataTable({
+       
+        language: {
+            url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json"
+        },
+        pageLength: 10,
+        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Tous"]],
+        dom: "<'row'<'col-sm-12 col-md-6 mb-3'l><'col-sm-12 col-md-6 mb-3'f>>" +
+             "<'row'<'col-md-6 mb-3'B>>" +
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+        buttons: [
+            {
+                extend: "excel",
+                className: "btn btn-sm btn-main",
+                text: '<i class="ph ph-file-xls"></i> Excel'
+            },
+            {
+                extend: "csv",
+                className: "btn btn-sm btn-main",
+                text: '<i class="ph ph-file-csv"></i> CSV'
+            },
+            {
+                extend: "pdf",
+                className: "btn btn-sm btn-main",
+                text: '<i class="ph ph-file-pdf"></i> PDF'
+            }
+        ],
+        order: [[0, 'asc']],
+        columnDefs: [
+            { targets: [6], orderable: false } // Actions non triable
+        ]
+    });
+});
+</script>
+@endpush

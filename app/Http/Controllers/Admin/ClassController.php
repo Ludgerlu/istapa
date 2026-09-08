@@ -23,12 +23,24 @@ class ClassController extends Controller
     {
         $query = Classes::with(['program', 'academicYear', 'headTeacher.user']);
 
+        $year_id = $request->input('academic_year_id');
+
+        // dd(empty($request->input('academic_year_id')));
+        if (empty($year_id)) {
+            // Default to the current academic year 
+            $currentAcademicYear = AcademicYear::where('is_current', true)->first();
+            $year_id = $currentAcademicYear ? $currentAcademicYear->id : null;
+            $query->where('academic_year_id', $currentAcademicYear->id);
+            // dd($currentAcademicYear);
+
+        }
         if ($request->filled('program_id')) {
             $query->where('program_id', $request->program_id);
         }
         if ($request->filled('academic_year_id')) {
             $query->where('academic_year_id', $request->academic_year_id);
         }
+        
         if ($request->filled('q')) {
             $search = $request->q;
             $query->where('name', 'like', "%{$search}%")
@@ -39,7 +51,7 @@ class ClassController extends Controller
         $programs = Program::all();
         $academicYears = AcademicYear::all();
 
-        return view('admin.classes.index', compact('classes', 'programs', 'academicYears'));
+        return view('admin.classes.index', compact('classes', 'programs', 'academicYears', 'year_id'));
     }
 
     /**
@@ -106,6 +118,37 @@ class ClassController extends Controller
             ->paginate(10);
 
         return view('admin.classes.show', compact('class', 'subjects', 'exams', 'students', 'attendanceSessions'));
+    }
+
+    public function attendances($class, Request $request)
+    {
+        $query = AttendanceSession::with(['class', 'subject', 'takenBy'])
+                    ->where('class_id', $class);
+
+     
+        // Filter by subject
+        if ($request->filled('subject_id')) {
+            $query->where('subject_id', $request->subject_id);
+        }
+
+        // Filter by date range
+        if ($request->filled('date_from')) {
+            $query->whereDate('session_date', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $query->whereDate('session_date', '<=', $request->date_to);
+        }
+
+        // Default order: most recent first
+        $sessions = $query->orderBy('session_date', 'desc')
+                        ->orderBy('start_time', 'desc')
+                        ->paginate(20);
+
+        // For filter dropdowns
+        // $classes = Classes::orderBy('name')->get();
+        $subjects = Subject::where('class_id', $class)->orderBy('name')->get(); // optional: you may want to restrict by class
+
+        return view('admin.classes.attendances', compact('sessions', 'subjects', 'class'));
     }
 
     /**

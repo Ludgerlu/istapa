@@ -128,6 +128,7 @@ Route::middleware(['auth'])->group(function () {
 
         // Classes
         Route::resource('classes', AdminClassController::class);
+        Route::get('classes/{class}/attendance', [AdminClassController::class, 'attendances'])->name('classes.attendances');
         Route::resource('subjects', AdminSubjectController::class);
         Route::resource('academic-years', AdminAcademicYearController::class);
         // Route::get('subjects/create?class_id={class_id}', [AdminSubjectController::class, 'create'])->name('subjects.create');
