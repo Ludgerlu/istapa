@@ -12044,6 +12044,7 @@ body::after {
     inset-inline-end: 54%;
     width: 716px;
     inset-block-start: 0;
+    height: 100%;
   }
 }
 .offer-message {

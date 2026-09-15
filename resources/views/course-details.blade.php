@@ -154,15 +154,15 @@
                         <div class="contact-info">
                             <div class="flex-align gap-12 mb-16">
                                 <i class="ph-bold ph-phone text-main-600 text-xl"></i>
-                                <a href="tel:+237699001122" class="text-neutral-600 hover-text-main-600">+237 699 001 122</a>
+                                <a href="tel:+237695533333" class="text-neutral-600 hover-text-main-600">+237 695-533-333</a>
                             </div>
                             <div class="flex-align gap-12 mb-16">
                                 <i class="ph-bold ph-envelope text-main-600 text-xl"></i>
-                                <a href="mailto:contact@istapa.site" class="text-neutral-600 hover-text-main-600">contact@istapa.site</a>
+                                <a href="mailto:contact@istapa.com" class="text-neutral-600 hover-text-main-600">contact@istapa.com</a>
                             </div>
                             <div class="flex-align gap-12">
                                 <i class="ph-bold ph-map-pin text-main-600 text-xl"></i>
-                                <span class="text-neutral-600">{{ app()->getLocale() === 'fr' ? 'Yaoundé, Cameroun' : 'Yaoundé, Cameroon' }}</span>
+                                <span class="text-neutral-600">{{ app()->getLocale() === 'fr' ? 'Soa - Ebogo I, Yaoundé, Cameroun' : 'Soa - Ebogo I, Yaoundé, Cameroon' }}</span>
                             </div>
                         </div>
                     </div>

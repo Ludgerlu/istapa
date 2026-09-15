@@ -220,13 +220,13 @@
 <div class="map-container py-60 bg-main-25">
     <div class="container">
         <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15915.205311479171!2d11.523847!3d3.866667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x108bcfc6f4a5b9b9%3A0x8a5e5e5e5e5e5e5e!2sYaound%C3%A9%2C%20Cameroon!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus" 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1019016.3297747128!2d9.999123210688218!3d3.9098003576307887!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x108bc70067919aff%3A0x2002826cc0603c1f!2sISTAPA%20-%20Institut%20Sup%C3%A9rieur%20des%20Technologies%20Agro-Pastorales%20Appliqu%C3%A9es!5e0!3m2!1sfr!2scm!4v1789471842834!5m2!1sfr!2scm" 
             width="100%" 
             height="450" 
             style="border:0;" 
             allowfullscreen="" 
             loading="lazy" 
-            referrerpolicy="no-referrer-when-downgrade">
+            referrerpolicy="strict-origin-when-cross-origin">
         </iframe>
     </div>
 </div>

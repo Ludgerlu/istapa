@@ -114,7 +114,7 @@
 
                 {{-- Panels for each album --}}
                 @foreach($albums as $index => $album)
-                    <div class="tab-pane fade @if($loop->first && !request()->has('album')) show active @endif"
+                    <div class="tab-pane fade"
                         id="pills-{{ $album->slug }}"
                         role="tabpanel"
                         aria-labelledby="pills-{{ $album->slug }}-tab"

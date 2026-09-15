@@ -13,7 +13,7 @@
     </button>
 
     <div class="banner-three__slider">
-        <div class="banner-three__item background-img bg-img linear-overlay position-relative" data-background-image="{{ asset('assets/images/thumbs/slide6.png') }}">
+        <div class="banner-three__item background-img bg-img linear-overlay position-relative" data-background-image="{{ asset('assets/images/thumbs/slide7.jpg') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-xxl-6 col-xl-8 col-lg-10 z-1">
@@ -30,7 +30,7 @@
                             </p>
                         </div>
                         <div class="buttons-wrapper flex-align flex-wrap gap-24 mt-40">
-                            <a href="{{ route('signin') }}" class="btn btn-main rounded-pill flex-align gap-8 wow bounceInLeft" data-wow-duration="1s" data-wow-delay=".5s">
+                            <a href="{{ route('contact') }}" class="btn btn-main rounded-pill flex-align gap-8 wow bounceInLeft" data-wow-duration="1s" data-wow-delay=".5s">
                                 Postuler Maintenant
                                 <i class="ph-bold ph-arrow-up-right d-flex text-lg"></i>
                             </a>
@@ -57,8 +57,8 @@
                             </p>
                         </div>
                         <div class="buttons-wrapper flex-align flex-wrap gap-24 mt-40">
-                            <a href="{{ route('signin') }}" class="btn btn-main rounded-pill flex-align gap-8 wow bounceInLeft" data-wow-duration="1s" data-wow-delay=".5s">
-                                Postuler Maintenant
+                            <a href="{{ route('contact') }}" class="btn btn-main rounded-pill flex-align gap-8 wow bounceInLeft" data-wow-duration="1s" data-wow-delay=".5s">
+                                Nous Contacter
                                 <i class="ph-bold ph-arrow-up-right d-flex text-lg"></i>
                             </a>
                         </div>
@@ -66,7 +66,7 @@
                 </div>
             </div>
         </div>
-        <div class="banner-three__item background-img bg-img linear-overlay position-relative" data-background-image="{{ asset('assets/images/thumbs/slide1.jpg') }}">
+        <div class="banner-three__item background-img bg-img linear-overlay position-relative" data-background-image="{{ asset('assets/images/thumbs/slide5.png') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-xxl-6 col-xl-8 col-lg-10 z-1">
@@ -84,8 +84,8 @@
                             </p>
                         </div>
                         <div class="buttons-wrapper flex-align flex-wrap gap-24 mt-40">
-                            <a href="{{ route('signin') }}" class="btn btn-main rounded-pill flex-align gap-8 wow bounceInLeft" data-wow-duration="1s" data-wow-delay=".5s">
-                                Postuler Maintenant
+                            <a href="{{ route('contact') }}" class="btn btn-main rounded-pill flex-align gap-8 wow bounceInLeft" data-wow-duration="1s" data-wow-delay=".5s">
+                                Nous Contacter
                                 <i class="ph-bold ph-arrow-up-right d-flex text-lg"></i>
                             </a>
                         </div>
@@ -155,16 +155,16 @@
                         <img src="{{ asset('assets/images/shapes/shape7.png') }}" alt="" class="shape seven animation-scalation" />
                         <div class="row gy-4">
                             <div class="col-sm-6">
-                                <img src="{{ asset('assets/images/thumbs/about-1.jpg') }}" alt="" class="rounded-12 w-100" data-tilt data-tilt-max="15" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening />
+                                <img src="{{ asset('assets/images/thumbs/about-4.jpg') }}" alt="" class="rounded-12 w-100" data-tilt data-tilt-max="15" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening />
                             </div>
                             <div class="col-sm-6">
                                 <div class="mb-24">
                                     <div class="bg-main-600 rounded-12 text-center py-24 px-2 min-w-max" data-aos="fade-right">
-                                        <h1 class="mb-0 text-white counter">16+</h1>
+                                        <h1 class="mb-0 text-white counter">+ 3</h1>
                                         <span class="text-white">Années d'expérience</span>
                                     </div>
                                 </div>
-                                <img src="{{ asset('assets/images/thumbs/about-2.jpg') }}" alt="" class="rounded-12 w-100" data-tilt data-tilt-max="20" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening />
+                                <img src="{{ asset('assets/images/thumbs/about-3.jpg') }}" alt="" class="rounded-12 w-100" data-tilt data-tilt-max="20" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening />
                             </div>
                         </div>
                     </div>
@@ -336,12 +336,14 @@
                     @endforelse
                     <div class="testimonials-three-item bg-white p-24 rounded-12 box-shadow-md">
                         <div class="w-90 h-90 rounded-circle position-relative mb-4">
-                            <img src="assets/images/thumbs/testimonials-three-img2.png" alt="" class="cover-img rounded-circle">
+                            <div class="cover-img rounded-circle bg-main-600 flex-center text-white" style="font-size: 32px; font-weight: 600;">
+                                RO
+                            </div>
                             <span class="w-40 h-40 bg-main-600 flex-center border border-white border-2 rounded-circle position-absolute inset-block-end-0 inset-inline-end-0 mt--5 me--5">
                                 <img src="assets/images/icons/quote-two-icon.png" alt="">
                             </span>
                         </div>
-                        <p class="text-neutral-500 my-24">Attending [University Name] was one of the best decisions I've made. The </p>
+                        <p class="text-neutral-500 my-24">Attending ISTAPA was one of the best decisions I've made to improve my skills and advance my career.</p>
                         <ul class="flex-align gap-8 mb-16">
                             <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
                             <li class="text-warning-600 text-xl d-flex"><i class="ph-fill ph-star"></i></li>
@@ -563,7 +565,7 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="join-community__thumb text-end position-relative">
-                            <img src="{{ asset('assets/images/thumbs/contact1.jpg') }}" alt="" class="wow bounceIn" data-tilt data-tilt-max="12" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening />
+                            <img src="{{ asset('assets/images/thumbs/contact2.jpg') }}" alt="" class="wow bounceIn" data-tilt data-tilt-max="12" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening />
                         </div>
                     </div>
                 </div>
@@ -582,6 +584,9 @@
                 <div class="brand-slider">
                     <div class="brand-slider__item px-24">
                         <img src="{{ asset('assets/images/thumbs/cefprepa.png') }}" alt="" />
+                    </div>
+                    <div class="brand-slider__item px-24">
+                        <img src="{{ asset('assets/images/thumbs/logo-isabee.jpg') }}" alt="" />
                     </div>
                     <div class="brand-slider__item px-24">
                         <img src="{{ asset('assets/images/thumbs/Sharda-University-Logo-Vector.png') }}" alt="" />

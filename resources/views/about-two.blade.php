@@ -36,7 +36,7 @@
         <div class="row gy-5 align-items-center">
             <div class="col-lg-6">
                 <div class="about-thumbs">
-                    <img src="https://istapa.com/wp-content/uploads/2025/06/457774318_122130731990331499_8404464423876650403_n-768x768.jpg" alt="ISTAPA Campus" class="rounded-12 w-100" data-tilt data-tilt-max="10">
+                    <img src="{{ asset('assets/images/thumbs/about-7.jpg') }}" alt="ISTAPA Campus" class="rounded-12 w-100 h-100" data-tilt data-tilt-max="10">
                 </div>
             </div>
             <div class="col-lg-6">
@@ -53,7 +53,7 @@
                             <div class="flex-align gap-12">
                                 <span class="w-48 h-48 bg-main-25 rounded-circle flex-center text-main-600 text-xl"><i class="ph-bold ph-building"></i></span>
                                 <div>
-                                    <h4 class="mb-0">5+</h4>
+                                    <!-- <h4 class="mb-0">5+</h4> -->
                                     <span class="text-neutral-500">Bâtiments Modernes</span>
                                 </div>
                             </div>
@@ -62,7 +62,7 @@
                             <div class="flex-align gap-12">
                                 <span class="w-48 h-48 bg-main-25 rounded-circle flex-center text-main-600 text-xl"><i class="ph-bold ph-flask"></i></span>
                                 <div>
-                                    <h4 class="mb-0">8</h4>
+                                    <!-- <h4 class="mb-0">8</h4> -->
                                     <span class="text-neutral-500">Laboratoires Spécialisés</span>
                                 </div>
                             </div>
@@ -71,7 +71,7 @@
                             <div class="flex-align gap-12">
                                 <span class="w-48 h-48 bg-main-25 rounded-circle flex-center text-main-600 text-xl"><i class="ph-bold ph-user-switch"></i></span>
                                 <div>
-                                    <h4 class="mb-0">50+</h4>
+                                    <!-- <h4 class="mb-0">50+</h4> -->
                                     <span class="text-neutral-500">Enseignants Qualifiés</span>
                                 </div>
                             </div>
@@ -80,7 +80,7 @@
                             <div class="flex-align gap-12">
                                 <span class="w-48 h-48 bg-main-25 rounded-circle flex-center text-main-600 text-xl"><i class="ph-bold ph-tree"></i></span>
                                 <div>
-                                    <h4 class="mb-0">10</h4>
+                                    <!-- <h4 class="mb-0">10</h4> -->
                                     <span class="text-neutral-500">Hectares de Terrain Agricole</span>
                                 </div>
                             </div>
@@ -374,7 +374,7 @@
         <div class="row gy-4">
             <div class="col-lg-6">
                 <div class="p-32 bg-white rounded-12 border border-neutral-30 h-100 text-center">
-                    <img src="{{ asset('assets/images/thumbs/isabee-default.png') }}" alt="ISABEE - Université de Bertoua" class="mb-24" style="max-height:64px;">
+                    <img src="{{ asset('assets/images/thumbs/logo-isabee.jpg') }}" alt="ISABEE - Université de Bertoua" class="mb-24" style="max-height:64px;">
                     <h4 class="mb-16">Tutelle Académique</h4>
                     <p class="text-neutral-500 mb-0">Tutelle académique en cours avec l'Université de Bertoua, notamment à travers l'Institut Supérieur d'Agriculture, du Bois, de l'Eau et de l'Environnement (ISABEE).</p>
                 </div>

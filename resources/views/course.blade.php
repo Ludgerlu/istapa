@@ -142,7 +142,7 @@
                 <div class="why-choose-us__thumb position-relative">
                     <img src="{{ asset('assets/images/thumbs/why-choose-us.jpg') }}" alt="Why Choose ISTAPA" class="rounded-16 w-100">
                     <div class="experience-card bg-main-600 text-white rounded-16 p-24 position-absolute bottom-0 end-0 mb-32 me-32 text-center">
-                        <span class="display-4 fw-bold">+10</span>
+                        <span class="display-4 fw-bold">+ 3</span>
                         <span class="d-block">{{ app()->getLocale() === 'fr' ? 'Années d\'excellence' : 'Years of excellence' }}</span>
                     </div>
                 </div>
@@ -212,33 +212,6 @@
 </section>
 <!-- ==================== Why Choose Us Section End Here ==================== -->
 
-<!-- ==================== Call to Action Start Here ==================== -->
-<section class="cta py-80 bg-main-600 mt-80">
-    <div class="container">
-        <div class="row justify-content-center text-center">
-            <div class="col-lg-8" data-aos="zoom-in">
-                <h2 class="text-white mb-16">
-                    {{ app()->getLocale() === 'fr' ? 'Prêt à rejoindre l\'ISTAPA ?' : 'Ready to join ISTAPA?' }}
-                </h2>
-                <p class="text-white opacity-75 mb-32">
-                    {{ app()->getLocale() === 'fr' 
-                        ? 'Inscrivez-vous dès maintenant et commencez votre parcours vers une carrière réussie dans l\'agriculture et l\'environnement.' 
-                        : 'Register now and start your journey towards a successful career in agriculture and environment.' }}
-                </p>
-                <div class="flex-center gap-16 flex-wrap">
-                    <a href="{{ route('admission') }}" class="btn btn-white rounded-pill px-40 py-14 fw-semibold">
-                        {{ app()->getLocale() === 'fr' ? 'Postuler maintenant' : 'Apply now' }}
-                        <i class="ph-bold ph-arrow-right ms-8"></i>
-                    </a>
-                    <a href="{{ route('contact') }}" class="btn btn-outline-white rounded-pill px-40 py-14 fw-semibold">
-                        {{ app()->getLocale() === 'fr' ? 'Nous contacter' : 'Contact us' }}
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- ==================== Call to Action End Here ==================== -->
 @endsection
 
 @push('styles')

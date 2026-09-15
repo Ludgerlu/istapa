@@ -48,30 +48,22 @@
                 <div class="col-xl-6">
                     <div class="about-thumbs position-relative pe-lg-5">
                         <img src="{{ asset('assets/images/shapes/shape7.png') }}" alt="" class="shape seven animation-scalation">
-    
-                        <div class="offer-message px-24 py-12 rounded-12 bg-main-two-50 fw-medium flex-align d-inline-flex gap-16 border border-neutral-30 animation-upDown">
-                            <span class="flex-shrink-0 w-48 h-48 bg-main-two-600 text-white text-2xl flex-center rounded-circle"><i class="ph ph-watch"></i></span>
-                            <div>
-                                <h6 class="mb-4">20% OFF</h6>
-                                <span class="text-neutral-500">Pour Toutes les Formations</span>
-                            </div>
-                        </div>
                         <div class="row gy-4">
                             <div class="col-sm-6">
-                                <img src="{{ asset('assets/images/thumbs/fondateur.jpg') }}" alt="" class="rounded-12 w-100" data-tilt data-tilt-max="15" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening>
+                                <img src="{{ asset('assets/images/thumbs/fondateur.jpg') }}" alt="" class="rounded-12 w-100 h-100" data-tilt data-tilt-max="15" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening>
                             </div>
                             <div class="col-sm-6">
                                 <div class="flex-align gap-24 mb-24">
                                     <div class="bg-main-600 rounded-12 text-center py-24 px-2 w-50-percent" data-aos="fade-right">    
-                                        <h1 class="mb-0 text-white counter">16+</h1>
+                                        <h1 class="mb-0 text-white counter">+ 3</h1>
                                         <span class="text-white">Années d'expérience</span>
                                     </div>
                                     <div class="bg-neutral-700 rounded-12 text-center py-24 px-2 w-50-percent" data-aos="fade-left">    
-                                        <h1 class="mb-0 text-white counter">3.2k</h1>
+                                        <h1 class="mb-0 text-white counter">500</h1>
                                         <span class="text-white">Étudiants formés</span>
                                     </div>
                                 </div>
-                                <img src="{{ asset('assets/images/thumbs/slide5.png') }}" alt="" class="rounded-12 w-100" data-tilt data-tilt-max="20" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening>
+                                <img src="{{ asset('assets/images/thumbs/fondateur1.jpg') }}" alt="" class="rounded-12 w-100" data-tilt data-tilt-max="20" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening>
                             </div>
                         </div>
                     </div>
@@ -175,84 +167,21 @@
             </div>
             <div class="col-xl-6">
                 <div class="choose-us__thumbs position-relative">
-                    <div class="offer-message style-two px-24 py-12 rounded-12 bg-white fw-medium flex-align d-inline-flex gap-16 box-shadow-lg animation-upDown">
-                        <span class="flex-shrink-0 w-48 h-48 bg-dark-yellow text-white text-2xl flex-center rounded-circle">
-                            <img src="{{ asset('assets/images/icons/stars.png') }}" alt="">
-                        </span>
-                        <div>
-                            <span class="text-lg text-neutral-700 d-block">4.6 <span class="text-neutral-100">(2.4k)</span></span>
-                            <span class="text-neutral-500">Avis Moyens</span>
-                        </div>
-                    </div>
-
                     <div class="text-end" data-aos="zoom-out">
                         <div class="d-sm-inline-block d-block position-relative">
                             <img src="{{ asset('assets/images/thumbs/choose-us-img2.jpg') }}" alt="" class="choose-us__img rounded-12" data-tilt data-tilt-max="16" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-full-page-listening>
-                            <span class="shadow-main-two w-80 h-80 flex-center bg-main-two-600 rounded-circle position-absolute inset-block-start-0 inset-inline-start-0 mt-40 ms--40 animation-upDown">
-                                <img src="{{ asset('assets/images/icons/book.png') }}" alt="">
-                            </span>
+                            
                             <a href="https://www.youtube.com/watch?v=2tNKYy1ftb4" class="play-button w-48 h-48 flex-center bg-main-600 text-white rounded-circle text-xl position-absolute top-50 start-50 translate-middle">
                                 <i class="ph-fill ph-play"></i>
                             </a>
                         </div>
                     </div>
-                    <!-- <div class="animation-video" data-aos="zoom-in">
-                        <img src="{{ asset('assets/images/thumbs/choose-us-img2.jpg') }}" alt="" class="border border-white rounded-circle border-3" data-tilt>
-                        <a href="https://www.youtube.com/watch?v=2tNKYy1ftb4" class="play-button w-48 h-48 flex-center bg-main-600 text-white rounded-circle text-xl position-absolute top-50 start-50 translate-middle">
-                            <i class="ph-fill ph-play"></i>
-                        </a>
-                    </div> -->
                 </div>
             </div>
         </div>
     </div>
 </section>
 <!-- =========================== CHoose Us Section End ================================ -->
-
-<!-- ========================== Counter Section start ============================== -->
-<section class="counter py-120">
-    <div class="container">
-        <div class="row gy-4">
-            <div class="col-xl-3 col-sm-6 col-xs-6" data-aos="fade-up" data-aos-duration="200">
-                <div class="counter-item animation-item h-100 text-center px-16 py-32 rounded-12 bg-main-25 border border-neutral-30">
-                    <span class="w-80 h-80 flex-center d-inline-flex bg-white text-main-600 text-40 rounded-circle box-shadow-md mb-24">
-                        <i class="animate__wobble ph ph-users"></i>
-                    </span>
-                    <h2 class="display-four mb-16 text-neutral-700 counter">1.6K</h2>
-                    <span class="text-neutral-500 text-lg">Formés avec Succès</span>
-                </div>
-            </div>
-            <div class="col-xl-3 col-sm-6 col-xs-6" data-aos="fade-up" data-aos-duration="400">
-                <div class="counter-item animation-item h-100 text-center px-16 py-32 rounded-12 bg-main-two-25 border border-neutral-30">
-                    <span class="w-80 h-80 flex-center d-inline-flex bg-white text-main-two-600 text-40 rounded-circle box-shadow-md mb-24">
-                        <i class="animate__wobble ph ph-video-camera"></i>
-                    </span>
-                    <h2 class="display-four mb-16 text-neutral-700 counter">16.5K</h2>
-                    <span class="text-neutral-500 text-lg">Cours Complétés</span>
-                </div>
-            </div>
-            <div class="col-xl-3 col-sm-6 col-xs-6" data-aos="fade-up" data-aos-duration="600">
-                <div class="counter-item animation-item h-100 text-center px-16 py-32 rounded-12 bg-main-25 border border-neutral-30">
-                    <span class="w-80 h-80 flex-center d-inline-flex bg-white text-main-600 text-40 rounded-circle box-shadow-md mb-24">
-                        <i class="animate__wobble ph ph-thumbs-up"></i>
-                    </span>
-                    <h2 class="display-four mb-16 text-neutral-700 counter">45.8K</h2>
-                    <span class="text-neutral-500 text-lg">Taux de Satisfaction</span>
-                </div>
-            </div>
-            <div class="col-xl-3 col-sm-6 col-xs-6" data-aos="fade-up" data-aos-duration="800">
-                <div class="counter-item animation-item h-100 text-center px-16 py-32 rounded-12 bg-main-two-25 border border-neutral-30">
-                    <span class="w-80 h-80 flex-center d-inline-flex bg-white text-main-two-600 text-40 rounded-circle box-shadow-md mb-24">
-                        <i class="animate__wobble ph ph-users-three"></i>
-                    </span>
-                    <h2 class="display-four mb-16 text-neutral-700 counter">55.6K</h2>
-                    <span class="text-neutral-500 text-lg">Communauté Étudiante</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- ========================== Counter Section End ============================== -->
 
 <!-- ================================= testimonials Section Start ========================================= -->
 <section class="testimonials py-120 position-relative z-1 bg-main-25">
