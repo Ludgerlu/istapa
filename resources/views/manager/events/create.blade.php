@@ -24,6 +24,6 @@
             <div class="col-md-12"><div class="form-check"><input type="checkbox" name="is_published" value="1" class="form-check-input"> Publié</div></div>
         </div>
     </div>
-    <div class="d-flex gap-12 justify-content-end"><a href="{{ route('manager.events.index') }}" class="btn btn-outline-secondary">Annuler</a><button type="submit" class="btn bg-main-600 text-white">Créer</button></div>
+    <div class="d-flex gap-12 justify-content-end"><a href="{{ route('manager.events.index') }}" class="btn bg-danger-600">Annuler</a><button type="submit" class="btn bg-main-600 text-white">Créer</button></div>
 </form>
 @endsection

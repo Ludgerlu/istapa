@@ -51,11 +51,11 @@
                     <td>@if($event->is_published) <span class="badge bg-success-100 text-success-600">Publié</span> @else <span class="badge bg-neutral-100 text-neutral-500">Brouillon</span> @endif</td>
                     <td>{{ $event->view_count ?? 0 }}</td>
                     <td class="d-flex gap-8">
-                        <a href="{{ route('manager.events.show', $event) }}" class="w-32 h-32 rounded-circle border border-neutral-40 d-flex align-items-center justify-content-center text-neutral-500 hover-bg-main-600 hover-text-white transition-03"><i class="ph ph-eye"></i></a>
-                        <a href="{{ route('manager.events.edit', $event) }}" class="w-32 h-32 rounded-circle border border-neutral-40 d-flex align-items-center justify-content-center text-neutral-500 hover-bg-main-600 hover-text-white transition-03"><i class="ph ph-pencil"></i></a>
+                        <a href="{{ route('manager.events.show', $event) }}" class="w-32 h-32 rounded-circle border border-neutral-40 d-flex align-items-center justify-content-center text-neutral-500 bg-main-600 hover-text-white transition-03"><i class="ph ph-eye"></i></a>
+                        <a href="{{ route('manager.events.edit', $event) }}" class="w-32 h-32 rounded-circle border border-neutral-40 d-flex align-items-center justify-content-center text-neutral-500 bg-warning-600 hover-text-white transition-03"><i class="ph ph-pencil"></i></a>
                         <form action="{{ route('manager.events.destroy', $event) }}" method="POST" onsubmit="return confirm('Supprimer ?')">
                             @csrf @method('DELETE')
-                            <button class="w-32 h-32 rounded-circle border border-neutral-40 d-flex align-items-center justify-content-center text-neutral-500 hover-bg-danger hover-text-white transition-03 bg-transparent"><i class="ph ph-trash"></i></button>
+                            <button class="w-32 h-32 rounded-circle border border-neutral-40 d-flex align-items-center justify-content-center text-neutral-500 bg-danger-600 hover-text-white transition-03"><i class="ph ph-trash"></i></button>
                         </form>
                     </td>
                 </tr>
