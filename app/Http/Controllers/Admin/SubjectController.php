@@ -67,7 +67,15 @@ class SubjectController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        Subject::create($validated);
+        $subject = Subject::create($validated);
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Matière créée avec succès.',
+                'data' => $subject->load(['class', 'teacher.user'])
+            ]);
+        }
 
         return redirect()->route('admin.subjects.index')
                          ->with('success', 'Matière créée avec succès.');
@@ -121,6 +129,14 @@ class SubjectController extends Controller
 
         $subject->update($validated);
 
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Matière mise à jour.',
+                'data' => $subject->fresh(['class', 'teacher.user'])
+            ]);
+        }
+
         return redirect()->route('admin.subjects.show', $subject)
                          ->with('success', 'Matière mise à jour.');
     }
@@ -139,7 +155,9 @@ class SubjectController extends Controller
         }
 
         $subject->delete();
-        return redirect()->route('admin.subjects.index')
-                         ->with('success', 'Matière supprimée.');
-    }
+        return response()->json([
+                'success' => true,
+                'message' => 'Matière supprimée.'
+            ]);
+        }
 }

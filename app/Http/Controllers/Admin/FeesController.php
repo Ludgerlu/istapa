@@ -228,4 +228,59 @@ class FeesController extends Controller
         return redirect()->route('fees.structure')
             ->with('success', 'Fee structure updated.');
     }
+
+    public function recordPayment(Request $request, $studentId)
+    {
+        $validated = $request->validate([
+            'fee_id'          => 'required|exists:fees,id',
+            'amount'          => 'required|numeric|min:1',
+            'paid_on'         => 'required|date',
+            'payment_method'  => 'required|in:cash,mobile_money,bank_transfer,cheque',
+            'transaction_ref' => 'nullable|string|max:100',
+            'notes'           => 'nullable|string|max:255',
+        ]);
+
+        $fee = Fee::find($validated['fee_id']);
+
+        $payment = FeePayment::create([
+            'student_id'      => $studentId,
+            'fee_id'          => $validated['fee_id'],
+            'amount_paid'     => $validated['amount'],
+            'paid_on'         => $validated['paid_on'],
+            'payment_method'  => $validated['payment_method'],
+            'transaction_ref' => $validated['transaction_ref'],
+            'notes'           => $validated['notes'],
+            'received_by'     => auth()->id(),
+        ]);
+
+        // Recalculate totals for this student in the class
+        $classFees = Fee::where('class_id', $fee->class_id)
+                        ->where('academic_year_id', $fee->academic_year_id)
+                        ->get();
+        $totalFees = $classFees->sum('amount');
+        $totalPaid = FeePayment::where('student_id', $studentId)
+                            ->whereIn('fee_id', $classFees->pluck('id'))
+                            ->sum('amount_paid');
+        $balance = $totalFees - $totalPaid;
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Paiement enregistré avec succès.',
+            'payment' => [
+                'id'          => $payment->id,
+                'amount'      => $payment->amount_paid,
+                'date'        => $payment->paid_on->format('d/m/Y'),
+                'method'      => $payment->payment_method,
+                'reference'   => $payment->transaction_ref,
+                'category'    => $fee->category->name ?? '—',
+                'received_by' => auth()->user()->name ?? '—'
+            ],
+            'totals' => [
+                'total_fees' => $totalFees,
+                'total_paid' => $totalPaid,
+                'balance'    => $balance,
+                'status'     => $balance <= 0 ? 'paid' : ($totalPaid > 0 ? 'partial' : 'unpaid')
+            ]
+        ]);
+    }
 }

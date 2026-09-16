@@ -58,11 +58,9 @@ class GalleryImageController extends Controller
      * Display a single album publicly (front office), with its images.
      * Looks up by slug so public URLs don't leak database IDs.
      */
-    public function show($slug)
+    public function show($id)
     {
-        $album = GalleryAlbum::with(['images' => function ($query) {
-            $query->orderBy('sort_order');
-        }])->where('slug', $slug)->firstOrFail();
+        $album = GalleryAlbum::with('images')->findOrFail($id);
 
         return view($this->getRoutePrefix() . '.gallery.show', compact('album'));
     }
@@ -92,7 +90,7 @@ class GalleryImageController extends Controller
 
         $album->update($validated);
 
-        return redirect()->route($this->getRoutePrefix() . '.gallery.edit', $album->id)
+        return redirect()->route($this->getRoutePrefix() . '.gallery.show', $album->id)
                          ->with('success', 'Album mis à jour avec succès.');
     }
 

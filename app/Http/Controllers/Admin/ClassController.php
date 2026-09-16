@@ -11,6 +11,8 @@ use App\Models\Subject;
 use App\Models\Exam;
 use App\Models\ClassEnrollment;
 use App\Models\AttendanceSession;
+use App\Models\Fee;
+use App\Models\FeePayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -109,6 +111,7 @@ class ClassController extends Controller
             ->where('class_id', $class->id)
             ->where('status', 'active')
             ->get();
+        
 
         // Attendance sessions (last 10)
         $attendanceSessions = AttendanceSession::with(['subject', 'takenBy'])
@@ -117,7 +120,59 @@ class ClassController extends Controller
             ->orderBy('start_time', 'desc')
             ->paginate(10);
 
-        return view('admin.classes.show', compact('class', 'subjects', 'exams', 'students', 'attendanceSessions'));
+        // Get fees for this class
+        $fees = Fee::where('class_id', $class->id)
+                ->where('academic_year_id', $class->academic_year_id)
+                ->get();
+        $totalFeesAmount = $fees->sum('amount');
+
+        // Get all payments for these fees
+        $feeIds = $fees->pluck('id');
+        $payments = FeePayment::whereIn('fee_id', $feeIds)
+                            ->with(['student', 'fee', 'receivedBy'])
+                            ->get();
+        $paymentsByStudent = $payments->groupBy('student_id');
+
+        // Build student data for the payment modal
+        $studentsData = [];
+        foreach ($students as $enrollment) {
+            $studentId = $enrollment->student_id;
+            $studentPayments = $paymentsByStudent->get($studentId, collect());
+            $totalPaid = $studentPayments->sum('amount_paid');
+            $balance = $totalFeesAmount - $totalPaid;
+            $studentsData[] = [
+                'id'          => $studentId,
+                'name'        => $enrollment->student->user->full_name ?? '—',
+                'matricule'   => $enrollment->student->matricule ?? '—',
+                'total_fees'  => $totalFeesAmount,
+                'total_paid'  => $totalPaid,
+                'balance'     => $balance,
+                'status'      => $balance <= 0 ? 'paid' : ($totalPaid > 0 ? 'partial' : 'unpaid'),
+                'payments'    => $studentPayments->map(function ($p) {
+                    return [
+                        'id'          => $p->id,
+                        'amount'      => $p->amount_paid,
+                        'date'        => $p->paid_on ? $p->paid_on->format('d/m/Y') : '—',
+                        'method'      => $p->payment_method,
+                        'reference'   => $p->transaction_ref,
+                        'category'    => $p->fee->category->name ?? '—',
+                        'received_by' => $p->receivedBy->name ?? '—'
+                    ];
+                })->toArray()
+            ];
+        }
+
+        $todaySessions = AttendanceSession::with(['subject', 'takenBy'])
+            ->where('class_id', $class->id)
+            ->whereDate('session_date', today())
+            ->orderBy('session_date', 'desc')
+            ->orderBy('start_time', 'desc')
+            ->get();
+
+        return view('admin.classes.show', compact(
+            'class', 'subjects', 'exams', 'students', 'attendanceSessions',
+             'fees', 'studentsData', 'todaySessions'
+        ));
     }
 
     public function attendances($class, Request $request)
@@ -207,5 +262,52 @@ class ClassController extends Controller
         $class->delete();
         return redirect()->route('admin.classes.index')
                          ->with('success', 'Classe supprimée.');
+    }
+
+    public function attendanceSessions(Request $request, Classes $class)
+    {
+        $query = AttendanceSession::with(['subject', 'takenBy'])
+            ->where('class_id', $class->id);
+
+        // Filter by date range
+        if ($request->filled('date_from')) {
+            $query->whereDate('session_date', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $query->whereDate('session_date', '<=', $request->date_to);
+        }
+        // Filter by subject
+        if ($request->filled('subject_id')) {
+            $query->where('subject_id', $request->subject_id);
+        }
+
+        $sessions = $query->orderBy('session_date', 'desc')
+                        ->orderBy('start_time', 'desc')
+                        ->paginate(15);
+
+        // Build response data
+        $data = [
+            'sessions' => $sessions->map(function ($session) {
+                return [
+                    'id'          => $session->id,
+                    'subject'     => $session->subject->name ?? '—',
+                    'date'        => $session->session_date->format('d/m/Y'),
+                    'start_time'  => $session->start_time ? \Carbon\Carbon::parse($session->start_time)->format('H:i') : '—',
+                    'end_time'    => $session->end_time ? \Carbon\Carbon::parse($session->end_time)->format('H:i') : '—',
+                    'taken_by'    => $session->takenBy->first_name ?? '' . ' ' . ($session->takenBy->last_name ?? ''),
+                    'details_url' => route('admin.attendances.show', $session),
+                ];
+            }),
+            'pagination' => [
+                'current_page' => $sessions->currentPage(),
+                'last_page'    => $sessions->lastPage(),
+                'per_page'     => $sessions->perPage(),
+                'total'        => $sessions->total(),
+                'next_page_url' => $sessions->nextPageUrl(),
+                'prev_page_url' => $sessions->previousPageUrl(),
+            ]
+        ];
+
+        return response()->json($data);
     }
 }

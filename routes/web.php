@@ -131,6 +131,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('classes/{class}/attendance', [AdminClassController::class, 'attendances'])->name('classes.attendances');
         Route::resource('subjects', AdminSubjectController::class);
         Route::resource('academic-years', AdminAcademicYearController::class);
+        Route::get('classes/{class}/attendance-sessions', [AdminAcademicYearController::class, 'attendanceSessions'])->name('classes.attendance-sessions');
         // Route::get('subjects/create?class_id={class_id}', [AdminSubjectController::class, 'create'])->name('subjects.create');
     
         // Attendance sessions (for presence list)
@@ -138,10 +139,12 @@ Route::middleware(['auth'])->group(function () {
 
         // ── Fees ──────────────────────────────────────────────────────────────
         Route::resource('fees', AdminFeesController::class);
+        
         Route::prefix('fees')->name('fees.')->group(function () {
             Route::get('/payment/create',                [AdminFeesController::class, 'createPayment'])   ->name('create-payment');
             Route::post('/payment',                      [AdminFeesController::class, 'storePayment'])    ->name('store-payment');
             Route::get('/student/{student}',             [AdminFeesController::class, 'studentFees'])     ->name('student');
+            Route::post('students/{student}/payments', [AdminFeesController::class, 'recordPayment'])->name('students.payments.store');
             Route::get('/receipt/{payment}',             [AdminFeesController::class, 'receipt'])         ->name('receipt');
             Route::get('/structure',                     [AdminFeesController::class, 'structure'])       ->name('structure');
             Route::put('/structure',                     [AdminFeesController::class, 'updateStructure']) ->name('update-structure');
