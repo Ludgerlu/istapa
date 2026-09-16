@@ -89,12 +89,12 @@
                     <td class="py-16 px-20 shadow-none">
                         <div class="d-flex align-items-center gap-8">
                             <a href="{{ route('manager.blogs.show', $blog->id) }}"
-                               class="w-32 h-32 rounded-circle border border-neutral-40 d-flex align-items-center justify-content-center text-neutral-500 hover-bg-main-600 hover-text-white transition-03"
+                               class="w-32 h-32 rounded-circle border border-neutral-40 d-flex align-items-center justify-content-center text-neutral-500 bg-main-600 hover-text-white transition-03"
                                title="Voir">
                                 <i class="ph ph-eye text-14"></i>
                             </a>
                             <a href="{{ route('manager.blogs.edit', $blog->id) }}"
-                               class="w-32 h-32 rounded-circle border border-neutral-40 d-flex align-items-center justify-content-center text-neutral-500 hover-bg-main-600 hover-text-white transition-03"
+                               class="w-32 h-32 rounded-circle border border-neutral-40 d-flex align-items-center justify-content-center text-neutral-500 bg-warning-600 hover-text-white transition-03"
                                title="Modifier">
                                 <i class="ph ph-pencil text-14"></i>
                             </a>
@@ -102,7 +102,7 @@
                                   onsubmit="return confirm('Supprimer cet article ?')">
                                 @csrf @method('DELETE')
                                 <button type="submit"
-                                        class="w-32 h-32 rounded-circle border border-neutral-40 d-flex align-items-center justify-content-center text-neutral-500 hover-bg-danger hover-text-white transition-03 bg-transparent"
+                                        class="w-32 h-32 rounded-circle border border-neutral-40 d-flex align-items-center justify-content-center text-neutral-500 bg-danger-600 hover-text-white transition-03"
                                         title="Supprimer">
                                     <i class="ph ph-trash text-14"></i>
                                 </button>

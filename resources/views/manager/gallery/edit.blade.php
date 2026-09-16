@@ -16,12 +16,6 @@
 </div>
 
 <div class="content-body">
-    @if(session('success'))
-        <div class="alert alert-success">
-            <i class="fas fa-check-circle"></i> {{ session('success') }}
-        </div>
-    @endif
-
     <!-- Formulaire d'édition -->
     <div class="form-card">
         <h3 class="section-title">Informations de l'album</h3>
@@ -78,68 +72,6 @@
         </form>
     </div>
 
-    <!-- Zone d'upload -->
-    <div class="upload-card">
-        <h3 class="section-title">
-            <i class="fas fa-cloud-upload-alt"></i>
-            Ajouter des photos
-        </h3>
-        
-        <div id="dropzone" class="dropzone">
-            <div class="dropzone-message">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <p>Glissez-déposez vos photos ici ou cliquez pour parcourir</p>
-                <span class="file-info">JPG, PNG, GIF, WEBP • Max 5MB par photo</span>
-            </div>
-            <input type="file" id="fileInput" multiple accept="image/jpeg,image/jpg,image/png,image/gif,image/webp" style="display: none;">
-        </div>
-
-        <div id="uploadProgress" class="upload-progress" style="display: none;">
-            <div class="progress-bar">
-                <div class="progress-fill" style="width: 0%"></div>
-            </div>
-            <p class="progress-text">Upload en cours...</p>
-        </div>
-    </div>
-
-    <!-- Galerie des photos existantes -->
-    <div class="photos-section">
-        <h3 class="section-title">
-            <i class="fas fa-images"></i>
-            Photos de l'album ({{ $album->images->count() }})
-        </h3>
-
-        @if($album->images->count() > 0)
-            <div class="photos-grid" id="photosGrid">
-                @foreach($album->images->sortBy('sort_order') as $image)
-                    <div class="photo-item" data-photo-id="{{ $image->id }}">
-                        <img src="{{ asset('storage/' . $image->image_path) }}" alt="{{ $image->caption }}">
-                        <div class="photo-overlay">
-                            @if($album->cover_image != $image->image_path)
-                                <button class="btn-icon btn-cover" onclick="setCover({{ $album->id }}, {{ $image->id }})" title="Définir comme couverture">
-                                    <i class="fas fa-star"></i>
-                                </button>
-                            @else
-                                <span class="cover-badge" title="Photo de couverture">
-                                    <i class="fas fa-star"></i>
-                                </span>
-                            @endif
-                            <button class="btn-icon btn-delete" onclick="deletePhoto({{ $image->id }})" title="Supprimer">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-            <p class="drag-hint"><i class="fas fa-arrows-alt"></i> Glissez-déposez les photos pour les réorganiser</p>
-        @else
-            <div class="empty-state">
-                <i class="fas fa-images"></i>
-                <p>Aucune photo dans cet album</p>
-                <p class="text-muted">Utilisez la zone d'upload ci-dessus pour ajouter des photos</p>
-            </div>
-        @endif
-    </div>
 </div>
 
 <style>
@@ -441,7 +373,7 @@ textarea.form-control {
 <script src="{{ asset('assets/js/image-compression.js') }}"></script>
 <script>
 const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
-const albumId = {{ $album->id }};
+
 
 // Onglets de langue
 document.querySelectorAll('.nav-link').forEach(button => {
@@ -454,141 +386,5 @@ document.querySelectorAll('.nav-link').forEach(button => {
     });
 });
 
-// Drag & Drop upload
-const dropzone = document.getElementById('dropzone');
-const fileInput = document.getElementById('fileInput');
-const uploadProgress = document.getElementById('uploadProgress');
-const progressFill = document.querySelector('.progress-fill');
-const progressText = document.querySelector('.progress-text');
-
-dropzone.addEventListener('click', () => fileInput.click());
-dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
-dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
-dropzone.addEventListener('drop', (e) => {
-    e.preventDefault();
-    dropzone.classList.remove('dragover');
-    handleFiles(e.dataTransfer.files);
-});
-fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
-
-function handleFiles(files) {
-    const validFiles = Array.from(files).filter(file => {
-        if (!file.type.match(/^image\/(jpeg|jpg|png|gif|webp)$/)) {
-            alert(`${file.name} n'est pas un format d'image valide`);
-            return false;
-        }
-        if (file.size > 5 * 1024 * 1024) {
-            alert(`${file.name} dépasse la taille maximale de 5MB`);
-            return false;
-        }
-        return true;
-    });
-    if (validFiles.length > 0) compressAndUploadFiles(validFiles);
-}
-
-// Compress each photo client-side (bounding box 1600x1600, quality 0.82) before
-// sending it, so the admin upload doesn't push full-size camera photos to the server.
-// GIFs are passed through untouched since canvas compression would flatten animation.
-async function compressAndUploadFiles(files) {
-    uploadProgress.style.display = 'block';
-    progressFill.style.width = '0%';
-    progressText.textContent = `Compression de ${files.length} photo(s) en cours...`;
-
-    const processed = [];
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        try {
-            if (file.type === 'image/gif') {
-                processed.push(file);
-            } else {
-                const blob = await compressImage(file, 1600, 1600, 0.82);
-                const compressedFile = new File(
-                    [blob],
-                    file.name.replace(/\.[^.]+$/, '') + '.jpg',
-                    { type: 'image/jpeg', lastModified: Date.now() }
-                );
-                processed.push(compressedFile);
-            }
-        } catch (error) {
-            console.error(`Compression échouée pour ${file.name}, envoi du fichier original.`, error);
-            processed.push(file);
-        }
-        progressFill.style.width = `${Math.round(((i + 1) / files.length) * 50)}%`;
-        progressText.textContent = `Compression : ${i + 1}/${files.length} photo(s)...`;
-    }
-
-    uploadFiles(processed);
-}
-
-function uploadFiles(files) {
-    const formData = new FormData();
-    files.forEach(file => formData.append('images[]', file));
-    progressFill.style.width = '50%';
-    progressText.textContent = `Upload de ${files.length} photo(s) en cours...`;
-    
-    fetch(`{{ route('manager.gallery.upload', $album->id) }}`, {
-        method: 'POST',
-        headers: { 'X-CSRF-TOKEN': csrfToken },
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            progressFill.style.width = '100%';
-            progressText.textContent = data.message;
-            setTimeout(() => location.reload(), 1000);
-        } else {
-            throw new Error(data.message || 'Erreur');
-        }
-    })
-    .catch(error => {
-        console.error('Upload error:', error);
-        alert('Erreur : ' + error.message);
-        uploadProgress.style.display = 'none';
-    });
-}
-
-function deletePhoto(photoId) {
-    if (!confirm('Supprimer cette photo ?')) return;
-    fetch(`{{ url('manager/gallery/image') }}/${photoId}`, {
-        method: 'DELETE',
-        headers: { 'X-CSRF-TOKEN': csrfToken, 'Content-Type': 'application/json' }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) location.reload();
-        else alert('Erreur lors de la suppression');
-    })
-    .catch(error => alert('Erreur : ' + error.message));
-}
-
-function setCover(albumId, photoId) {
-    fetch(`{{ url('manager/gallery') }}/${albumId}/cover/${photoId}`, {
-        method: 'POST',
-        headers: { 'X-CSRF-TOKEN': csrfToken, 'Content-Type': 'application/json' }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) location.reload();
-        else alert('Erreur lors de la mise à jour');
-    });
-}
-
-// Sortable reorder
-const photosGrid = document.getElementById('photosGrid');
-if (photosGrid) {
-    new Sortable(photosGrid, {
-        animation: 200,
-        onEnd: function() {
-            let order = [];
-            document.querySelectorAll('.photo-item').forEach(item => order.push(item.dataset.photoId));
-            fetch(`{{ route('manager.gallery.reorder', $album->id) }}`, {
-                method: 'POST',
-                headers: { 'X-CSRF-TOKEN': csrfToken, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ order: order })
-            });
-        }
-    });
-}
 </script>
 @endsection

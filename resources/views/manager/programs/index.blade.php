@@ -55,19 +55,19 @@
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="{{ route('manager.programs.show', $program) }}" 
-                                class="w-32 h-32 rounded-circle border border-neutral-40 d-flex align-items-center justify-content-center text-neutral-500 hover-bg-main-600 hover-text-white transition-03"
+                                class="w-32 h-32 rounded-circle border border-neutral-40 d-flex align-items-center justify-content-center text-white bg-main-600 hover-text-white transition-03"
                                title="Voir">
                                 <i class="ph ph-eye text-14"></i>
                             </a>
                             <a href="{{ route('manager.programs.edit', $program) }}" 
-                                class="w-32 h-32 rounded-circle border border-neutral-40 d-flex align-items-center justify-content-center text-neutral-500 hover-bg-main-600 hover-text-white transition-03"
+                                class="w-32 h-32 rounded-circle border border-neutral-40 d-flex align-items-center justify-content-center text-white bg-warning-600 hover-text-white transition-03"
                                 title="Modifier">
                                     <i class="ph ph-pencil text-14"></i>
                             </a>
                             <form action="{{ route('manager.programs.destroy', $program) }}" method="POST" class="d-inline" onsubmit="return confirm('Supprimer ce programme ?')">
                                 @csrf @method('DELETE')
                                 <button 
-                                        class="w-32 h-32 rounded-circle border border-neutral-40 d-flex align-items-center justify-content-center text-neutral-500 hover-bg-danger hover-text-white transition-03 bg-transparent"
+                                        class="w-32 h-32 rounded-circle border border-neutral-40 d-flex align-items-center justify-content-center text-white bg-danger-600 hover-text-white transition-03"
                                         title="Supprimer">
                                     <i class="ph ph-trash text-14"></i>
                                 </button>

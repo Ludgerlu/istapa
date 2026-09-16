@@ -97,8 +97,8 @@
                                             alt="{{ $image->caption ?? 'Gallery image' }}"
                                             class="cover-img">
                                         <a href="{{ asset('storage/' . $image->image_path) }}"
-                                        class="masonry__image position-absolute start-50 top-50 translate-middle z-1 text-white w-100 h-100 d-flex justify-content-center align-items-center rounded-12 hidden opacity-0"
-                                        data-fancybox="gallery-all">
+                                            class="masonry__image position-absolute start-50 top-50 translate-middle z-1 text-white w-100 h-100 d-flex justify-content-center align-items-center rounded-12 hidden opacity-0"
+                                            data-fancybox="gallery-all">
                                             <i class="ph ph-magnifying-glass-plus"></i>
                                         </a>
                                     </div>

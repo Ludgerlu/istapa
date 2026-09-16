@@ -14,9 +14,6 @@
                     <span class="fw-normal text-14 text-neutral-400 mb-4 d-block">Articles publiés</span>
                     <h6 class="text-18 fw-semibold text-neutral-500 mb-0">{{ number_format($totalBlogs) }}</h6>
                 </div>
-                <span class="w-44 h-44 bg-main-600 rounded-circle justify-content-center align-items-center d-flex flex-shrink-0">
-                    <i class="ph ph-newspaper text-white text-20"></i>
-                </span>
             </div>
             <a href="{{ route('manager.blogs.index') }}" class="text-12 fw-medium text-main-600 text-decoration-underline transition-03">Voir tout</a>
         </div>
@@ -27,10 +24,7 @@
                 <div>
                     <span class="fw-normal text-14 text-neutral-400 mb-4 d-block">Événements publiés</span>
                     <h6 class="text-18 fw-semibold text-neutral-500 mb-0">{{ number_format($totalEvents) }}</h6>
-                </div>
-                <span class="w-44 h-44 bg-success-600 rounded-circle justify-content-center align-items-center d-flex flex-shrink-0">
-                    <i class="ph ph-calendar text-white text-20"></i>
-                </span>
+                </div> 
             </div>
             <a href="{{ route('manager.events.index') }}" class="text-12 fw-medium text-main-600 text-decoration-underline transition-03">Voir tout</a>
         </div>
@@ -43,9 +37,6 @@
                     <span class="fw-normal text-14 text-neutral-400 mb-4 d-block">Programmes publiés</span>
                     <h6 class="text-18 fw-semibold text-neutral-500 mb-0">{{ number_format($totalPrograms) }}</h6>
                 </div>
-                <span class="w-44 h-44 bg-warning-600 rounded-circle justify-content-center align-items-center d-flex flex-shrink-0">
-                    <i class="ph ph-graduation-cap text-white text-20"></i>
-                </span>
             </div>
             <a href="{{ route('manager.programs.index') }}" class="text-12 fw-medium text-main-600 text-decoration-underline transition-03">Voir tout</a>
         </div>
@@ -101,7 +92,6 @@
                     <thead>
                         <tr class="bg-main-25 border-bottom">
                             <th class="text-12 fw-medium text-neutral-500 py-16 px-20">Titre</th>
-                            <th class="text-12 fw-medium text-neutral-500 py-16 px-20">Auteur</th>
                             <th class="text-12 fw-medium text-neutral-500 py-16 px-20">Publié le</th>
                         </tr>
                     </thead>
@@ -110,9 +100,6 @@
                         <tr class="hover-bg-neutral-20 border-bottom transition-03">
                             <td class="py-16 px-20 shadow-none">
                                 <span class="fw-medium text-14 text-neutral-500">{{ $blog->title_en }}</span>
-                            </td>
-                            <td class="text-14 fw-normal py-16 px-20 shadow-none text-neutral-500">
-                                {{ optional($blog->author)->display_name ?? 'N/A' }}
                             </td>
                             <td class="text-14 fw-normal py-16 px-20 shadow-none text-neutral-500">
                                 {{ optional($blog->published_at)->format('d/m/Y') ?? '—' }}
@@ -139,8 +126,6 @@
                     <thead>
                         <tr class="bg-main-25 border-bottom">
                             <th class="text-12 fw-medium text-neutral-500 py-16 px-20">Titre</th>
-                            <th class="text-12 fw-medium text-neutral-500 py-16 px-20">Début</th>
-                            <th class="text-12 fw-medium text-neutral-500 py-16 px-20">Fin</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -148,12 +133,6 @@
                         <tr class="hover-bg-neutral-20 border-bottom transition-03">
                             <td class="py-16 px-20 shadow-none">
                                 <span class="fw-medium text-14 text-neutral-500">{{ $event->title_en }}</span>
-                            </td>
-                            <td class="text-14 fw-normal py-16 px-20 shadow-none text-neutral-500">
-                                {{ \Carbon\Carbon::parse($event->start_date)->format('d/m/Y') }}
-                            </td>
-                            <td class="text-14 fw-normal py-16 px-20 shadow-none text-neutral-500">
-                                {{ \Carbon\Carbon::parse($event->end_date)->format('d/m/Y') }}
                             </td>
                         </tr>
                         @empty
@@ -177,8 +156,6 @@
                     <thead>
                         <tr class="bg-main-25 border-bottom">
                             <th class="text-12 fw-medium text-neutral-500 py-16 px-20">Titre</th>
-                            <th class="text-12 fw-medium text-neutral-500 py-16 px-20">Durée</th>
-                            <th class="text-12 fw-medium text-neutral-500 py-16 px-20">Créé le</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -186,12 +163,6 @@
                         <tr class="hover-bg-neutral-20 border-bottom transition-03">
                             <td class="py-16 px-20 shadow-none">
                                 <span class="fw-medium text-14 text-neutral-500">{{ $program->title_en }}</span>
-                            </td>
-                            <td class="text-14 fw-normal py-16 px-20 shadow-none text-neutral-500">
-                                {{ $program->duration_months ? $program->duration_months.' mois' : '—' }}
-                            </td>
-                            <td class="text-14 fw-normal py-16 px-20 shadow-none text-neutral-500">
-                                {{ $program->created_at->format('d/m/Y') }}
                             </td>
                         </tr>
                         @empty

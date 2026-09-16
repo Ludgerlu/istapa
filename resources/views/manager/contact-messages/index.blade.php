@@ -116,17 +116,17 @@
                     </td>
                     <td class="d-flex gap-8">
                         <a href="{{ route('manager.contact-messages.show', $message) }}" class="btn btn-sm bg-success-600 btn-outline-secondary">
-                            <i class="ph ph-eye"></i> Voir
+                            <i class="ph ph-eye"></i>
                         </a>
                         @if($message->status == 'new')
                             <form action="{{ route('manager.contact-messages.mark-read', $message) }}" method="POST">
                                 @csrf @method('PATCH')
-                                <button class="btn btn-sm bg-success-600"><i class="ph ph-check"></i> Marquer lu</button>
+                                <button class="btn btn-sm bg-success-600"><i class="ph ph-check"></i></button>
                             </form>
                         @elseif($message->status == 'read')
                             <form action="{{ route('manager.contact-messages.mark-unread', $message) }}" method="POST">
                                 @csrf @method('PATCH')
-                                <button class="btn btn-sm bg-warning-600"><i class="ph ph-envelope"></i> Marquer non lu</button>
+                                <button class="btn btn-sm bg-warning-600"><i class="ph ph-envelope"></i></button>
                             </form>
                         @endif
                         <form action="{{ route('manager.contact-messages.destroy', $message) }}" method="POST" onsubmit="return confirm('Supprimer ce message ?')">
